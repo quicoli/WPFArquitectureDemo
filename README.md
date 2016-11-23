@@ -35,4 +35,21 @@ This is an one Window only application using the following packages:
 
 All packages available by nuget, except MVVMHelper (binaries included)
 
+##Instructions
+
+As SQLite database is not created, open App.xml.cs and change this line:
+
+SessionFactory = Bootstrapper.Initialize(false);
+
+to
+
+SessionFactory = Bootstrapper.Initialize(true);
+
+and run the application,
+so database will be created.
+
+After first run you can change back to
+
+
+SessionFactory = Bootstrapper.Initialize(false);
 
