@@ -1,0 +1,2397 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Julmar.Core</name>
+    </assembly>
+    <members>
+        <member name="T:JulMar.Core.Concurrency.Range">
+            <summary>
+            Range structure for breaking a chunk into a range of
+            values.  This is useful when trying to generate inner loops
+            for Parallel.ForEach processing.
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Concurrency.Range.Start">
+            <summary>
+            Start of range
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Concurrency.Range.End">
+            <summary>
+            End of range (inclusive)
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.Range.CreateSubRanges(System.Int32)">
+            <summary>
+            Method to create a sub range from the current range.
+            </summary>
+            <param name="nRanges"># of blocks to break this range into</param>
+            <returns>New IEnumerable range</returns>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.Range.ToString">
+            <summary>
+            Returns the fully qualified type name of this instance.
+            </summary>
+            <returns>
+            A <see cref="T:System.String"/> containing a fully qualified type name.
+            </returns>
+        </member>
+        <member name="T:JulMar.Core.Interfaces.IDynamicResolver">
+            <summary>
+            This interface is exposed through the service provider to get to 
+            the resolver (MEF).
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IDynamicResolver.Compose(System.Object[])">
+            <summary>
+            Used to resolve a set of targets.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IDynamicResolver.ComposeOnce(System.Object[])">
+            <summary>
+            This is used to resolve a set of targets once - 
+            with this method, MEF will not hold a reference to
+            the composed tree of objects
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IDynamicResolver.GetExportedValue``1">
+            <summary>
+            Retrieves the specified exported object by type, or NULL if it doesn't exist.
+            </summary>
+            <typeparam name="T">Type</typeparam>
+            <returns>Created object</returns>
+        </member>
+        <member name="T:JulMar.Core.Interfaces.IServiceProviderEx">
+            <summary>
+            Interface that defines Add/Remove and typesafe Resolve
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IServiceProviderEx.Exists(System.Type)">
+            <summary>
+            Returns whether the service exists.
+            </summary>
+            <param name="type">Type</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IServiceProviderEx.Add(System.Type,System.Object)">
+            <summary>
+            Adds a new service to the resolver list
+            </summary>
+            <param name="type">Service Type (typically an interface)</param>
+            <param name="value">Object that implements service</param>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IServiceProviderEx.Add(System.Type,System.ComponentModel.Design.ServiceCreatorCallback)">
+            <summary>
+            This registers a new service by type, with a creator callback
+            to generate the service at runtime.
+            </summary>
+            <param name="type">Type</param>
+            <param name="creatorCallback">Callback to create the service</param>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IServiceProviderEx.Add``1(System.Func{System.ComponentModel.Design.IServiceContainer,``0})">
+            <summary>
+            This registers a new service by type with a creator callback.
+            </summary>
+            <typeparam name="T">Type to generate</typeparam>
+            <param name="creatorCallback">Creator callback</param>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IServiceProviderEx.Add``1(``0)">
+            <summary>
+            This adds a new service to the resolver list.
+            </summary>
+            <typeparam name="T">Type of the service</typeparam>
+            <param name="value">Value</param>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IServiceProviderEx.Remove(System.Type)">
+            <summary>
+            Remove a service
+            </summary>
+            <param name="type">Type to remove</param>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IServiceProviderEx.Resolve``1">
+            <summary>
+            This resolves a service type and returns the implementation. Note that this
+            assumes the key used to register the object is of the appropriate type or
+            this method will throw an InvalidCastException!
+            </summary>
+            <typeparam name="T">Type to resolve</typeparam>
+            <returns>Implementation</returns>
+        </member>
+        <member name="T:JulMar.Core.Extensions.ObjectCloner">
+            <summary>
+            This class clones object values without requiring Serializable objects.
+            Warning: it uses reflection so it will not necessarily be the fastest mechanism
+            available.
+            
+            The object being cloned must have a public, default constructor.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Extensions.ObjectCloner.Clone``1(``0)">
+            <summary>
+            Clones an object by doing a full deep copy of every field and property.
+            </summary>
+            <param name="source">Object to clone</param>
+            <returns>Cloned copy</returns>
+        </member>
+        <member name="M:JulMar.Core.Extensions.ObjectCloner.InternalClone(System.Object,System.Collections.Generic.Dictionary{System.Object,System.Object})">
+            <summary>
+            Internal method to clone an object
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Collections.CollectionChangedEventArgs`1">
+            <summary>
+            This is passed when the ThreadedCollection changes as the argument indicating the change type.
+            </summary>
+            <typeparam name="T">Collection type</typeparam>
+        </member>
+        <member name="M:JulMar.Core.Collections.CollectionChangedEventArgs`1.#ctor(System.Collections.Generic.IList{`0},System.Collections.Generic.IList{`0})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="addedItems">Items that have been added</param>
+            <param name="removedItems">Items that have been removed</param>
+        </member>
+        <member name="M:JulMar.Core.Collections.CollectionChangedEventArgs`1.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            </summary>
+            <returns>
+            A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            </returns>
+        </member>
+        <member name="P:JulMar.Core.Collections.CollectionChangedEventArgs`1.AddedItems">
+            <summary>
+            List of added items (may be empty)
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Collections.CollectionChangedEventArgs`1.RemovedItems">
+            <summary>
+            List of removed items (may be empty)
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Interfaces.ISupportUndo">
+            <summary>
+            Interface that describes a single Undo/Redo operation
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.ISupportUndo.Undo">
+            <summary>
+            Method used to undo operation
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.ISupportUndo.Redo">
+            <summary>
+            Method to redo operation
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Interfaces.ISupportUndo.CanRedo">
+            <summary>
+            True if operation can be "reapplied" after undo.
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Undo.CollectionChangeUndoObserver">
+            <summary>
+            This class provides a simple INotifyCollectionChanged observer that will add 
+            undo/redo support to a collection class automatically by monitoring the collection
+            changed events.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Undo.CollectionChangeUndoObserver.#ctor(System.Collections.IList,JulMar.Core.Interfaces.IUndoService)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="collection">Collection to monitor</param>
+            <param name="undoService">Undo service</param>
+        </member>
+        <member name="M:JulMar.Core.Undo.CollectionChangeUndoObserver.BeginDeferredTracking(JulMar.Core.Undo.UndoOperationSet)">
+            <summary>
+            This starts collecting the undo operations in a deferred list so they can be applied as a group.
+            </summary>
+            <param name="undoSet">Undo set to use</param>
+        </member>
+        <member name="M:JulMar.Core.Undo.CollectionChangeUndoObserver.EndDeferredTracking">
+            <summary>
+            This ends the undo tracking - the user is responsible for adding the operations
+            to the undo manager if they are to be tracked.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Undo.CollectionChangeUndoObserver.GetListObject">
+            <summary>
+            Returns the IList object held by this observer.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Core.Undo.CollectionChangeUndoObserver.OnCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>
+            This is invoked when the collection changes.
+            </summary>
+            <param name="sender">Collection</param>
+            <param name="e">Change event</param>
+        </member>
+        <member name="M:JulMar.Core.Undo.CollectionChangeUndoObserver.System#Windows#IWeakEventListener#ReceiveWeakEvent(System.Type,System.Object,System.EventArgs)">
+            <summary>
+            Receives events from the centralized event manager.
+            </summary>
+            <returns>
+            true if the listener handled the event. It is considered an error by the <see cref="T:System.Windows.WeakEventManager"/> handling in WPF to register a listener for an event that the listener does not handle. Regardless, the method should return false if it receives an event that it does not recognize or handle.
+            </returns>
+            <param name="managerType">The type of the <see cref="T:System.Windows.WeakEventManager"/> calling this method.</param><param name="sender">Object that originated the event.</param><param name="e">Event data.</param>
+        </member>
+        <member name="M:JulMar.Core.Undo.CollectionChangeUndoObserver.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Undo.CollectionChangeUndoObserver.IgnoreChanges">
+            <summary>
+            Set this to ignore changes temporarily while you perform
+            some action to the tracked collection.
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Interfaces.IThreadedNotifyCollection`1">
+            <summary>
+            Interface describing a thread-safe collection that performs notifications.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IThreadedNotifyCollection`1.EnterLock">
+            <summary>
+            Used to enter/obtain the lock
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="E:JulMar.Core.Interfaces.IThreadedNotifyCollection`1.CollectionChanged">
+            <summary>
+            This event is raised when the collection is altered (add/remove/change)
+            </summary>
+        </member>
+        <member name="E:JulMar.Core.Interfaces.IThreadedNotifyCollection`1.ElementChanged">
+            <summary>
+            This event is raised when an element in the collection is altered (changes state)
+            It is only reported for items that support INotifyPropertyChanged
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Collections.ElementChangedEventArgs`1">
+            <summary>
+            This is passed as the argument to an ElementChanged event from a ThreadedCollection.
+            </summary>
+            <typeparam name="T">Element Type</typeparam>
+        </member>
+        <member name="T:JulMar.Core.PropertyChangedEventArgsEx">
+            <summary>
+            A single EventArgs to capture property change events 
+            that include the old and new values for thread safety.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.PropertyChangedEventArgsEx.#ctor(System.String)">
+            <summary>
+            Base constructor
+            </summary>
+            <param name="propertyName">Property that has changed</param>
+        </member>
+        <member name="M:JulMar.Core.PropertyChangedEventArgsEx.#ctor(System.String,System.Object)">
+            <summary>
+            Base constructor
+            </summary>
+            <param name="propertyName">Property that has changed</param>
+            <param name="newValue">New Value</param>
+        </member>
+        <member name="M:JulMar.Core.PropertyChangedEventArgsEx.#ctor(System.String,System.Object,System.Object)">
+            <summary>
+            Full Constructor
+            </summary>
+            <param name="propertyName">Property that has changed</param>
+            <param name="oldValue">Old value</param>
+            <param name="newValue">New Value</param>
+        </member>
+        <member name="P:JulMar.Core.PropertyChangedEventArgsEx.HasOldValue">
+            <summary>
+            True if the OldValue is valid
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.PropertyChangedEventArgsEx.OldValue">
+            <summary>
+            Old value
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.PropertyChangedEventArgsEx.HasNewValue">
+            <summary>
+            True if the NewValue is valid
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.PropertyChangedEventArgsEx.NewValue">
+            <summary>
+            New value
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Collections.ElementChangedEventArgs`1.#ctor(JulMar.Core.Collections.ThreadedCollection{`0},`0,System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="container">Collection container</param>
+            <param name="element">Element</param>
+            <param name="propName">Property name</param>
+        </member>
+        <member name="M:JulMar.Core.Collections.ElementChangedEventArgs`1.#ctor(JulMar.Core.Collections.ThreadedCollection{`0},`0,System.String,System.Object)">
+            <summary>
+            Base constructor
+            </summary>
+            <param name="container">Collection container</param>
+            <param name="element">Element</param>
+            <param name="propertyName">Property that has changed</param>
+            <param name="newValue">New Value</param>
+        </member>
+        <member name="M:JulMar.Core.Collections.ElementChangedEventArgs`1.#ctor(JulMar.Core.Collections.ThreadedCollection{`0},`0,System.String,System.Object,System.Object)">
+            <summary>
+            Full Constructor
+            </summary>
+            <param name="container">Collection container</param>
+            <param name="element">Element</param>
+            <param name="propertyName">Property that has changed</param>
+            <param name="oldValue">Old value</param>
+            <param name="newValue">New Value</param>
+        </member>
+        <member name="P:JulMar.Core.Collections.ElementChangedEventArgs`1.Collection">
+            <summary>
+            Collection owner that changed [do not manipulate]
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Collections.ElementChangedEventArgs`1.Element">
+            <summary>
+            Element that was changed
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Undo.UndoManager">
+            <summary>
+            Class used for Undo/Redo support.
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Interfaces.IUndoService">
+            <summary>
+            This interface describes a simple Undo service
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IUndoService.Undo">
+            <summary>
+            Executes the next UNDO operation.
+            </summary>
+            <returns>True if an undo was executed</returns>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IUndoService.Redo">
+            <summary>
+            Executes the last REDO operation.
+            </summary>
+            <returns>True if a REDO operation occurred</returns>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IUndoService.Add(JulMar.Core.Interfaces.ISupportUndo,System.Boolean)">
+            <summary>
+            Adds a new undo operation to the stack.
+            </summary>
+            <param name="undoOp">operation</param>
+            <param name="noInsertIfExecutingOperation">Do not insert record if currently running undo/redo</param>
+            <returns>True if record inserted, false if not</returns>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IUndoService.Clear">
+            <summary>
+            Clears all the undo/redo events.  This should be used if some
+            action makes the operations invalid (clearing a collection where you are tracking changes to indexes inside it for example)
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Interfaces.IUndoService.MaxSupportedOperations">
+            <summary>
+            Maximum number of supported operations.
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Interfaces.IUndoService.CanUndo">
+            <summary>
+            Returns true if we have at least one UNDO operation we can perform
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Interfaces.IUndoService.CanRedo">
+            <summary>
+            True if at least one REDO operation is available.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Undo.UndoManager.#ctor">
+            <summary>
+            Default constructor (used by MEF)
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Undo.UndoManager.#ctor(System.Int32)">
+            <summary>
+            Constructor (if used directly)
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Undo.UndoManager.Undo">
+            <summary>
+            Executes the next UNDO operation.
+            </summary>
+            <returns>True if an undo was executed</returns>
+        </member>
+        <member name="M:JulMar.Core.Undo.UndoManager.Redo">
+            <summary>
+            Executes the last REDO operation.
+            </summary>
+            <returns>True if a REDO operation occurred</returns>
+        </member>
+        <member name="M:JulMar.Core.Undo.UndoManager.Add(JulMar.Core.Interfaces.ISupportUndo,System.Boolean)">
+            <summary>
+            Adds a new undo operation to the stack.
+            </summary>
+            <param name="undoOp">operation</param>
+            <param name="noInsertIfInUndoOperation">True if the insertion should not occur if in an UNDO operation</param>
+            <returns>True if undo operation was added to stack</returns>
+        </member>
+        <member name="M:JulMar.Core.Undo.UndoManager.Clear">
+            <summary>
+            Clears all the undo/redo events.  This should be used if some
+            action makes the operations invalid (clearing a collection for example)
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Undo.UndoManager.MaxSupportedOperations">
+            <summary>
+            Maximum number of supported operations.
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Undo.UndoManager.CanUndo">
+            <summary>
+            Returns true if we have at least one UNDO operation we can perform
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Undo.UndoManager.CanRedo">
+            <summary>
+            True if at least one REDO operation is available.
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.MessageMediatorTargetAttribute">
+            <summary>
+            This attribute allows a method to be targeted as a recipient for a message.
+            It requires that the Type is registered with the MessageMediator through the
+            <seealso cref="M:JulMar.Core.Services.MessageMediator.Register(System.Object)"/> method
+            </summary>
+            <example>
+            <![CDATA[
+            [MessageMediatorTarget("DoBackgroundCheck")]
+            void OnBackgroundCheck(object parameter) { ... }
+            
+            [MessageMediatorTarget(typeof(SomeDataClass))]
+            void OnNotifyDataRecieved(SomeDataClass parameter) { ... }
+            ...
+            
+            mediator.SendMessage("DoBackgroundCheck", new CheckParameters());
+            ...
+            mediator.SendMessage(new SomeDataClass(...));
+            
+            ]]>
+            </example>
+        </member>
+        <member name="M:JulMar.Core.MessageMediatorTargetAttribute.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.MessageMediatorTargetAttribute.#ctor(System.String)">
+            <summary>
+            Constructor that takes a message key
+            </summary>
+            <param name="messageKey">Message Key</param>
+        </member>
+        <member name="P:JulMar.Core.MessageMediatorTargetAttribute.MessageKey">
+            <summary>
+            Message key
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Undo.UndoOperationSet">
+            <summary>
+            A single undo/redo operation "set" that is executed together.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Undo.UndoOperationSet.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Undo.UndoOperationSet.#ctor(System.Collections.Generic.IEnumerable{JulMar.Core.Interfaces.ISupportUndo})">
+            <summary>
+            Constructor that takes a list of items to add
+            </summary>
+            <param name="ops">Operations</param>
+        </member>
+        <member name="M:JulMar.Core.Undo.UndoOperationSet.Add(JulMar.Core.Interfaces.ISupportUndo)">
+            <summary>
+            Adds a new undo operation to the collection
+            </summary>
+            <param name="operation">Operation</param>
+        </member>
+        <member name="M:JulMar.Core.Undo.UndoOperationSet.AddRange(System.Collections.Generic.IEnumerable{JulMar.Core.Interfaces.ISupportUndo})">
+            <summary>
+            Adds a range of operations
+            </summary>
+            <param name="ops">Operations to add</param>
+        </member>
+        <member name="M:JulMar.Core.Undo.UndoOperationSet.Undo">
+            <summary>
+            Method used to undo operation
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Undo.UndoOperationSet.Redo">
+            <summary>
+            Method to redo operation
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Undo.UndoOperationSet.CanRedo">
+            <summary>
+            True if operation can be "reapplied" after undo.
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Services.MefComposer">
+            <summary>
+            Inversion of Control Composer - currently based on MEF (4.0).
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Services.MefComposer.#ctor">
+            <summary>
+            Internal constructor - stop this class from being created directly.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Services.MefComposer.AddCatalogResolver(System.ComponentModel.Composition.Primitives.ComposablePartCatalog[])">
+            <summary>
+            This method allows direct use of the container to add new catalogs.  This
+            should be done before anything else in the application occurs.
+            </summary>
+            <param name="catalog"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Core.Services.MefComposer.Compose(System.Object[])">
+            <summary>
+            Used to resolve a set of targets.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Services.MefComposer.ComposeOnce(System.Object[])">
+            <summary>
+            This is used to resolve a set of targets once - 
+            with this method, MEF will not hold a reference to
+            the composed tree of objects
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Services.MefComposer.GetExportedValue``1">
+            <summary>
+            Retrieves the specified exported object by type, or NULL if it doesn't exist.
+            </summary>
+            <typeparam name="T">Type</typeparam>
+            <returns>Created object</returns>
+        </member>
+        <member name="M:JulMar.Core.Services.MefComposer.CreateContainer">
+            <summary>
+            Create the composition container used to locate and fixup imports.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Services.MefComposer.AddAssemblyToCatalog(System.String,System.ComponentModel.Composition.Hosting.AggregateCatalog)">
+            <summary>
+            Adds the given assembly to the catalog for composition
+            </summary>
+            <param name="fname"></param>
+            <param name="catalog"></param>
+        </member>
+        <member name="M:JulMar.Core.Services.MefComposer.GenerateAssemblyList(System.String)">
+            <summary>
+            This method returns the assembly list to use for composition
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Core.Services.MefComposer.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Services.MefComposer.Instance">
+            <summary>
+            IoC instance
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Services.MefComposer.Container">
+            <summary>
+            The composition container being used
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Interfaces.IMessageMediator">
+            <summary>
+             The interface definition for our Message mediator.  This allows loose-event coupling between components
+             in an application by sending messages to registered elements.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IMessageMediator.Register(System.Object)">
+            <summary>
+            This registers a Type with the mediator.  Any methods decorated with <seealso cref="T:JulMar.Core.MessageMediatorTargetAttribute"/> will be 
+            registered as target method handlers for the given message key.
+            </summary>
+            <param name="view">Object to register</param>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IMessageMediator.Unregister(System.Object)">
+            <summary>
+            This method unregisters a type from the message mediator.
+            </summary>
+            <param name="view">Object to unregister</param>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IMessageMediator.RegisterHandler``1(System.String,System.Action{``0})">
+            <summary>
+            This registers a specific method as a message handler for a specific type.
+            </summary>
+            <param name="key">Message key</param>
+            <param name="handler">Handler method</param>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IMessageMediator.RegisterHandler``1(System.Action{``0})">
+            <summary>
+            This registers a specific method as a message handler for a specific type.
+            </summary>
+            <param name="handler">Handler method</param>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IMessageMediator.UnregisterHandler``1(System.String,System.Action{``0})">
+            <summary>
+            This unregisters a method as a handler.
+            </summary>
+            <param name="key">Message key</param>
+            <param name="handler">Handler</param>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IMessageMediator.UnregisterHandler``1(System.Action{``0})">
+            <summary>
+            This unregisters a method as a handler for a specific type
+            </summary>
+            <param name="handler">Handler</param>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IMessageMediator.SendMessage``1(System.String,``0)">
+            <summary>
+            This method broadcasts a message to all message targets for a given
+            message key and passes a parameter.
+            </summary>
+            <param name="key">Message key</param>
+            <param name="message">Message parameter</param>
+            <returns>True/False if any handlers were invoked.</returns>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IMessageMediator.SendMessage``1(``0)">
+            <summary>
+            This method broadcasts a message to all message targets for a given parameter type.
+            If a derived type is passed, any handlers for interfaces or base types will also be
+            invoked.
+            </summary>
+            <param name="message">Message parameter</param>
+            <returns>True/False if any handlers were invoked.</returns>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IMessageMediator.SendMessageAsync``1(System.String,``0)">
+            <summary>
+            This method broadcasts a message to all message targets for a given
+            message key and passes a parameter.  The message targets are all called
+            asynchronously and any resulting exceptions are ignored.
+            </summary>
+            <param name="key">Message key</param>
+            <param name="message">Message parameter</param>
+        </member>
+        <member name="M:JulMar.Core.Interfaces.IMessageMediator.SendMessageAsync``1(``0)">
+            <summary>
+            This method broadcasts a message to all message targets for a given parameter type.
+            If a derived type is passed, any handlers for interfaces or base types will also be
+            invoked.  The message targets are all called asynchronously and any resulting exceptions
+            are ignored.
+            </summary>
+            <param name="message">Message parameter</param>
+        </member>
+        <member name="T:JulMar.Core.Composition.FilteredCatalog">
+            <summary>
+            MEF catalog filter
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Composition.FilteredCatalog.#ctor(System.ComponentModel.Composition.Primitives.ComposablePartCatalog,System.Func{System.ComponentModel.Composition.Primitives.ComposablePartDefinition,System.Boolean},System.Func{System.ComponentModel.Composition.Primitives.ExportDefinition,System.Boolean})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="catalogToFilter"></param>
+            <param name="filterDelegate"></param>
+            <param name="exportDelegate"></param>
+        </member>
+        <member name="M:JulMar.Core.Composition.FilteredCatalog.GetExports(System.ComponentModel.Composition.Primitives.ImportDefinition)">
+            <summary>
+            Gets a list of export definitions that match the constraint defined by the specified <see cref="T:System.ComponentModel.Composition.Primitives.ImportDefinition"/> object.
+            </summary>
+            <returns>
+            A collection of <see cref="T:System.Tuple`2"/> containing the <see cref="T:System.ComponentModel.Composition.Primitives.ExportDefinition"/> objects and their associated <see cref="T:System.ComponentModel.Composition.Primitives.ComposablePartDefinition"/> objects for objects that match the constraint specified by <paramref name="definition"/>.
+            </returns>
+            <param name="definition">The conditions of the <see cref="T:System.ComponentModel.Composition.Primitives.ExportDefinition"/> objects to be returned.</param><exception cref="T:System.ObjectDisposedException">The <see cref="T:System.ComponentModel.Composition.Primitives.ComposablePartCatalog"/> object has been disposed of.</exception><exception cref="T:System.ArgumentNullException"><paramref name="definition"/> is null.</exception>
+        </member>
+        <member name="P:JulMar.Core.Composition.FilteredCatalog.Parts">
+            <summary>
+            Gets the part definitions that are contained in the catalog.
+            </summary>
+            <returns>
+            The <see cref="T:System.ComponentModel.Composition.Primitives.ComposablePartDefinition"/> contained in the <see cref="T:System.ComponentModel.Composition.Primitives.ComposablePartCatalog"/>.
+            </returns>
+            <exception cref="T:System.ObjectDisposedException">The <see cref="T:System.ComponentModel.Composition.Primitives.ComposablePartCatalog"/> object has been disposed of.</exception>
+        </member>
+        <member name="T:JulMar.Core.Undo.PropertyChangeUndo">
+            <summary>
+            This implements the undo mechanics for a PropertyChange.
+            This does not support index array properties.
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Undo.PropertyChangeUndo._target">
+            <summary>
+            Object that has been changed
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Undo.PropertyChangeUndo._propertyName">
+            <summary>
+            Property that was changed
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Undo.PropertyChangeUndo._value">
+            <summary>
+            Old value of property
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Undo.PropertyChangeUndo._newValue">
+            <summary>
+            New value of property
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Undo.PropertyChangeUndo._supportRedo">
+            <summary>
+            True if we support REDO (old value was supplied)
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Undo.PropertyChangeUndo.#ctor(System.Object,System.String,System.Object)">
+            <summary>
+            Constructor when only the old value is known
+            </summary>
+            <param name="target">Target that has changed</param>
+            <param name="propName">Property</param>
+            <param name="oldValue">Old value</param>
+        </member>
+        <member name="M:JulMar.Core.Undo.PropertyChangeUndo.#ctor(System.Object,System.String,System.Object,System.Object)">
+            <summary>
+            Constructor when an old and new value are known
+            </summary>
+            <param name="target">Target that has changed</param>
+            <param name="propName">Property</param>
+            <param name="oldValue">Old value</param>
+            <param name="newValue">New value</param>
+        </member>
+        <member name="M:JulMar.Core.Undo.PropertyChangeUndo.Undo">
+            <summary>
+            Method used to undo operation
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Undo.PropertyChangeUndo.Redo">
+            <summary>
+            Method to redo operation
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Undo.PropertyChangeUndo.CanRedo">
+            <summary>
+            True if operation can be "reapplied" after undo.
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions">
+            <summary>
+            A set of extensions applied over ReaderWriterLockSlim to ensure the
+            lock is properly released through the use of delegates/anonymous methods.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.UsingReadLock(System.Threading.ReaderWriterLockSlim,System.Action)">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock read-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="action">Action to perform</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.TryUsingReadLock(System.Threading.ReaderWriterLockSlim,System.Int32,System.Action)">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock read-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="timeout">Timeout</param>
+            <param name="action">Action to perform</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.TryUsingReadLock(System.Threading.ReaderWriterLockSlim,System.TimeSpan,System.Action)">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock read-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="timeSpan">Timeout</param>
+            <param name="action">Action to perform</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.UsingReadLock``1(System.Threading.ReaderWriterLockSlim,System.Func{``0})">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock read-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="action">Action to perform</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.TryUsingReadLock``1(System.Threading.ReaderWriterLockSlim,System.Int32,System.Func{``0},``0@)">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock read-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="timeout">Timeout</param>
+            <param name="action">Action to perform</param>
+            <param name="result">Result</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.TryUsingReadLock``1(System.Threading.ReaderWriterLockSlim,System.TimeSpan,System.Func{``0},``0@)">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock read-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="timeSpan">Timeout</param>
+            <param name="action">Action to perform</param>
+            <param name="result">Result</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.UsingUpgradeableReadLock(System.Threading.ReaderWriterLockSlim,System.Action)">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock upgradeable read-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="action">Action to perform</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.TryUsingUpgradeableReadLock(System.Threading.ReaderWriterLockSlim,System.Int32,System.Action)">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock upgradeable read-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="timeout">Timeout</param>
+            <param name="action">Action to perform</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.TryUsingUpgradeableReadLock(System.Threading.ReaderWriterLockSlim,System.TimeSpan,System.Action)">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock upgradeable read-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="timeSpan">Timeout</param>
+            <param name="action">Action to perform</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.UsingUpgradeableReadLock``1(System.Threading.ReaderWriterLockSlim,System.Func{``0})">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock upgradeable read-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="action">Action to perform</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.TryUsingUpgradeableReadLock``1(System.Threading.ReaderWriterLockSlim,System.Int32,System.Func{``0},``0@)">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock upgradable read-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="timeout">Timeout</param>
+            <param name="action">Action to perform</param>
+            <param name="result">Result</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.TryUsingUpgradeableReadLock``1(System.Threading.ReaderWriterLockSlim,System.TimeSpan,System.Func{``0},``0@)">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock upgradable read-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="timeSpan">Timeout</param>
+            <param name="action">Action to perform</param>
+            <param name="result">Result</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.UsingWriteLock(System.Threading.ReaderWriterLockSlim,System.Action)">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock write-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="action">Action to perform</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.TryUsingWriteLock(System.Threading.ReaderWriterLockSlim,System.Int32,System.Action)">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock write-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="timeout">Timeout</param>
+            <param name="action">Action to perform</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.TryUsingWriteLock(System.Threading.ReaderWriterLockSlim,System.TimeSpan,System.Action)">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock write-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="timeSpan">Timeout</param>
+            <param name="action">Action to perform</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.UsingWriteLock``1(System.Threading.ReaderWriterLockSlim,System.Func{``0})">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock write-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="action">Action to perform</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.TryUsingWriteLock``1(System.Threading.ReaderWriterLockSlim,System.Int32,System.Func{``0},``0@)">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock write-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="timeout">Timeout</param>
+            <param name="action">Action to perform</param>
+            <param name="result">Result</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ReaderWriterLockSlimExtensions.TryUsingWriteLock``1(System.Threading.ReaderWriterLockSlim,System.TimeSpan,System.Func{``0},``0@)">
+            <summary>
+            Used to perform some action while holding the ReaderWriterLock write-lock
+            </summary>
+            <param name="rwl">Reader/Writer Lock</param>
+            <param name="timeSpan">Timeout</param>
+            <param name="action">Action to perform</param>
+            <param name="result">Result</param>
+        </member>
+        <member name="T:JulMar.Core.Undo.CollectionChangeType">
+            <summary>
+            This describes the specific change types for a collection
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Undo.CollectionChangeType.Add">
+            <summary>
+            Item has been added to collection
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Undo.CollectionChangeType.Remove">
+            <summary>
+            Item has been removed from collection
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Undo.CollectionChangeType.Replace">
+            <summary>
+            Item has been replaced within collection
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Undo.CollectionChangeType.Move">
+            <summary>
+            Item has been moved inside collection
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Undo.CollectionChangeUndo">
+            <summary>
+            This class implements the undo/redo support for collection changes.
+            A single instance can undo one operation performed to a collection.
+            The collection must implement IList.
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Undo.CollectionChangeUndo._collection">
+            <summary>
+            Collection we are working with
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Undo.CollectionChangeUndo._changeType">
+            <summary>
+            Change type that has occurred
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Undo.CollectionChangeUndo._pos">
+            <summary>
+            Position where change occurred (old)
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Undo.CollectionChangeUndo._newPos">
+            <summary>
+            New position where movement/insertion occurred
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Undo.CollectionChangeUndo._newValue">
+            <summary>
+            New value
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Undo.CollectionChangeUndo._oldValue">
+            <summary>
+            Old value
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Undo.CollectionChangeUndo.#ctor(System.Collections.IList,JulMar.Core.Undo.CollectionChangeType,System.Int32,System.Int32,System.Object,System.Object)">
+            <summary>
+            Constructor used for add/delete/replace
+            </summary>
+            <param name="coll">Collection to work with</param>
+            <param name="type">Type of change</param>
+            <param name="oldPos">Position of change</param>
+            <param name="newPos">New position of change</param>
+            <param name="oldValue">Old value at position</param>
+            <param name="newValue">New value at position</param>
+        </member>
+        <member name="M:JulMar.Core.Undo.CollectionChangeUndo.Undo">
+            <summary>
+            Method used to undo operation
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Undo.CollectionChangeUndo.Redo">
+            <summary>
+            Method to redo operation
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Undo.CollectionChangeUndo.CanRedo">
+            <summary>
+            True if operation can be "reapplied" after undo.
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Collections.ThreadedCollection`1">
+            <summary>
+            Simple thread-safe collection that performs deferred notification on both
+            collection and child elements.
+            </summary>
+            <typeparam name="T">Type added to collection</typeparam>
+        </member>
+        <member name="M:JulMar.Core.Collections.ThreadedCollection`1.EnterLock">
+            <summary>
+            Used to enter/obtain the lock
+            </summary>
+            <returns>Disposable object</returns>
+        </member>
+        <member name="M:JulMar.Core.Collections.ThreadedCollection`1.ClearItems">
+            <summary>
+            Removes all elements from the <see cref="T:System.Collections.ObjectModel.Collection`1"/>.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Collections.ThreadedCollection`1.InsertItem(System.Int32,`0)">
+            <summary>
+            Inserts an element into the <see cref="T:System.Collections.ObjectModel.Collection`1"/> at the specified index.
+            </summary>
+            <param name="index">The zero-based index at which <paramref name="item"/> should be inserted.</param>
+            <param name="item">The object to insert. The value can be null for reference types.</param>
+        </member>
+        <member name="M:JulMar.Core.Collections.ThreadedCollection`1.RemoveItem(System.Int32)">
+            <summary>
+            Removes the element at the specified index of the <see cref="T:System.Collections.ObjectModel.Collection`1"/>.
+            </summary>
+            <param name="index">The zero-based index of the element to remove.</param>
+        </member>
+        <member name="M:JulMar.Core.Collections.ThreadedCollection`1.SetItem(System.Int32,`0)">
+            <summary>
+            Replaces the element at the specified index.
+            </summary>
+            <param name="index">The zero-based index of the element to replace.</param>
+            <param name="item">The new value for the element at the specified index. The value can be null for reference types.</param>
+        </member>
+        <member name="M:JulMar.Core.Collections.ThreadedCollection`1.OnItemChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)">
+            <summary>
+            EventHandler invoked when an element in the collection changes internal state.
+            Reported through INotifyPropertyChanged
+            </summary>
+            <param name="sender">Child element</param>
+            <param name="e">PropertyChange notification</param>
+        </member>
+        <member name="M:JulMar.Core.Collections.ThreadedCollection`1.OnElementChanged(JulMar.Core.Collections.ElementChangedEventArgs{`0})">
+            <summary>
+            Raises the ElementChanged event
+            </summary>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:JulMar.Core.Collections.ThreadedCollection`1.OnCollectionChanged(JulMar.Core.Collections.CollectionChangedEventArgs{`0})">
+            <summary>
+            Raises the CollectionChanged event
+            </summary>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:JulMar.Core.Collections.ThreadedCollection`1.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            </summary>
+            <returns>
+            A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            </returns>
+        </member>
+        <member name="E:JulMar.Core.Collections.ThreadedCollection`1.CollectionChanged">
+            <summary>
+            This event is raised when the collection is altered (add/remove/change)
+            </summary>
+        </member>
+        <member name="E:JulMar.Core.Collections.ThreadedCollection`1.ElementChanged">
+            <summary>
+            This event is raised when an element in the collection is altered (changes state)
+            It is only reported for items that support INotifyPropertyChanged
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Collections.ThreadedCollection`1.CollectionLock">
+            <summary>
+            This class is used to obtain/release the lock with a Dispose pattern.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Collections.ThreadedCollection`1.CollectionLock.Dispose">
+            <summary>
+            Releases the lock on the collection
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Services.MessageMediator">
+            <summary>
+            This class creates a simple Mediator which loosely connects different objects together. 
+            The message handlers are organized using string-based message keys and are held in a WeakReference
+            collection.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Services.MessageMediator.Register(System.Object)">
+            <summary>
+            This registers a Type with the mediator.  Any methods decorated with <seealso cref="T:JulMar.Core.MessageMediatorTargetAttribute"/> will be 
+            registered as target method handlers for the given message key.
+            </summary>
+            <param name="view">Object to register</param>
+        </member>
+        <member name="M:JulMar.Core.Services.MessageMediator.Unregister(System.Object)">
+            <summary>
+            This method unregisters a type from the message mediator.
+            </summary>
+            <param name="view">Object to unregister</param>
+        </member>
+        <member name="M:JulMar.Core.Services.MessageMediator.RegisterHandler(System.String,System.Action)">
+            <summary>
+            Registers a specific method with no parameters as a handler
+            </summary>
+            <param name="key">Message key</param>
+            <param name="handler">Handler method</param>
+        </member>
+        <member name="M:JulMar.Core.Services.MessageMediator.RegisterHandler``1(System.String,System.Action{``0})">
+            <summary>
+            This registers a specific method as a message handler for a specific type.
+            </summary>
+            <param name="key">Message key</param>
+            <param name="handler">Handler method</param>
+        </member>
+        <member name="M:JulMar.Core.Services.MessageMediator.RegisterHandler``1(System.Action{``0})">
+            <summary>
+            This registers a specific method as a message handler for a specific type.
+            </summary>
+            <param name="handler">Handler method</param>
+        </member>
+        <member name="M:JulMar.Core.Services.MessageMediator.UnregisterHandler(System.String,System.Action)">
+            <summary>
+            Unregisters simple handler
+            </summary>
+            <param name="key">Message key</param>
+            <param name="handler">Handler method</param>
+        </member>
+        <member name="M:JulMar.Core.Services.MessageMediator.UnregisterHandler``1(System.String,System.Action{``0})">
+            <summary>
+            This unregisters a method as a handler.
+            </summary>
+            <param name="key">Message key</param>
+            <param name="handler">Handler</param>
+        </member>
+        <member name="M:JulMar.Core.Services.MessageMediator.UnregisterHandler``1(System.Action{``0})">
+            <summary>
+            This unregisters a method as a handler for a specific type
+            </summary>
+            <param name="handler">Handler</param>
+        </member>
+        <member name="M:JulMar.Core.Services.MessageMediator.RegisterHandler(System.Object,System.Type,System.Delegate)">
+            <summary>
+            Performs the actual registration of a target
+            </summary>
+            <param name="key">Key to store in dictionary</param>
+            <param name="actionType">Delegate type</param>
+            <param name="handler">Method</param>
+        </member>
+        <member name="M:JulMar.Core.Services.MessageMediator.UnregisterHandler(System.Object,System.Type,System.Delegate)">
+            <summary>
+            Performs the unregistration from a target
+            </summary>
+            <param name="key">Key to store in dictionary</param>
+            <param name="actionType">Delegate type</param>
+            <param name="handler">Method</param>
+        </member>
+        <member name="M:JulMar.Core.Services.MessageMediator.SendMessage(System.Object,System.Object)">
+            <summary>
+            This method broadcasts a message to all message targets for a given
+            message key and passes a parameter.
+            </summary>
+            <param name="key">Message key</param>
+            <param name="message">Message parameter</param>
+            <returns>True/False if any handlers were invoked.</returns>
+        </member>
+        <member name="M:JulMar.Core.Services.MessageMediator.SendSimpleMessage(System.String)">
+            <summary>
+            This method broadcasts a message with no parameters
+            </summary>
+            <param name="key">Message key</param>
+            <returns>True/False if any handlers were invoked.</returns>
+        </member>
+        <member name="M:JulMar.Core.Services.MessageMediator.SendMessage``1(System.String,``0)">
+            <summary>
+            This method broadcasts a message to all message targets for a given
+            message key and passes a parameter.
+            </summary>
+            <param name="key">Message key</param>
+            <param name="message">Message parameter</param>
+            <returns>True/False if any handlers were invoked.</returns>
+        </member>
+        <member name="M:JulMar.Core.Services.MessageMediator.SendMessage``1(``0)">
+            <summary>
+            This method broadcasts a message to all message targets for a given parameter type.
+            If a derived type is passed, any handlers for interfaces or base types will also be
+            invoked.
+            </summary>
+            <param name="message">Message parameter</param>
+            <returns>True/False if any handlers were invoked.</returns>
+        </member>
+        <member name="M:JulMar.Core.Services.MessageMediator.SendMessageAsync``1(System.String,``0)">
+            <summary>
+            This method broadcasts a message to all message targets for a given
+            message key and passes a parameter.  The message targets are all called
+            asynchronously and any resulting exceptions are ignored.
+            </summary>
+            <param name="key">Message key</param>
+            <param name="message">Message parameter</param>
+        </member>
+        <member name="M:JulMar.Core.Services.MessageMediator.SendMessageAsync``1(``0)">
+            <summary>
+            This method broadcasts a message to all message targets for a given parameter type.
+            If a derived type is passed, any handlers for interfaces or base types will also be
+            invoked.  The message targets are all called asynchronously and any resulting exceptions
+            are ignored.
+            </summary>
+            <param name="message">Message parameter</param>
+        </member>
+        <member name="T:JulMar.Core.Services.MessageMediator.WeakAction">
+            <summary>
+            This class creates a weak delegate of form Action(Of Object)
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.CollectionObserver">
+            <summary>
+            This class manages a notify-able collection, holding onto a WeakReference so
+            the collection itself can go away.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.CollectionObserver.#ctor(System.Collections.Specialized.INotifyCollectionChanged)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="collection">Collection to monitor</param>
+        </member>
+        <member name="M:JulMar.Core.CollectionObserver.GetSource">
+            <summary>
+            Retrieves the collection source
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.CollectionObserver.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.CollectionObserver.ReceiveWeakEvent(System.Type,System.Object,System.EventArgs)">
+            <summary>
+            Receives events from the centralized event manager.
+            </summary>
+            <returns>
+            true if the listener handled the event. It is considered an error by the <see cref="T:System.Windows.WeakEventManager"/> handling in WPF to register a listener for an event that the listener does not handle. Regardless, the method should return false if it receives an event that it does not recognize or handle.
+            </returns>
+            <param name="managerType">The type of the <see cref="T:System.Windows.WeakEventManager"/> calling this method.</param><param name="sender">Object that originated the event.</param><param name="e">Event data.</param>
+        </member>
+        <member name="E:JulMar.Core.CollectionObserver.CollectionChanged">
+            <summary>
+            Event list - targets associated with this event are called when
+            the NotifyCollectionChanged occurs.
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.ExportServiceAttribute">
+            <summary>
+            This attribute is used to decorate all "auto-located" services.
+            MEF is used to locate and bind each service with this attribute decoration.
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Interfaces.IServiceProviderMetadata">
+            <summary>
+            Interface used to populate metadata we use for services.
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Interfaces.IServiceProviderMetadata.ServiceType">
+            <summary>
+            Service Type being exported (typically an interface)
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.ExportServiceAttribute.#ctor(System.Type)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="type">Service Type to export</param>
+        </member>
+        <member name="P:JulMar.Core.ExportServiceAttribute.ServiceType">
+            <summary>
+            Service Type being exported (typically an interface)
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.WeakEventHandler">
+            <summary>
+            Simple class to generate WeakEventHandler delegates.  This is modeled
+            after the WeakEventManager support in WPF but is generic (not dependent upon that class)
+            Warning: this will not work properly for anonymous methods.
+            </summary>
+            <example>
+            <![CDATA[
+              staticClass.SomeEvent += WeakEventHandler(MyHandlerMethod, e => staticClass.SomeEvent -= e);
+              staticClass.SomeEvent += WeakEventHandler<MyEventArgs>.Create(MyHandlerMethod);
+            ]]>
+            </example>
+        </member>
+        <member name="M:JulMar.Core.WeakEventHandler.Create(System.EventHandler,System.Action{System.EventHandler})">
+            <summary>
+            Creates a new EventHandler wrapper over an existing method that exhibits
+            WeakEvent semantics.  I.e. the event will not keep the specified target alive
+            if no other references are outstanding.  This version is for EventHandler.
+            </summary>
+            <param name="eventHandler">Method to wrap</param>
+            <param name="removeTarget">Delegate owner</param>
+            <returns>EventHandler (weak)</returns>
+        </member>
+        <member name="M:JulMar.Core.WeakEventHandler.Create``1(System.EventHandler{``0},System.Action{System.EventHandler{``0}})">
+            <summary>
+            Creates a new EventHandler wrapper over an existing method that exhibits
+            WeakEvent semantics.  I.e. the event will not keep the specified target alive
+            if no other references are outstanding.  This version is for EventHandler(OfType(T)).
+            </summary>
+            <typeparam name="T">Generic EventArgs type</typeparam>
+            <param name="eventHandler">Method to wrap</param>
+            <param name="removeTarget">Delegate owner</param>
+            <returns>EventHandler (weak)</returns>
+        </member>
+        <member name="T:JulMar.Core.IWeakEventHandler">
+            <summary>
+            Interface for non-generic event handler type
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.InternalWeakEventHandler`1">
+            <summary>
+            This class implements the WeakEvent handler
+            </summary>
+            <typeparam name="T">Type</typeparam>
+        </member>
+        <member name="M:JulMar.Core.InternalWeakEventHandler`1.#ctor(System.EventHandler,System.Action{System.EventHandler})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="eventHandler">EventHandler</param>
+            <param name="removeTarget">Delegate owner</param>
+        </member>
+        <member name="M:JulMar.Core.InternalWeakEventHandler`1.Invoke(System.Object,System.EventArgs)">
+            <summary>
+            Method to invoke the wrapped weak method.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="P:JulMar.Core.InternalWeakEventHandler`1.JulMar#Core#IWeakEventHandler#Handler">
+            <summary>
+            Retrieves the handler
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.IWeakEventHandler`1">
+            <summary>
+            Interface to allow compile-time binding to generated handler.
+            </summary>
+            <typeparam name="T">EventArgs type</typeparam>
+        </member>
+        <member name="P:JulMar.Core.IWeakEventHandler`1.Handler">
+            <summary>
+            Retrieves the handler
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.InternalWeakEventHandler`2">
+            <summary>
+            This class implements the WeakEvent handler
+            </summary>
+            <typeparam name="T">Type</typeparam>
+            <typeparam name="TE">EventArgs</typeparam>
+        </member>
+        <member name="M:JulMar.Core.InternalWeakEventHandler`2.#ctor(System.EventHandler{`1},System.Action{System.EventHandler{`1}})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="eventHandler">EventHandler</param>
+            <param name="removeTarget">Action called on removal</param>
+        </member>
+        <member name="M:JulMar.Core.InternalWeakEventHandler`2.Invoke(System.Object,`1)">
+            <summary>
+            Method to invoke the wrapped weak method.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="P:JulMar.Core.InternalWeakEventHandler`2.JulMar#Core#IWeakEventHandler{TE}#Handler">
+            <summary>
+            Retrieves the handler
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.SystemInfo">
+            <summary>
+            Provides operating and hardware system information beyond Environment.OSVersion.
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.SystemInfo.PhysicalCPUs">
+            <summary>
+            Count of physical CPU packages
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.SystemInfo.PhysicalCores">
+            <summary>
+            Count of physical cores available. This ignores
+            HyperThreaded cores reported by Windows.
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.SystemInfo.CoresInUse">
+            <summary>
+            Provides access to the Processor Affinity mask.
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.SystemInfo.OperatingSystem">
+            <summary>
+            Returns operating system information
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.SystemInfo.DoubleClickTime">
+            <summary>
+            Time (in msec) for two consecutive button-down events to
+            equal a double-click
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.SystemInfo.Is64BitProcess">
+            <summary>
+            Returns TRUE if we are running as an x64 process.
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.SystemInfo.Is64BitWindows">
+            <summary>
+            Returns whether this is a 64-bit version of Windows.
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.SystemInfo.IsWow64Process">
+            <summary>
+            Returns true if this is a 32-bit process running on a 64-bit box.
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.OperatingSystem">
+            <summary>
+            Operating system type detected
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.OperatingSystem.Unknown">
+            <summary>
+            Unknown operating system (pre-XP)
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.OperatingSystem.Windows2000">
+            <summary>
+            Windows 2000
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.OperatingSystem.WindowsXP">
+            <summary>
+            Windows XP
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.OperatingSystem.Windows2003">
+            <summary>
+            Windows Server 2003
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.OperatingSystem.Windows2003R2">
+            <summary>
+            Windows Server 2003 R2
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.OperatingSystem.WindowsVista">
+            <summary>
+            Windows Vista
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.OperatingSystem.Windows2008">
+            <summary>
+            Windows 2008
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.OperatingSystem.Windows7">
+            <summary>
+            Windows 7
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.OperatingSystem.Windows2008R2">
+            <summary>
+            Windows 2008 R2
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.OperatingSystemInfo">
+            <summary>
+            Contains information about the running operating system.  Detects between
+            Windows7 vs. W2K8R2, etc.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.OperatingSystemInfo.#ctor">
+            <summary>
+            Disallow creation of object
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.OperatingSystemInfo.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            </summary>
+            <returns>
+            A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+            </returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:JulMar.Core.OperatingSystemInfo.GetProductInfo">
+            <summary>
+            Retrieves the product info
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Core.OperatingSystemInfo.DetermineOperatingSystem">
+            <summary>
+            This retrieves the operating system
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:JulMar.Core.OperatingSystemInfo.Product">
+            <summary>
+            Returns the running operating system as an enumeration
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.OperatingSystemInfo.ServicePack">
+            <summary>
+            Returns the active service pack (if any)
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.OperatingSystemInfo.HasTabletSupport">
+            <summary>
+            Returns whether the system has tablet support
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.OperatingSystemInfo.IsMediaCenter">
+            <summary>
+            Returns whether the system is "Media Center"
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.OperatingSystemInfo.IsEmbedded">
+            <summary>
+            Returns whether this is an embedded version of Windows
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.OperatingSystemInfo.ProductInfo">
+            <summary>
+            Returns the product information (Home, Ultimate, etc.)
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.PROCESSOR_CACHE_TYPE.UnifiedCache">
+            <summary>
+            Unified Cache
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.PROCESSOR_CACHE_TYPE.InstructionCache">
+            <summary>
+            Processor instruction cache
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.PROCESSOR_CACHE_TYPE.DataCache">
+            <summary>
+            Data cache
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.PROCESSOR_CACHE_TYPE.TraceCache">
+            <summary>
+            Trace cache
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.LOGICAL_PROCESSOR_RELATIONSHIP.RelationProcessorCore">
+            <summary>
+            Logical processors share single processor core.
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.LOGICAL_PROCESSOR_RELATIONSHIP.RelationNumaNode">
+            <summary>
+            Logical processors part of same NUMA node.
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.LOGICAL_PROCESSOR_RELATIONSHIP.RelationCache">
+            <summary>
+            Processors share cache.
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.LOGICAL_PROCESSOR_RELATIONSHIP.RelationProcessorPackage">
+            <summary>
+            Processors share physical socket package
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Concurrency.ObjectLockExtensions">
+            <summary>
+            This class provides a functional way to obtain a monitor and
+            invoke an action.  This allows for an elegant syntax to Monitor.TryEnter.
+            </summary>
+            <example>
+            <![CDATA[
+              object myLock = new object();
+              ...
+              myLock.UsingLock(() => DoSomeThreadSafeWorkHere());
+              myLock.TryUsingLock(TimeSpan.FromSeconds(10), () => CalculateValues());
+            ]]>
+            </example>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ObjectLockExtensions.UsingLock(System.Object,System.Action)">
+            <summary>
+            Performs an action while holding a Monitor; infinite wait
+            </summary>
+            <param name="monitor">Object to lock</param>
+            <param name="action">Action to invoke</param>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ObjectLockExtensions.UsingLock``1(System.Object,System.Func{``0})">
+            <summary>
+            Performs an action while holding a Monitor; infinite wait
+            </summary>
+            <typeparam name="T">Result type</typeparam>
+            <param name="monitor">Object to lock</param>
+            <param name="action">Action to invoke</param>
+            <returns>Result from action</returns>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ObjectLockExtensions.TryUsingLock(System.Object,System.Int32,System.Action)">
+            <summary>
+            Attempts to obtain monitor and performs action.
+            </summary>
+            <param name="monitor">Object to lock</param>
+            <param name="timeout">Timeout</param>
+            <param name="action">Action to invoke</param>
+            <returns>True if action invoked</returns>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ObjectLockExtensions.TryUsingLock(System.Object,System.TimeSpan,System.Action)">
+            <summary>
+            Attempts to obtain monitor and performs action.
+            </summary>
+            <param name="monitor">Object to lock</param>
+            <param name="timeSpan">Timeout</param>
+            <param name="action">Action to invoke</param>
+            <returns>True if action invoked</returns>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ObjectLockExtensions.TryUsingLock``1(System.Object,System.Int32,System.Func{``0},``0@)">
+            <summary>
+            Attempts to obtain monitor and performs action that returns result.
+            </summary>
+            <typeparam name="T">Result type</typeparam>
+            <param name="monitor">Object to lock</param>
+            <param name="timeout">Timeout to wait</param>
+            <param name="action">Action to perform</param>
+            <param name="result">Result from action</param>
+            <returns>True if action invoked</returns>
+        </member>
+        <member name="M:JulMar.Core.Concurrency.ObjectLockExtensions.TryUsingLock``1(System.Object,System.TimeSpan,System.Func{``0},``0@)">
+            <summary>
+            Attempts to obtain monitor and performs action that returns result.
+            </summary>
+            <typeparam name="T">Result type</typeparam>
+            <param name="monitor">Object to lock</param>
+            <param name="timeSpan">Timeout to wait</param>
+            <param name="action">Action to perform</param>
+            <param name="result">Result from action</param>
+            <returns>True if action invoked</returns>
+        </member>
+        <member name="T:JulMar.Core.Collections.WeakReferenceList`1">
+            <summary>
+            A List(Of T) that implements weak reference semantics.
+            Elements in the list can be collected if no other reference exists to the object.
+            The list automatically cleans up when any item is added or removed.
+            </summary>
+            <remarks>
+            Do not use this for List(String) - strings are interned and treated differently by the
+            CLR.  As such they will never be "dead" and so this class will act just like a normal
+            List - so just use List.
+            </remarks>
+            <typeparam name="T">Type</typeparam>
+        </member>
+        <member name="M:JulMar.Core.Collections.WeakReferenceList`1.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Collections.WeakReferenceList`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Constructor which takes an existing list
+            </summary>
+            <param name="existingData">Existing data to load</param>
+        </member>
+        <member name="M:JulMar.Core.Collections.WeakReferenceList`1.Add(`0)">
+            <summary>
+            Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </summary>
+            <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
+        </member>
+        <member name="M:JulMar.Core.Collections.WeakReferenceList`1.AddRange(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Adds a range of items to the list.
+            </summary>
+            <param name="existingData">Existing data to load</param>
+        </member>
+        <member name="M:JulMar.Core.Collections.WeakReferenceList`1.Clear">
+            <summary>
+            Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </summary>
+            <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only. </exception>
+        </member>
+        <member name="M:JulMar.Core.Collections.WeakReferenceList`1.Contains(`0)">
+            <summary>
+            Determines whether the <see cref="T:System.Collections.Generic.ICollection`1"/> contains a specific value.
+            </summary>
+            <returns>
+            true if <paramref name="item"/> is found in the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false.
+            </returns>
+            <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
+        </member>
+        <member name="M:JulMar.Core.Collections.WeakReferenceList`1.CopyTo(`0[],System.Int32)">
+            <summary>
+            Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
+            </summary>
+            <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from 
+            <see cref="T:System.Collections.Generic.ICollection`1"/>. The <see cref="T:System.Array"/> must have zero-based indexing.
+            </param>
+            <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="array"/> is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than 0.</exception>
+        </member>
+        <member name="M:JulMar.Core.Collections.WeakReferenceList`1.Remove(`0)">
+            <summary>
+            Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </summary>
+            <returns>
+            true if <paramref name="item"/> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false. This method also returns false if <paramref name="item"/> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </returns>
+            <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.</exception>
+        </member>
+        <member name="M:JulMar.Core.Collections.WeakReferenceList`1.IndexOf(`0)">
+            <summary>
+            Determines the index of a specific item in the <see cref="T:System.Collections.Generic.IList`1"/>.
+            </summary>
+            <returns>
+            The index of <paramref name="item"/> if found in the list; otherwise, -1.
+            </returns>
+            <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1"/>.</param>
+        </member>
+        <member name="M:JulMar.Core.Collections.WeakReferenceList`1.Insert(System.Int32,`0)">
+            <summary>
+            Inserts an item to the <see cref="T:System.Collections.Generic.IList`1"/> at the specified index.
+            </summary>
+            <param name="index">The zero-based index at which <paramref name="item"/> should be inserted.</param><param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1"/>.</param><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.</exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.</exception>
+        </member>
+        <member name="M:JulMar.Core.Collections.WeakReferenceList`1.RemoveAt(System.Int32)">
+            <summary>
+            Removes the <see cref="T:System.Collections.Generic.IList`1"/> item at the specified index.
+            </summary>
+            <param name="index">The zero-based index of the item to remove.</param><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.</exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.</exception>
+        </member>
+        <member name="M:JulMar.Core.Collections.WeakReferenceList`1.ToList">
+            <summary>
+            Converts to a List with strong references to all active items
+            </summary>
+            <returns>List of items</returns>
+        </member>
+        <member name="M:JulMar.Core.Collections.WeakReferenceList`1.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>
+            A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
+            </returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:JulMar.Core.Collections.WeakReferenceList`1.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through a collection.
+            </summary>
+            <returns>
+            An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+            </returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:JulMar.Core.Collections.WeakReferenceList`1.DoEnumeration">
+            <summary>
+            Private method to run enumeration
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Core.Collections.WeakReferenceList`1.RemoveDeadItems">
+            <summary>
+            This method removes all items which have been collected.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Collections.WeakReferenceList`1.GetItem(System.Int32,`0@)">
+            <summary>
+            This retrieves a specific item by index.
+            </summary>
+            <param name="index">Index to retrieve</param>
+            <param name="value">Returning value, null if item was collected</param>
+            <returns>True if item was present at index</returns>
+        </member>
+        <member name="P:JulMar.Core.Collections.WeakReferenceList`1.Count">
+            <summary>
+            Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </summary>
+            <returns>
+            The number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </returns>
+        </member>
+        <member name="P:JulMar.Core.Collections.WeakReferenceList`1.IsReadOnly">
+            <summary>
+            Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+            </summary>
+            <returns>
+            true if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:JulMar.Core.Collections.WeakReferenceList`1.Item(System.Int32)">
+            <summary>
+            Gets or sets the element at the specified index.
+            </summary>
+            <returns>
+            The element at the specified index.
+            </returns>
+            <param name="index">The zero-based index of the element to get or set.</param><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.</exception><exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1"/> is read-only.</exception>
+        </member>
+        <member name="T:JulMar.Core.ObservableObject">
+            <summary>
+            This class implements the INotifyPropertyChanged interface to provide
+            simple property change notifications.  It has the option of passing
+            the old and new value if thread-safe semantics are required.  This will
+            ensure the known value is passed with the event so that the consumer doesn't
+            have to read the (possibly changed) value, or take a lock to retrieve the value.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.ObservableObject.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.ObservableObject.ChangeValue``1(System.String,``0@,``0)">
+            <summary>
+            This method can be used to change a property value.
+            </summary>
+            <typeparam name="T">Property type</typeparam>
+            <param name="propertyName">Name of the property</param>
+            <param name="oldValue">Old value</param>
+            <param name="newValue">New value</param>
+            <returns>True if value was changed, False if not</returns>
+        </member>
+        <member name="M:JulMar.Core.ObservableObject.OnPropertyChanged(System.String)">
+            <summary>
+            Raises the PropertyChanged event
+            </summary>
+            <param name="propertyName">Property Changing value</param>
+        </member>
+        <member name="M:JulMar.Core.ObservableObject.OnPropertyChanged(System.String,System.Object)">
+            <summary>
+            Raises the PropertyChanged event
+            </summary>
+            <param name="propertyName">Property Changing value</param>
+            <param name="newValue">New Value</param>
+        </member>
+        <member name="M:JulMar.Core.ObservableObject.OnPropertyChanged(System.String,System.Object,System.Object)">
+            <summary>
+            Raises the PropertyChanged event
+            </summary>
+            <param name="propertyName">Property Changing value</param>
+            <param name="oldValue">Old value</param>
+            <param name="newValue">New value</param>
+        </member>
+        <member name="M:JulMar.Core.ObservableObject.OnPropertyChanged(JulMar.Core.PropertyChangedEventArgsEx)">
+            <summary>
+            This raises the INotifyPropertyChanged.PropertyChanged event to indicate
+            a specific property has changed value.
+            </summary>
+            <param name="e">PropertyChangingEventArgs</param>
+        </member>
+        <member name="E:JulMar.Core.ObservableObject.PropertyChanged">
+            <summary>
+            Occurs during a property value changes.
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.PropertyObserver`1">
+            <summary>
+            Monitors the PropertyChanged event of an object that implements INotifyPropertyChanged,
+            and executes callback methods (i.e. handlers) registered for properties of that object.
+            </summary>
+            <typeparam name="T">The type of object to monitor for property changes.</typeparam>
+        </member>
+        <member name="M:JulMar.Core.PropertyObserver`1.#ctor(`0)">
+            <summary>
+            Initializes a new instance of PropertyObserver, which
+            observes the 'propertySource' object for property changes.
+            </summary>
+            <param name="propertySource">The object to monitor for property changes.</param>
+        </member>
+        <member name="M:JulMar.Core.PropertyObserver`1.RegisterHandler(System.Linq.Expressions.Expression{System.Func{`0,System.Object}},System.Action{`0})">
+            <summary>
+            Registers a callback to be invoked when the PropertyChanged event has been raised for the specified property.
+            </summary>
+            <param name="expression">A lambda expression like 'n => n.PropertyName'.</param>
+            <param name="handler">The callback to invoke when the property has changed.</param>
+            <returns>The object on which this method was invoked, to allow for multiple invocations chained together.</returns>
+        </member>
+        <member name="M:JulMar.Core.PropertyObserver`1.UnregisterHandler(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
+            <summary>
+            Removes the callback associated with the specified property.
+            </summary>
+            <param name="expression">A lambda expression like 'n => n.PropertyName'.</param>
+            <returns>The object on which this method was invoked, to allow for multiple invocations chained together.</returns>
+        </member>
+        <member name="M:JulMar.Core.PropertyObserver`1.GetPropertyName(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
+            <summary>
+            Retrieves the property name for a given expression.
+            </summary>
+            <param name="expression">Expression to evaluate</param>
+            <returns>Property name</returns>
+        </member>
+        <member name="M:JulMar.Core.PropertyObserver`1.GetSource">
+            <summary>
+            Returns the source object we are monitoring.
+            </summary>
+            <returns>Object if it is still alive.</returns>
+        </member>
+        <member name="M:JulMar.Core.PropertyObserver`1.System#Windows#IWeakEventListener#ReceiveWeakEvent(System.Type,System.Object,System.EventArgs)">
+            <summary>
+            Receives events from the centralized event manager.
+            </summary>
+            <returns>
+            true if the listener handled the event. It is considered an error by the <see cref="T:System.Windows.WeakEventManager"/> handling in WPF to register a listener for an event that the listener does not handle. Regardless, the method should return false if it receives an event that it does not recognize or handle.
+            </returns>
+            <param name="managerType">The type of the <see cref="T:System.Windows.WeakEventManager"/> calling this method.</param><param name="sender">Object that originated the event.</param><param name="e">Event data.</param>
+        </member>
+        <member name="M:JulMar.Core.PropertyObserver`1.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="E:JulMar.Core.PropertyObserver`1.PropertyChanged">
+            <summary>
+            This event list gets invoked for *every* property change on the object.
+            However, it will not keep the object alive.
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Collections.ObservableDictionary`2">
+            <summary>
+             This is a Dictionary that supports INotifyCollectionChanged semantics. 
+            </summary>
+             <remarks>
+             WARNING: this dictionary is NOT thread-safe!  You must still
+             provide synchronization to ensure no writes are done while the dictionary is being
+             enumerated!  This should not be a problem for most bindings as they rely on the 
+             CollectionChanged information.
+             </remarks>
+            <typeparam name="TKey">Key</typeparam>
+            <typeparam name="TValue">Value type</typeparam>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.#ctor(System.Collections.Generic.IEqualityComparer{`0})">
+            <summary>
+            Constructor that takes an equality comparer
+            </summary>
+            <param name="comparer">Comparison class</param>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.Add(`0,`1)">
+            <summary>
+            Adds an element with the provided key and value to the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            </summary>
+            <param name="key">The object to use as the key of the element to add.
+            </param><param name="value">The object to use as the value of the element to add.
+            </param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.
+            </exception><exception cref="T:System.ArgumentException">An element with the same key already exists in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            </exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IDictionary`2"/> is read-only.
+            </exception>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{TKey@TValue}}#Add(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <summary>
+            Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </summary>
+            <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+            </exception>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.Clear">
+            <summary>
+            Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </summary>
+            <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only. 
+            </exception>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.ContainsKey(`0)">
+            <summary>
+            Determines whether the <see cref="T:System.Collections.Generic.IDictionary`2"/> contains an element with the specified key.
+            </summary>
+            <returns>
+            true if the <see cref="T:System.Collections.Generic.IDictionary`2"/> contains an element with the key; otherwise, false.
+            </returns>
+            <param name="key">The key to locate in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            </param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.
+            </exception>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.CopyTo(System.Collections.Generic.KeyValuePair{`0,`1}[],System.Int32)">
+            <summary>
+            Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
+            </summary>
+            <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"/>. The <see cref="T:System.Array"/> must have zero-based indexing.
+            </param><param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.
+            </param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="array"/> is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="arrayIndex"/> is less than 0.</exception>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>
+            A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
+            </returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.Remove(`0)">
+            <summary>
+            Removes the element with the specified key from the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            </summary>
+            <returns>
+            true if the element is successfully removed; otherwise, false.  This method also returns false if <paramref name="key"/> was not found in the original <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            </returns>
+            <param name="key">The key of the element to remove.
+            </param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.
+            </exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IDictionary`2"/> is read-only.
+            </exception>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{TKey@TValue}}#Remove(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <summary>
+            Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </summary>
+            <returns>
+            true if <paramref name="item"/> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false. This method also returns false if <paramref name="item"/> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </returns>
+            <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+            </exception>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.System#Collections#Generic#ICollection{System#Collections#Generic#KeyValuePair{TKey@TValue}}#Contains(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <summary>
+            Determines whether the <see cref="T:System.Collections.Generic.ICollection`1"/> contains a specific value.
+            </summary>
+            <returns>
+            true if <paramref name="item"/> is found in the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false.
+            </returns>
+            <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+                            </param>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through a collection.
+            </summary>
+            <returns>
+            An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+            </returns>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.TryGetValue(`0,`1@)">
+            <summary>
+            Gets the value associated with the specified key.
+            </summary>
+            <returns>
+            true if the object that implements <see cref="T:System.Collections.Generic.IDictionary`2"/> contains an element with the specified key; otherwise, false.
+            </returns>
+            <param name="key">The key whose value to get.
+            </param><param name="value">When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the <paramref name="value"/> parameter. This parameter is passed uninitialized.
+            </param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.
+            </exception>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.OnNotifyAdd(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <summary>
+            This is used to notify insertions into the dictionary.
+            </summary>
+            <param name="item">Item</param>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.OnNotifyRemove(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <summary>
+            This is used to notify removals from the dictionary
+            </summary>
+            <param name="item">Item</param>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.OnNotifyReplace(System.Collections.Generic.KeyValuePair{`0,`1},System.Collections.Generic.KeyValuePair{`0,`1})">
+            <summary>
+            This is used to notify replacements in the dictionary
+            </summary>
+            <param name="newItem">New item</param>
+            <param name="oldItem">Old item</param>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.OnNotifyReset">
+            <summary>
+            This is used to notify that the dictionary was completely reset.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Collections.ObservableDictionary`2.OnCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Collections.ObjectModel.ObservableCollection`1.CollectionChanged"/> event with the provided arguments.
+            </summary>
+            <param name="e">Arguments of the event being raised.</param>
+        </member>
+        <member name="E:JulMar.Core.Collections.ObservableDictionary`2.CollectionChanged">
+            <summary>
+            Event raised for collection change notification
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Collections.ObservableDictionary`2.Count">
+            <summary>
+            Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </summary>
+            <returns>
+            The number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </returns>
+        </member>
+        <member name="P:JulMar.Core.Collections.ObservableDictionary`2.IsReadOnly">
+            <summary>
+            Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+            </summary>
+            <returns>
+            true if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, false.
+            </returns>
+        </member>
+        <member name="P:JulMar.Core.Collections.ObservableDictionary`2.Item(`0)">
+            <summary>
+            Gets or sets the element with the specified key.
+            </summary>
+            <returns>
+            The element with the specified key.
+            </returns>
+            <param name="key">The key of the element to get or set.
+            </param><exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.
+            </exception><exception cref="T:System.Collections.Generic.KeyNotFoundException">The property is retrieved and <paramref name="key"/> is not found.
+            </exception><exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IDictionary`2"/> is read-only.
+            </exception>
+        </member>
+        <member name="P:JulMar.Core.Collections.ObservableDictionary`2.Keys">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.ICollection`1"/> containing the keys of the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            </summary>
+            <returns>
+            An <see cref="T:System.Collections.Generic.ICollection`1"/> containing the keys of the object that implements <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            </returns>
+        </member>
+        <member name="P:JulMar.Core.Collections.ObservableDictionary`2.Values">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.ICollection`1"/> containing the values in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            </summary>
+            <returns>
+            An <see cref="T:System.Collections.Generic.ICollection`1"/> containing the values in the object that implements <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            </returns>
+        </member>
+        <member name="T:JulMar.Core.Undo.DelegateUndo">
+            <summary>
+            This class implements a generic undo using delegates.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Undo.DelegateUndo.#ctor(System.Action,System.Action)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="undoAction">Action for undo</param>
+            <param name="redoAction">Optional action for redo</param>
+        </member>
+        <member name="M:JulMar.Core.Undo.DelegateUndo.Undo">
+            <summary>
+            Method used to undo operation
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Undo.DelegateUndo.Redo">
+            <summary>
+            Method to redo operation
+            </summary>
+        </member>
+        <member name="P:JulMar.Core.Undo.DelegateUndo.CanRedo">
+            <summary>
+            True if operation can be "reapplied" after undo.
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Services.ServiceLocator">
+            <summary>
+            This class acts as a resolver for typed services (interfaces and implementations).
+            Internally it relies on an IServiceContainer - it will create a BCL version if one is not 
+            supplied.  Any custom implementation can also be used - this provider will not use the 
+            promotion features so those do not need to be implemented.
+            </summary>
+            <example>
+            To register a service use Add:
+            <![CDATA[
+            serviceResolver.Add(typeof(IService), new Service());
+            
+            To retrieve a service use Resolve:
+            
+            IService svc = serviceResolver<IService>.Resolve();
+            ]]>
+            </example>
+        </member>
+        <member name="F:JulMar.Core.Services.ServiceLocator.MefLocatorKey">
+            <summary>
+            Key used to bind exports together
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Services.ServiceLocator._mefResolver">
+            <summary>
+            The MEF loader.
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Services.ServiceLocator._lock">
+            <summary>
+            Lock
+            </summary>
+        </member>
+        <member name="F:JulMar.Core.Services.ServiceLocator._serviceContainer">
+            <summary>
+            Service container
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Services.ServiceLocator.#ctor">
+            <summary>
+            Construct the service provider.  Resolve all the imported services.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Services.ServiceLocator.SetServiceContainer(System.ComponentModel.Design.IServiceContainer)">
+            <summary>
+            This allows the user to set the container to a different type.
+            If not performed, the default ServiceContainer will be created and used.
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="M:JulMar.Core.Services.ServiceLocator.Exists(System.Type)">
+            <summary>
+            Returns whether the service exists.
+            </summary>
+            <param name="type">Type</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:JulMar.Core.Services.ServiceLocator.Add(System.Type,System.Object)">
+            <summary>
+            Adds a new service to the resolver list
+            </summary>
+            <param name="type">Service Type (typically an interface)</param>
+            <param name="value">Object that implements service</param>
+        </member>
+        <member name="M:JulMar.Core.Services.ServiceLocator.Add(System.Type,System.ComponentModel.Design.ServiceCreatorCallback)">
+            <summary>
+            This registers a new service by type, with a creator callback
+            to generate the service at runtime.
+            </summary>
+            <param name="type">Type</param>
+            <param name="creatorCallback">Callback to create the service</param>
+        </member>
+        <member name="M:JulMar.Core.Services.ServiceLocator.Add``1(System.Func{System.ComponentModel.Design.IServiceContainer,``0})">
+            <summary>
+            This registers a new service by type with a creator callback.
+            </summary>
+            <typeparam name="T">Type to generate</typeparam>
+            <param name="creatorCallback">Creator callback</param>
+        </member>
+        <member name="M:JulMar.Core.Services.ServiceLocator.Add``1(``0)">
+            <summary>
+            This adds a new service to the resolver list.
+            </summary>
+            <typeparam name="T">Type of the service</typeparam>
+            <param name="value">Value</param>
+        </member>
+        <member name="M:JulMar.Core.Services.ServiceLocator.EnsureServiceContainer">
+            <summary>
+            Ensures the container has been created.
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Services.ServiceLocator.Remove(System.Type)">
+            <summary>
+            Remove a service
+            </summary>
+            <param name="type">Type to remove</param>
+        </member>
+        <member name="M:JulMar.Core.Services.ServiceLocator.Resolve``1">
+            <summary>
+            This resolves a service type and returns the implementation. Note that this
+            assumes the key used to register the object is of the appropriate type or
+            this method will throw an InvalidCastException!
+            </summary>
+            <typeparam name="T">Type to resolve</typeparam>
+            <returns>Implementation</returns>
+        </member>
+        <member name="M:JulMar.Core.Services.ServiceLocator.GetService(System.Type)">
+            <summary>
+            Implementation of IServiceProvider
+            </summary>
+            <param name="serviceType">Service Type</param>
+            <returns>Object implementing service</returns>
+        </member>
+        <member name="M:JulMar.Core.Services.ServiceLocator.CheckLocatedServices(System.Type)">
+            <summary>
+            This locates a lazy service record for a give type.
+            </summary>
+            <param name="type">Type to search for</param>
+            <returns>Lazy object or null</returns>
+        </member>
+        <member name="M:JulMar.Core.Services.ServiceLocator.DynamicLoadAndAdd(System.Type)">
+            <summary>
+            This searches the located MEF components and creates it and loads it into the service container.
+            </summary>
+            <param name="serviceType">Type we are looking for</param>
+            <returns>Created object</returns>
+        </member>
+        <member name="M:JulMar.Core.Services.ServiceLocator.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="T:JulMar.Core.Extensions.CollectionExtensions">
+            <summary>
+            A set of collection extension methods
+            </summary>
+        </member>
+        <member name="M:JulMar.Core.Extensions.CollectionExtensions.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
+            <summary>
+            Enumerates a collection and executes a predicate against each item
+            </summary>
+            <typeparam name="T">Type of elements</typeparam>
+            <param name="collection">Collection</param>
+            <param name="action">Action to execute on each element</param>
+        </member>
+        <member name="M:JulMar.Core.Extensions.CollectionExtensions.Compare``1(System.Collections.Generic.ICollection{``0},System.Collections.Generic.ICollection{``0},System.Boolean)">
+            <summary>
+            This is used to compare two collections.
+            </summary>
+            <typeparam name="T">Collection type</typeparam>
+            <param name="collection">Collection Source</param>
+            <param name="other">Collection to compare to</param>
+            <param name="exactMatch">Require same-order elements (exact match)</param>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Core.Extensions.CollectionExtensions.AddRange``1(System.Collections.Generic.ICollection{``0},System.Collections.Generic.IEnumerable{``0})">
+             <summary>
+             Add a range of IEnumerable collection to an existing Collection.
+             </summary>
+            <typeparam name="T">Type of collection</typeparam>
+            <param name="collection">Collection</param>
+             <param name="items">Items to add</param>
+        </member>
+        <member name="M:JulMar.Core.Extensions.CollectionExtensions.IndexOf``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
+            <summary>
+             This method tests an enumerable sequence and returns the index of the first item that
+             passes the test.
+            </summary>
+            <typeparam name="T">Type of collection</typeparam>
+            <param name="collection">Collection</param>
+            <param name="test">Predicate test</param>
+            <returns>Index (zero based) of first element that passed test, -1 if none did</returns>
+        </member>
+        <member name="M:JulMar.Core.Extensions.CollectionExtensions.Swap``1(System.Collections.Generic.IList{``0},System.Int32,System.Int32)">
+            <summary>
+            Swap a value in the collection
+            </summary>
+            <typeparam name="T">Type of collection</typeparam>
+            <param name="collection">Source collection</param>
+            <param name="sourceIndex">Index</param>
+            <param name="destIndex">Dest index</param>
+        </member>
+        <member name="M:JulMar.Core.Extensions.CollectionExtensions.MoveRange``1(System.Collections.Generic.IList{``0},System.Int32,System.Int32,System.Int32)">
+            <summary>
+            This method moves a range of values in the collection
+            </summary>
+            <typeparam name="T">Type of collection</typeparam>
+            <param name="collection">Source collection</param>
+            <param name="startingIndex">Index</param>
+            <param name="count">Count of items</param>
+            <param name="destIndex">Dest index</param>
+        </member>
+    </members>
+</doc>

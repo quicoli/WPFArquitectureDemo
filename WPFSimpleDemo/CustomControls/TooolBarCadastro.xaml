@@ -1,0 +1,102 @@
+﻿<UserControl x:Class="WPFSimpleDemo.CustomControls.TooolBarCadastro"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="400">
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+        <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                ToolTip="ALT+C - Create new" 
+                Command="{Binding CmdInserir, RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Mode=TwoWay}"
+                HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                Visibility="{Binding BtnInserirVisible, RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Mode=TwoWay}">
+            <Viewbox Width="16" Height="16" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                <Path Data="M12.126984,0L19.872009,0 19.872009,12.128 32,12.128 32,19.872999 19.872009,19.872999 19.872009,31.999 12.126984,31.999 12.126984,19.872999 0,19.872999 0,12.128 12.126984,12.128z" 
+                                  Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}}, Path=Foreground}" >
+                </Path>
+
+            </Viewbox>
+        </Button>
+        <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                ToolTip="ALT+E - Edit" 
+                Command="{Binding CmdEditar, RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Mode=TwoWay}"
+                Margin="3,0,0,0"
+                HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                Visibility="{Binding BtnEditarVisible, RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Mode=TwoWay}" >
+
+            <Viewbox Width="16" Height="16" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                <Path Data="M0,22.691865L9.6958332,27.864942 0.24500618,32.000013z M8.8988495,6.3116251L18.869686,12.034729 11.211813,25.370919 10.644821,23.665877 7.7198686,23.364879 7.2188854,21.531844 4.3549361,21.429853 3.5479436,19.422835 1.2459807,19.647815z M13.690775,0.00052993685C13.965764,-0.0064584891,14.233765,0.055554115,14.474758,0.19355655L21.534634,4.2476002C22.392622,4.7375976,22.586618,6.0146238,21.968632,7.0966398L21.126636,8.5616571 10.95782,2.7255753 11.799801,1.2555529C12.243793,0.48054798,12.988775,0.017528671,13.690775,0.00052993685z" 
+                                  Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}}, Path=Foreground}" >
+                </Path>
+
+            </Viewbox>
+        </Button>
+        <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                        ToolTip="ALT+D - Delete" 
+                        Command="{Binding CmdExcluir, RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Mode=TwoWay}"
+                        Margin="3,0,0,0"
+                        HorizontalAlignment="Right" VerticalAlignment="Bottom" Visibility="{Binding BtnExcluirVisible, RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Mode=TwoWay}" >
+            <Viewbox Width="16" Height="16" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                <Path Data="M18.551998,14.302987L18.551998,28.304994 21.451992,28.304994 21.451992,14.302987z M11.295988,14.302987L11.295988,28.304994 14.196988,28.304994 14.196988,14.302987z M4.0390009,14.302987L4.0390009,28.304994 6.9400014,28.304994 6.9400014,14.302987z M0,11.068995L25.492001,11.068995 24.680996,31.999999 0.81100462,31.999999z M8.692015,1.358993L8.692015,3.2749924 16.800015,3.2749924 16.800015,1.358993z M6.9400014,0L18.551998,0 18.551998,3.2749924 25.492001,3.2749924 25.492001,7.7210044 0,7.7210044 0,3.2749924 6.9400014,3.2749924z" 
+                                  Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}}, Path=Foreground}" >
+                </Path>
+
+            </Viewbox>
+        </Button>
+        <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                Command="{Binding CmdCancelar, RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Mode=TwoWay}"
+                ToolTip="ESC - Cancel"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Visibility="{Binding BtnCancelarVisible, RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Mode=TwoWay}"
+                Margin="3,0,0,0">
+            <Viewbox Width="16" Height="16">
+
+                <Path Data="M17.227443,0.00011515617C23.663684,-0.02380538,29.524736,3.6793081,32.000001,9.4210017L30.164003,10.212011C27.899001,4.9599484 22.372999,1.6759092 16.393995,2.0269136 11.083991,2.3439173 6.4269894,5.5139551 4.3359879,10.08601L10.825992,9.1769989 11.102991,11.158022 2.9010238,12.307828 2.9130002,12.424029 0.92401315,12.629046 0,3.6640635 1.9890176,3.4590459 2.5740291,9.1351464 2.6108104,9.0557344C5.0485648,3.9273926 10.30235,0.38714385 16.273994,0.030889273 16.592979,0.011482954 16.910905,0.0012919903 17.227443,0.00011515617z" 
+                                      Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}}, Path=Foreground}" />
+
+            </Viewbox>
+        </Button>
+        <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                ToolTip="ALT+S - Save" 
+                Command="{Binding CmdSalvar, RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Mode=TwoWay}"
+                HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                Visibility="{Binding BtnSalvarVisible, RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Mode=TwoWay}"
+                Margin="3,0,0,0">
+            <Viewbox Width="16" Height="16">
+
+                <Path Data="M5.3999969,24.699982L5.3999969,27.899994 26.199997,27.899994 26.199997,24.699982z M8.2999927,0L12.299995,0 12.299995,8.1000061 8.2999927,8.1000061z M0,0L5.2999908,0 5.2999908,9.7999878 26.199997,9.7999878 26.199997,0 31.700001,0 31.700001,32 0,32z" 
+                                      Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}}, Path=Foreground}" />
+
+            </Viewbox>
+        </Button>
+        <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                ToolTip="ALT+F - Find" 
+                Command="{Binding CmdPesquisar, RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Mode=TwoWay}"
+                HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                Visibility="{Binding BtnPesquisarVisible, RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Mode=TwoWay}"
+                Margin="3,0,0,0">
+            <Viewbox Width="16" Height="16">
+
+                <Path Data="M11.170988,2.0000026C6.1139962,2.0000026 1.9999944,6.1120075 1.9999944,11.16603 1.9999944,16.219991 6.1139962,20.331996 11.170988,20.331996 16.227981,20.331996 20.341006,16.219991 20.341006,11.16603 20.341006,6.1120075 16.227981,2.0000026 11.170988,2.0000026z M11.170988,0C17.33003,0 22.341001,5.0089787 22.341001,11.16603 22.341001,13.76351 21.449155,16.156669 19.95551,18.055608L19.942527,18.071714 31.999898,30.615001 30.5589,32.001003 18.567029,19.525854 18.476871,19.605846C16.516895,21.303544 13.961804,22.332 11.170988,22.332 5.0119487,22.332 1.6168633E-07,17.32302 0,11.16603 1.6168633E-07,5.0089787 5.0119487,0 11.170988,0z"
+                                      Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}}, Path=Foreground}" />
+
+            </Viewbox>
+        </Button>
+        <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}" 
+                ToolTip="ALT+P - Print" 
+                Command="{Binding CmdImprimir, RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Mode=TwoWay}"
+                HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                Visibility="{Binding BtnImprimirVisible, RelativeSource={RelativeSource AncestorType={x:Type UserControl}},Mode=TwoWay}"
+                Margin="3,0,0,0">
+            <Viewbox Width="16" Height="16">
+                <Path Data="M10,24L20,24 20,26 10,26z M10,20L22,20 22,22 10,22z M8,18L8,30 24,30 24,18z M28,10.400009C27.100006,10.400009 26.400024,11.100006 26.400024,12 26.400024,12.900009 27.100006,13.600006 28,13.600006 28.900024,13.600006 29.600006,12.900009 29.600006,12 29.600006,11.100006 28.900024,10.400009 28,10.400009z M2,8L30,8C31.100006,8,32,8.9000092,32,10L32,22C32,23.100006,31.100006,24,30,24L26,24 26,30C26,31.100006,25.100006,32,24,32L8,32C6.9000244,32,6,31.100006,6,30L6,24 2,24C0.90002441,24,0,23.100006,0,22L0,10C0,8.9000092,0.90002441,8,2,8z M8,0L24,0C25.100006,0,26,0.90000916,26,2L26,6 24,6 24,2 8,2 8,6 6,6 6,2C6,0.90000916,6.9000244,0,8,0z"
+                                      Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}}, Path=Foreground}" />
+            </Viewbox>
+        </Button>
+    </StackPanel>
+</UserControl>

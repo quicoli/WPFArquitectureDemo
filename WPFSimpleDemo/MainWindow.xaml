@@ -1,0 +1,87 @@
+﻿<Window x:Class="WPFSimpleDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFSimpleDemo"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:customControls="clr-namespace:WPFSimpleDemo.CustomControls"
+        xmlns:behaviors="clr-namespace:WPFSimpleDemo.Behaviors"
+        xmlns:converters="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf"
+        mc:Ignorable="d"
+        
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        TextElement.FontSize="14"
+        TextElement.FontWeight="Medium"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        WindowStartupLocation="CenterOwner"
+        
+        Unloaded="MainWindow_OnUnloaded"
+        
+        Title="WPF Simple Demo" Height="550" Width="550">
+    
+    <Window.Resources>
+        <converters:NotConverter x:Key="NotConverter"/>
+    </Window.Resources>
+    
+    
+    <DockPanel LastChildFill="True">
+        <Grid DockPanel.Dock="Top">
+            <materialDesign:ColorZone Height="50"
+                              Mode="PrimaryMid"
+                              Padding="8"
+                              materialDesign:ShadowAssist.ShadowDepth="Depth2">
+                <Label VerticalAlignment="Center" FontSize="24">Users</Label>
+            </materialDesign:ColorZone>
+            <customControls:TooolBarCadastro Margin="0,0,5,-20"
+                                             HorizontalAlignment="Right"
+                                             VerticalAlignment="Bottom"
+                                             BtnPesquisarVisible="Collapsed"
+                                             BtnImprimirVisible="Collapsed"
+                                             CmdInserir="{Binding CmdInsert}"
+                                             CmdEditar="{Binding CmdEdit}"
+                                             CmdCancelar="{Binding CmdCancel}"
+                                             CmdExcluir="{Binding CmdDelete}"
+                                             CmdSalvar="{Binding CmdSave}"/>
+
+        </Grid>
+
+        <materialDesign:Card Margin="4 15 4 4" DockPanel.Dock="Top">
+            <StackPanel Orientation="Vertical"  IsEnabled="{Binding IsEditing}" Margin="10">
+                <StackPanel Orientation="Vertical">
+                    <Label>Username</Label>
+                    <TextBox x:Name="TextBoxUserName" Text="{Binding Path=User.UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="0,20,0,0">
+                    <Label>Password</Label>
+                    <PasswordBox 
+                        behaviors:PasswordBoxHelper.BindPassword="True"
+                        behaviors:PasswordBoxHelper.BoundPassword="{Binding Path=User.Password, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="0,20,0,20">
+                    <Label>Confirm Password</Label>
+                    <PasswordBox
+                        behaviors:PasswordBoxHelper.BindPassword="True"
+                        behaviors:PasswordBoxHelper.BoundPassword="{Binding Path=User.ConfirmPassword, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay, ValidatesOnDataErrors=True}"/>
+                </StackPanel>
+            </StackPanel>
+        </materialDesign:Card>
+      
+        <DataGrid DockPanel.Dock="Bottom"
+                  AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+                  IsEnabled="{Binding IsEditing, Converter={StaticResource NotConverter}}"
+                  ItemsSource="{Binding UserList, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedItem="{Binding SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  materialDesign:DataGridAssist.ColumnHeaderPadding="4 2 2 2"
+                  materialDesign:DataGridAssist.CellPadding="4 2 2 2"
+                  Margin="0,5,0,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Username" SortMemberPath="UserName" CanUserSort="True" Binding="{Binding UserName}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>

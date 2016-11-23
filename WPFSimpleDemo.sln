@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFSimpleDemo", "WPFSimpleDemo\WPFSimpleDemo.csproj", "{D61388A4-688D-4A64-8B19-7A55C8E3FACA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFSimpleDemo.Tests", "WPFSimpleDemo.Tests\WPFSimpleDemo.Tests.csproj", "{A6C76ABA-6F22-4BF3-A56C-EE6FA7C2DAD0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D61388A4-688D-4A64-8B19-7A55C8E3FACA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D61388A4-688D-4A64-8B19-7A55C8E3FACA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D61388A4-688D-4A64-8B19-7A55C8E3FACA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D61388A4-688D-4A64-8B19-7A55C8E3FACA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6C76ABA-6F22-4BF3-A56C-EE6FA7C2DAD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6C76ABA-6F22-4BF3-A56C-EE6FA7C2DAD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6C76ABA-6F22-4BF3-A56C-EE6FA7C2DAD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6C76ABA-6F22-4BF3-A56C-EE6FA7C2DAD0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Validation.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Validation.Integration.WPF.6.0.1304.0\lib\NET45
+	EndGlobalSection
+EndGlobal

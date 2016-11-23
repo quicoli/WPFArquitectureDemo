@@ -1,0 +1,1863 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Julmar.Wpf.Behaviors</name>
+    </assembly>
+    <members>
+        <member name="T:JulMar.Windows.Internal.DragAdorner">
+            <summary>
+            Drag Adorner - this was taken from a sample posted by Bea Stollnitz
+            See http://www.beacosta.com/blog/?p=53 for the original article.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Internal.DragAdorner.#ctor(System.Object,System.Windows.DataTemplate,System.Windows.UIElement,System.Windows.Documents.AdornerLayer)">
+            <summary>
+            Constructor for the drag adorner
+            </summary>
+            <param name="dragDropData">Tag data</param>
+            <param name="dragDropTemplate">Template for visual</param>
+            <param name="adornedElement">Element we are adorning</param>
+            <param name="adornerLayer">Adorner layer to insert into</param>
+        </member>
+        <member name="M:JulMar.Windows.Internal.DragAdorner.SetPosition(System.Double,System.Double)">
+            <summary>
+            This changes the position of the adorner.
+            </summary>
+            <param name="left"></param>
+            <param name="top"></param>
+        </member>
+        <member name="M:JulMar.Windows.Internal.DragAdorner.MeasureOverride(System.Windows.Size)">
+            <summary>
+            Implements any custom measuring behavior for the adorner.
+            </summary>
+            <returns>
+            A <see cref="T:System.Windows.Size"/> object representing the amount of layout space needed by the adorner.
+            </returns>
+            <param name="constraint">A size to constrain the adorner to.</param>
+        </member>
+        <member name="M:JulMar.Windows.Internal.DragAdorner.ArrangeOverride(System.Windows.Size)">
+            <summary>
+            When overridden in a derived class, positions child elements and determines a size for a <see cref="T:System.Windows.FrameworkElement"/> derived class. 
+            </summary>
+            <returns>
+            The actual size used.
+            </returns>
+            <param name="finalSize">The final area within the parent that this element should use to arrange itself and its children.</param>
+        </member>
+        <member name="M:JulMar.Windows.Internal.DragAdorner.GetVisualChild(System.Int32)">
+            <summary>
+            Overrides <see cref="M:System.Windows.Media.Visual.GetVisualChild(System.Int32)"/>, and returns a child at the specified index from a collection of child elements. 
+            </summary>
+            <returns>
+            The requested child element. This should not return null; if the provided index is out of range, an exception is thrown.
+            </returns>
+            <param name="index">The zero-based index of the requested child element in the collection.</param>
+        </member>
+        <member name="M:JulMar.Windows.Internal.DragAdorner.GetDesiredTransform(System.Windows.Media.GeneralTransform)">
+            <summary>
+            Returns a <see cref="T:System.Windows.Media.Transform"/> for the adorner, based on the transform that is currently applied to the adorned element.
+            </summary>
+            <returns>
+            A transform to apply to the adorner.
+            </returns>
+            <param name="transform">The transform that is currently applied to the adorned element.</param>
+        </member>
+        <member name="M:JulMar.Windows.Internal.DragAdorner.Dispose">
+            <summary>
+            This removes the item from the adorner layer
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Internal.DragAdorner.VisualChildrenCount">
+            <summary>
+            Gets the number of visual child elements within this element.
+            </summary>
+            <returns>
+            The number of visual child elements for this element.
+            </returns>
+        </member>
+        <member name="T:JulMar.Windows.Actions.ChangeThemeAction">
+            <summary>
+            This changes the window's theme to the given theme URI.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Actions.ChangeThemeAction.ThemeUriProperty">
+            <summary>
+             Theme URI to apply to the application
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Actions.ChangeThemeAction.Invoke(System.Object)">
+            <summary>
+            Invokes the action.
+            </summary>
+            <param name="parameter">The parameter to the action. If the Action does not require a parameter, the parameter may be set to a null reference.</param>
+        </member>
+        <member name="M:JulMar.Windows.Actions.ChangeThemeAction.RaiseThemeChanged">
+            <summary>
+            Raises the ThemeChanged event
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Actions.ChangeThemeAction.ThemeUri">
+            <summary>
+            Theme URI to apply to the application.
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.Actions.ChangeThemeAction.ThemeChanged">
+            <summary>
+            This event is raised when the theme is changed.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.WatermarkTextBoxBehavior">
+            <summary>
+            This behavior associates a watermark onto a TextBox indicating what the user should
+            provide as input.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.WatermarkTextBoxBehavior.TextProperty">
+            <summary>
+            The watermark text
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.WatermarkTextBoxBehavior.IsWatermarkedPropertyKey">
+            <summary>
+            Readonly property used to style the TextBox when the watermark is present
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.WatermarkTextBoxBehavior.IsWatermarkedProperty">
+            <summary>
+            This readonly property is applied to the TextBox and indicates whether the watermark
+            is currently being displayed.  It allows a style to change the visual appearanve of the
+            TextBox.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.WatermarkTextBoxBehavior.GetIsWatermarked(System.Windows.Controls.TextBox)">
+            <summary>
+            Retrieves the current watermarked state of the TextBox.
+            </summary>
+            <param name="tb"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.WatermarkTextBoxBehavior.OnAttached">
+            <summary>
+            Called after the behavior is attached to an AssociatedObject.
+            </summary>
+            <remarks>
+            Override this to hook up functionality to the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.WatermarkTextBoxBehavior.OnTextChanged(System.Object,System.Windows.Controls.TextChangedEventArgs)">
+            <summary>
+            This method is called when the text for the TextBox is changed.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.WatermarkTextBoxBehavior.OnDetaching">
+            <summary>
+            Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
+            </summary>
+            <remarks>
+            Override this to unhook functionality from the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.WatermarkTextBoxBehavior.OnGotFocus(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            This method is called when the textbox gains focus.  It removes the watermark.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.WatermarkTextBoxBehavior.OnLostFocus(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            This method is called when focus is lost from the TextBox.  It puts the watermark
+            into place if no text is in the textbox.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.WatermarkTextBoxBehavior.ChangeText(System.String)">
+            <summary>
+            This method is used to change the text.
+            </summary>
+            <param name="newText">New string to assign to TextBox</param>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.WatermarkTextBoxBehavior.IsWatermarked">
+            <summary>
+            Retrieves the current watermarked state of the TextBox.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.WatermarkTextBoxBehavior.Text">
+            <summary>
+            The watermark text
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior">
+            <summary>
+            ItemsControlDragDropBehavior can be used to add automatic Drag/Drop support
+            to any ItemsControl based element.
+            </summary>
+            <remarks>
+            This was originally taken from a sample posted by Bea Stollnitz
+            See http://www.beacosta.com/blog/?p=53 for the original article. 
+            I have also borrowed elements from http://code.google.com/p/gong-wpf-dragdrop/
+            which was an extension of the above codebase. 
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.OnAttached">
+            <summary>
+            Called after the behavior is attached to an AssociatedObject.
+            </summary>
+            <remarks>
+            Override this to hook up functionality to the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.PreviewMouseLeftButtonDown(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            Starts the drag/drop operation.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.PreviewMouseMove(System.Object,System.Windows.Input.MouseEventArgs)">
+            <summary>
+            Display the drag indicator
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.PreviewMouseLeftButtonUp(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            Stops the drag/drop operation
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.PreviewDragEnter(System.Object,System.Windows.DragEventArgs)">
+            <summary>
+            New drop target identified
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.PreviewDragOver(System.Object,System.Windows.DragEventArgs)">
+            <summary>
+            New drop target being dragged over
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.DragLeave(System.Object,System.Windows.DragEventArgs)">
+            <summary>
+            Drop target has left control airspace
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.PreviewQueryContinueDrag(System.Object,System.Windows.QueryContinueDragEventArgs)">
+            <summary>
+            Query to continue dragging operation
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.PreviewDrop(System.Object,System.Windows.DragEventArgs)">
+            <summary>
+            Drop started
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.DragStarted(System.Windows.Controls.ItemsControl)">
+            <summary>
+            This starts the drag operation from the given ItemsControl
+            </summary>
+            <param name="itemsControl"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.GetDropEffectType(System.Windows.DragDropEffects,System.Windows.DragDropKeyStates)">
+            <summary>
+            Returns the drop effects allowed
+            </summary>
+            <param name="allowedEffects"></param>
+            <param name="keyStates"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.HandleDragScrolling(System.Windows.Controls.ItemsControl,System.Windows.DragEventArgs)">
+            <summary>
+            This scrolls the items control when we hit a boundary
+            </summary>
+            <param name="itemsControl"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.FindInsertionIndex(System.Windows.Controls.ItemsControl,System.Windows.DragEventArgs)">
+            <summary>
+            Determine the proper insertion index
+            </summary>
+            <param name="itemsControl"></param>
+            <param name="e"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.ResetState">
+            <summary>
+            Resets the drag/drop operation
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.InitializeDragAdorner(System.Windows.Controls.ItemsControl,System.Object,System.Windows.Point)">
+            <summary>
+            Initialize the drag adorner -- this is the DataTemplate instantiation of the item
+            </summary>
+            <param name="itemsControl"></param>
+            <param name="dragData"></param>
+            <param name="startPosition"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.UpdateDragAdorner(System.Windows.Point)">
+            <summary>
+            Update the position of the drag adorner
+            </summary>
+            <param name="currentPosition"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.InitializeInsertAdorner(System.Windows.Controls.ItemsControl,System.Windows.DragEventArgs)">
+            <summary>
+            Initialize the insertion point marker
+            </summary>
+            <param name="itemsControl"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.UpdateInsertAdorner(System.Windows.Controls.ItemsControl,System.Windows.DragEventArgs)">
+            <summary>
+            Update the position of the insertion point marker
+            </summary>
+            <param name="itemsControl"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.DestroyAdorners">
+            <summary>
+            Remove all the adorners
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.ItemTypeKey">
+            <summary>
+            Key used for drag/drop operations
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.DragTemplate">
+            <summary>
+            Data template to represent drag items
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.AllowOnlySelf">
+            <summary>
+            True to only allow "Self" as drop target
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.DragInitiated">
+            <summary>
+            This event is raised when a drag/drop operation starts
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.DropEnter">
+            <summary>
+            This event is raised when a target is identified
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.Interactivity.ItemsControlDragDropBehavior.DropInitiated">
+            <summary>
+            This event is raised when a drop is initiated
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.DataGridRowIndexBehavior">
+            <summary>
+            This behavior changes the Text for the associated TextBlock
+            to the current row index of the DataGridRow it is bound to.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.DataGridRowIndexBehavior.TargetProperty">
+            <summary>
+            Internal target property used to track current item of DataGridRow.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.DataGridRowIndexBehavior.DataGridRowProperty">
+            <summary>
+            DataGridRow this behavior uses to determine the proper row index.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DataGridRowIndexBehavior.OnDataGridRowChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            This is called when the DataGridRow property is changed.  It generally means
+            a new row has been added into the grid and we need to set the initial row
+            value for it.  We won't see a CollectionChange for this item - the event isn't
+            hooked up yet.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DataGridRowIndexBehavior.OnDetachFromDataGridRow(System.Windows.Controls.DataGridRow)">
+            <summary>
+            Detaches object from row - called when being unloaded.
+            </summary>
+            <param name="dgr"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DataGridRowIndexBehavior.OnItemPropertyChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            This is called when the item associated with the DG row changes; this possibly
+            requires a change in the index.
+            </summary>
+            <param name="dpo"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DataGridRowIndexBehavior.DgRowEditEnding(System.Object,System.Windows.Controls.DataGridRowEditEndingEventArgs)">
+            <summary>
+            This is used to reset the header on the NewItemPlaceholder.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DataGridRowIndexBehavior.CvCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>
+            This is called when the ItemsSource collection changes - i.e. it is sorted,
+            items are removed, inserted, etc.  It updates the *existing* row numbers.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DataGridRowIndexBehavior.OnDetaching">
+            <summary>
+            Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.DataGridRowIndexBehavior.DataGridRow">
+            <summary>
+            DataGridRow this behavior uses to determine the proper row index.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Internal.DragInfo">
+            <summary>
+            This class is passed around from drop source to target
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.SelectedItemsCollectionSynchronizer">
+            <summary>
+            This behavior synchronizes a collection with the Multiple Selection of a ListBox or MultiSelector.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.SelectedItemsCollectionSynchronizer.ItemsProperty">
+            <summary>
+            Dependency Property to manage collection
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.SelectedItemsCollectionSynchronizer.OnAttached">
+            <summary>
+            Called after the behavior is attached to an AssociatedObject.
+            </summary>
+            <remarks>
+            Override this to hook up functionality to the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.SelectedItemsCollectionSynchronizer.SelectionChanged(System.Object,System.Windows.Controls.SelectionChangedEventArgs)">
+            <summary>
+            Processes the selection change event from the ListBox/MultiSelector.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.SelectedItemsCollectionSynchronizer.OnDetaching">
+            <summary>
+            Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
+            </summary>
+            <remarks>
+            Override this to unhook functionality from the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.SelectedItemsCollectionSynchronizer.Items">
+            <summary>
+            Collection to synchronize
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.NumericTextBoxBehavior">
+            <summary>
+            WPF attached behavior which attaches the NumericTextBoxBehavior to any TextBox.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.NumericTextBoxBehavior.MIN_DELTA">
+            <summary>
+            Minimum amount of distance mouse must be "dragged" before we begin changing
+            the numeric value.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.NumericTextBoxBehavior.IsEnabledProperty">
+            <summary>
+            This property allows the behavior to be used as a traditional
+            attached property behavior.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.GetIsEnabled(System.Windows.Controls.TextBox)">
+            <summary>
+            Returns whether NumericTextBoxBehavior is enabled via attached property
+            </summary>
+            <param name="textBox"></param>
+            <returns>True/FalseB</returns>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.SetIsEnabled(System.Windows.Controls.TextBox,System.Boolean)">
+            <summary>
+            Adds NumericTextBoxBehavior to TextBox
+            </summary>
+            <param name="textBox">TextBox to apply</param>
+            <param name="value">True/False</param>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.NumericTextBoxBehavior.AllowMouseDragProperty">
+            <summary>
+            AllowMouseDrag Dependency Property
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.OnAttached">
+            <summary>
+            This attaches the property handlers - PreviewKeyDown, Clipboard support and our adorner.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.AddAdorner(System.Windows.Controls.TextBox)">
+            <summary>
+            This adds the adorner.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.OnDetaching">
+            <summary>
+            This removes all our handlers.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.OnClipboardPaste(System.Object,System.Windows.DataObjectPastingEventArgs)">
+            <summary>
+            This method handles paste and drag/drop events onto the TextBox.  It restricts the character
+            set to numerics and ensures we have consistent behavior.
+            </summary>
+            <param name="sender">TextBox sender</param>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.OnKeyDown(System.Object,System.Windows.Input.KeyEventArgs)">
+            <summary>
+            This checks the PreviewKeyDown on the TextBox and constrains it to a numeric value.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.NumericTextBoxBehavior.AllowMouseDrag">
+            <summary>
+            Gets or sets the AllowMouseDrag property. When set to "True", the NumericTextBoxBehavior will allow
+            Mouse "drags" to adjust the value - similar to the Blend text boxes.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.NumericTextBoxBehavior.CursorAdorner">
+            <summary>
+            This visual adorner is used to provide mouse cursor + numeric up/down drag support
+            on top of an existing TextBox.  It provides scroll wheel + left/right dragging
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.CursorAdorner.#ctor(System.Windows.Controls.TextBox)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="textBox"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.CursorAdorner.OnQueryCursor(System.Windows.Input.QueryCursorEventArgs)">
+            <summary>
+            This is called as the cursor moves to change the visual representation on the screen.
+            We display the W/E cursor or the IBeam.
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.CursorAdorner.OnRender(System.Windows.Media.DrawingContext)">
+            <summary>
+            Called to render the visual - we place a transparent (hit-testable) rectangle on top
+            of the text box.
+            </summary>
+            <param name="drawingContext"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.CursorAdorner.OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            Left button down
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.CursorAdorner.OnMouseMove(System.Windows.Input.MouseEventArgs)">
+            <summary>
+            Mouse movement
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.CursorAdorner.OnMouseLeftButtonUp(System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            Left button up
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.CursorAdorner.OnMouseWheel(System.Windows.Input.MouseWheelEventArgs)">
+            <summary>
+            Mouse wheel changes
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.CursorAdorner.OnMouseDown(System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            Detection for double-click support
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.CursorAdorner.Dispose">
+            <summary>
+            This is used to remove the adorner
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.CursorAdorner.SetTextBoxFocus(System.Windows.Controls.TextBox)">
+            <summary>
+            This is used to change the focus to the text box and adjust the cursor
+            </summary>
+            <param name="textBox"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.NumericTextBoxBehavior.CursorAdorner.AdjustValue(System.Windows.Controls.TextBox,System.Int32)">
+            <summary>
+            This is used to adjust the numeric value in the TextBox.
+            </summary>
+            <param name="textBox"></param>
+            <param name="val"></param>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.SynchronizedScrollingBehavior">
+            <summary>
+            This behavior tracks two ScrollViewer based controls and keeps their 
+            Horizontal and Vertical positions synchronized.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.SynchronizedScrollingBehavior.OnAttached">
+            <summary>
+            Called after the behavior is attached to an AssociatedObject.
+            </summary>
+            <remarks>
+            Override this to hook up functionality to the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.SynchronizedScrollingBehavior.OnDetaching">
+            <summary>
+            Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
+            </summary>
+            <remarks>
+            Override this to unhook functionality from the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.SynchronizedScrollingBehavior.HorizontalAdjustmentProperty">
+            <summary>
+            This dependency property holds the horizontal adjustment factor when two ScrollViewer instances do not have the
+            same size or elements.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.SynchronizedScrollingBehavior.VerticalAdjustmentProperty">
+            <summary>
+            This dependency property holds the vertical adjustment factor when two ScrollViewer instances do not have the
+            same size or elements.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.SynchronizedScrollingBehavior.TargetProperty">
+            <summary>
+            This holds the target to synchronize to.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.SynchronizedScrollingBehavior.OnTargetChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            This method is called when the target property is changed.
+            </summary>
+            <param name="dpo">Dependency object</param>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.SynchronizedScrollingBehavior.OnSourceScroll(System.Object,System.Windows.Controls.ScrollChangedEventArgs)">
+            <summary>
+            This handles the synchronization when the source list is scrolled.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.SynchronizedScrollingBehavior.OnTargetScroll(System.Object,System.Windows.Controls.ScrollChangedEventArgs)">
+            <summary>
+            This handles the synchronization when the target list is scrolled.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.SynchronizedScrollingBehavior.AdjustScrollPosition(System.Windows.Controls.ScrollViewer,System.Windows.Controls.ScrollChangedEventArgs,System.Double,System.Double)">
+            <summary>
+            This is the command scroll adjustment code which synchronizes two ScrollViewer instances.
+            </summary>
+            <param name="sv">ScrollViewer to adjust</param>
+            <param name="e">Change in the source</param>
+            <param name="hadjust">Horizontal adjustment</param>
+            <param name="vadjust">Vertical adjustment</param>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.SynchronizedScrollingBehavior.HorizontalAdjustment">
+            <summary>
+            The horizontal adjustment to apply between source and target.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.SynchronizedScrollingBehavior.VerticalAdjustment">
+            <summary>
+            The vertical adjustment to apply between source and target.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.SynchronizedScrollingBehavior.Target">
+            <summary>
+            The target ScrollViewer to synchronize to
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.DragPositionBehavior">
+            <summary>
+            This Blend behavior provides positional translation for UIElements through a 
+            RenderTransform using Drag/Drop semantics.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.DragPositionBehavior.IsEnabledProperty">
+            <summary>
+            This property allows the behavior to be used as a traditional
+            attached property behavior.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DragPositionBehavior.GetIsEnabled(System.Windows.DependencyObject)">
+            <summary>
+            Returns whether DragPositionBehavior is enabled via attached property
+            </summary>
+            <param name="uie">Element</param>
+            <returns>True/False</returns>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DragPositionBehavior.SetIsEnabled(System.Windows.DependencyObject,System.Boolean)">
+            <summary>
+            Adds DragPositionBehavior to an element
+            </summary>
+            <param name="uie">Element to apply</param>
+            <param name="value">True/False</param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DragPositionBehavior.OnIsEnabledChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            This is called when the IsEnabled property has changed.
+            </summary>
+            <param name="dpo"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DragPositionBehavior.OnAttached">
+            <summary>
+            Called after the behavior is attached to an AssociatedObject.
+            </summary>
+            <remarks>
+            Override this to hook up functionality to the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DragPositionBehavior.OnDetaching">
+            <summary>
+            Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
+            </summary>
+            <remarks>
+            Override this to unhook functionality from the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DragPositionBehavior.OnMouseDown(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            Handles the MouseDown event
+            </summary>
+            <param name="sender">UIElement</param>
+            <param name="e">Mouse eventargs</param>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.DragPositionBehavior.UIElementMouseDrag">
+            <summary>
+            This class encapsulates the drag data + logic for a given element.
+            It saves memory space as it is only allocated while the object is
+            being dragged around.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.SelectTextOnFocusBehavior">
+            <summary>
+            This behavior selects all text in a TextBox when it gets focus
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.SelectTextOnFocusBehavior.OnAttached">
+            <summary>
+            Called after the behavior is attached to an AssociatedObject.
+            </summary>
+            <remarks>
+            Override this to hook up functionality to the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.SelectTextOnFocusBehavior.OnDetaching">
+            <summary>
+            Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
+            </summary>
+            <remarks>
+            Override this to unhook functionality from the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.SelectTextOnFocusBehavior.SelectAllText(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            This selects the text in the TextBox.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:JulMar.Windows.Internal.InsertAdorner">
+            <summary>
+            Insertion Adorner - this was taken from a sample posted by Bea Stollnitz
+            See http://www.beacosta.com/blog/?p=53 for the original article.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Internal.InsertAdorner.#ctor(System.Boolean,System.Boolean,System.Windows.UIElement,System.Windows.Documents.AdornerLayer,System.Windows.UIElement)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="isSeparatorHorizontal">Horizontal vs. vertical separator</param>
+            <param name="isInFirstHalf">First half of items control</param>
+            <param name="adornedElement">Element being adorner</param>
+            <param name="adornerLayer">Layer</param>
+            <param name="parentContainer">Parent container to constrain drawing</param>
+        </member>
+        <member name="M:JulMar.Windows.Internal.InsertAdorner.CalculateStartAndEndPoint(System.Windows.Point@,System.Windows.Point@)">
+            <summary>
+            Calculates the top and end points
+            </summary>
+            <param name="startPoint"></param>
+            <param name="endPoint"></param>
+        </member>
+        <member name="M:JulMar.Windows.Internal.InsertAdorner.BoundPointToContainer(System.Windows.Point@)">
+            <summary>
+            Ensures our point does not escape the parent boundaries.
+            </summary>
+            <param name="pt"></param>
+        </member>
+        <member name="M:JulMar.Windows.Internal.InsertAdorner.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.ScrollbarPreviewBehavior">
+            <summary>
+            Displays a ToolTip next to the ScrollBar thumb while it is being dragged.  
+            The original idea and code was taken from an MSDN sample - see http://code.msdn.microsoft.com/getwpfcode/Release/ProjectReleases.aspx?ReleaseId=1445
+            for the original source code and project.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.ScrollbarPreviewBehavior.ScrollingPreviewTemplateProperty">
+            <summary>
+            Specifies a ContentTemplate for a ToolTip that will appear next to the ScrollBar while dragging the thumb.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.ScrollbarPreviewBehavior._previewToolTip">
+            <summary>
+            Holds the ToolTip when it is being used.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ScrollbarPreviewBehavior.OnAttached">
+            <summary>
+            Called after the behavior is attached to an AssociatedObject.
+            </summary>
+            <remarks>
+            Override this to hook up functionality to the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ScrollbarPreviewBehavior.OnDetaching">
+            <summary>
+            Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
+            </summary>
+            <remarks>
+            Override this to unhook functionality from the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ScrollbarPreviewBehavior.ScrollingPreviewTemplate">
+            <summary>
+            Gets/Sets the vertical scrolling preview template
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.ScrollbarPreviewBehavior.ScrollingPreviewData">
+            <summary>
+                Provides data that should be useful to templates displaying
+                a preview.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ScrollbarPreviewBehavior.ScrollingPreviewData.UpdateScrollingValues(System.Windows.Controls.Primitives.ScrollBar)">
+            <summary>
+                Updates Offset, Viewport, and Extent.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ScrollbarPreviewBehavior.ScrollingPreviewData.OnPropertyChanged(System.String)">
+            <summary>
+                Raises the PropertyChanged event.
+            </summary>
+            <param name="name">The name of the property.</param>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ScrollbarPreviewBehavior.ScrollingPreviewData.Value">
+            <summary>
+            The Scrollbar's current value
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ScrollbarPreviewBehavior.ScrollingPreviewData.Offset">
+            <summary>
+                The ScrollBar's offset.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ScrollbarPreviewBehavior.ScrollingPreviewData.Viewport">
+            <summary>
+                The size of the current viewport.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ScrollbarPreviewBehavior.ScrollingPreviewData.Extent">
+            <summary>
+                The entire scrollable range.
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.Interactivity.ScrollbarPreviewBehavior.ScrollingPreviewData.PropertyChanged">
+            <summary>
+                Notifies listeners of changes to properties on this object.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.DragDropEventArgs">
+            <summary>
+            EventArgs for our drag/drop
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.DragDropEventArgs.#ctor(System.Windows.Controls.ItemsControl,System.Windows.Controls.ItemsControl,System.Object,System.Int32)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="source"></param>
+            <param name="destination"></param>
+            <param name="item"></param>
+            <param name="dropIndex"></param>
+        </member>
+        <member name="P:JulMar.Windows.DragDropEventArgs.Source">
+            <summary>
+            Source where the item is currently located
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.DragDropEventArgs.Destination">
+            <summary>
+            Destination where item is being dropped (may be null)
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.DragDropEventArgs.Item">
+            <summary>
+            Object being copied or moved
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.DragDropEventArgs.DropIndex">
+            <summary>
+            Position we are dropping item onto
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.DragDropEventArgs.Cancel">
+            <summary>
+            Set to true to disallow drag/drop operation
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.DragDropEventArgs.AllowedEffects">
+            <summary>
+            Initially holds allowed effects, can be modified to restrict
+            operations
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.SortAdorner">
+            <summary>
+            This adorner draws the sorting arrow onto the ListView column
+            header and provides the visual feedback for the sorting direction.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.SortAdorner.FillProperty">
+            <summary>
+            The color of the arrow
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.SortAdorner.#ctor(System.Windows.UIElement)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="adornedElement">Element (ColumnHeader) to adorn</param>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.SortAdorner.NoPen">
+            <summary>
+            Pen used to draw geometry (none)
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.SortAdorner.UpGeometry">
+            <summary>
+            The geometry for the up arrow
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.SortAdorner.DownGeometry">
+            <summary>
+            The geometry for the down arrow
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.SortAdorner.OnRender(System.Windows.Media.DrawingContext)">
+            <summary>
+            When overridden in a derived class, participates in rendering operations that are directed by the layout system. The rendering instructions for this element are not used directly when this method is invoked, and are instead preserved for later asynchronous use by layout and drawing. 
+            </summary>
+            <param name="dc">The drawing instructions for a specific element. This context is provided to the layout system.</param>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.SortAdorner.Direction">
+            <summary>
+            The direction to draw the arrow (up vs. down)
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.SortAdorner.Fill">
+            <summary>
+            The color of the arrow
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.ListViewSortBehavior">
+            <summary>
+            Behavior to provide automatic sorting of a ListView.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.ListViewSortBehavior.InitialColumnIndexProperty">
+            <summary>
+            Initial column index
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.ListViewSortBehavior.SortDirectionProperty">
+            <summary>
+            Sort direction
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.ListViewSortBehavior.ArrowFillProperty">
+            <summary>
+            The color of the arrow
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ListViewSortBehavior.OnAttached">
+            <summary>
+            Called after the behavior is attached to an AssociatedObject.
+            </summary>
+            <remarks>
+            Override this to hook up functionality to the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ListViewSortBehavior.AssociatedObjectLoaded(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Called when the ListView has completely loaded.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ListViewSortBehavior.OnDetaching">
+            <summary>
+            Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
+            </summary>
+            <remarks>
+            Override this to unhook functionality from the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ListViewSortBehavior.OnSortHeaderClick(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            This is called when a Button.Click event occurs inside
+            the ListView. Here we filter to the column headers and
+            then provide the sorting when that happens.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ListViewSortBehavior.SortByColumn(System.Windows.Controls.GridViewColumnHeader)">
+            <summary>
+            This method provides the actual sorting behavior.
+            </summary>
+            <param name="sortingColumn"></param>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ListViewSortBehavior.InitialColumnIndex">
+            <summary>
+            Initial sorting column
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ListViewSortBehavior.SortDirection">
+            <summary>
+            Sort direction
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ListViewSortBehavior.ArrowFill">
+            <summary>
+            The color of the arrow
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.ViewportSynchronizerBehavior">
+            <summary>
+            This behavior allows a ViewModel to monitor and control the scrolling position of any ScrollViewer or 
+            control with a ScrollViewer in the template.  It can also be used to synchronize two scrolling items
+            against a single property in a ViewModel.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.ViewportSynchronizerBehavior.VerticalOffsetProperty">
+            <summary>
+            Vertical offset of the scroll viewer
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.ViewportSynchronizerBehavior.ViewportHeightProperty">
+            <summary>
+            Vertical height of the scroll viewer
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.ViewportSynchronizerBehavior.ViewportWidthProperty">
+            <summary>
+            Horizontal width of the scroll viewer
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.ViewportSynchronizerBehavior.HorizontalOffsetProperty">
+            <summary>
+            Horizontal offset of the scroll viewer
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ViewportSynchronizerBehavior.OnAttached">
+            <summary>
+            Called after the behavior is attached to an AssociatedObject.
+            </summary>
+            <remarks>
+            Override this to hook up functionality to the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ViewportSynchronizerBehavior.FindAndAttachToScrollViewer">
+            <summary>
+            Attaches to the scrollviewer.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ViewportSynchronizerBehavior.AssociatedObjectSizeChanged(System.Object,System.Windows.SizeChangedEventArgs)">
+            <summary>
+            This is called when the associated object's size changes.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ViewportSynchronizerBehavior.ScrollViewerSizeChanged(System.Object,System.Windows.SizeChangedEventArgs)">
+            <summary>
+            Called when the scrollviewer changes the size
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ViewportSynchronizerBehavior.ScrollViewerScrollChanged(System.Object,System.Windows.Controls.ScrollChangedEventArgs)">
+            <summary>
+            This method is called when the scroll viewer is scrolled.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ViewportSynchronizerBehavior.OnDetaching">
+            <summary>
+            Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
+            </summary>
+            <remarks>
+            Override this to unhook functionality from the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ViewportSynchronizerBehavior.OnVerticalOffsetChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            This method is called when the VerticalOffset property is changed.
+            </summary>
+            <param name="dpo"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ViewportSynchronizerBehavior.OnHorizontalOffsetChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            This method is called when HorizontalOffset property is changed.
+            </summary>
+            <param name="dpo"></param>
+            <param name="e"></param>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ViewportSynchronizerBehavior.VerticalOffset">
+            <summary>
+            The vertical offset
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ViewportSynchronizerBehavior.ViewportHeight">
+            <summary>
+            The vertical height of the scrollviewer
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ViewportSynchronizerBehavior.ViewportWidth">
+            <summary>
+            The horizontal width of the scrollviewer
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ViewportSynchronizerBehavior.HorizontalOffset">
+            <summary>
+            The horizontal offset
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Actions.SetFocusAction">
+            <summary>
+            This action sets focus to the associated element.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Actions.SetFocusAction.TargetProperty">
+            <summary>
+            Dependency Property backing the Target property.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Actions.SetFocusAction.Invoke(System.Object)">
+            <summary>
+            Invokes the action.
+            </summary>
+            <param name="parameter">The parameter to the action. If the Action does not require a parameter, the parameter may be set to a null reference.</param>
+        </member>
+        <member name="P:JulMar.Windows.Actions.SetFocusAction.Target">
+            <summary>
+            This property allows you to set the focus target independant of where this
+            action is applied - so you can apply the trigger/action to the Window and then
+            push focus to a child element as an example.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Actions.ApplyEffect">
+            <summary>
+            This action applies a specific media effect to the element.  It is used as a Blend
+            Action and will apply/remove an effect based on the Effect property (leave it null
+            to clear any effect on the target element).
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Actions.ApplyEffect.EffectProperty">
+            <summary>
+            Effect property
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Actions.ApplyEffect.Invoke(System.Object)">
+            <summary>
+            Called to apply the effect when the trigger is active.
+            </summary>
+            <param name="parameter">Can pass in specific effect if desired, overrides Property</param>
+        </member>
+        <member name="P:JulMar.Windows.Actions.ApplyEffect.Effect">
+            <summary>
+            The effect to apply
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.ViewModelTrigger">
+            <summary>
+            This is a Blend trigger that binds to a IViewModelTrigger and invokes actions when it 
+            is raised by the ViewModel.  This allows the VM to trigger behaviors in the View easily.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.ViewModelTrigger.TriggerProperty">
+            <summary>
+            The DependencyProperty used to hold the IViewModelTrigger.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ViewModelTrigger.OnTriggerChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            Change handler for IViewModelTrigger.
+            </summary>
+            <param name="dpo">VMTrigger object</param>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ViewModelTrigger.TriggerRaised(System.Object)">
+            <summary>
+            This is called when the trigger occurs.
+            </summary>
+            <param name="parameter"></param>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ViewModelTrigger.Trigger">
+            <summary> 
+            IViewModelTrigger to hook into.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.ScrollingPreviewBehavior">
+            <summary>
+            Displays a ToolTip next to the ScrollBar thumb while it is being dragged.  
+            This code was taken from an MSDN sample - 
+            see http://code.msdn.microsoft.com/getwpfcode/Release/ProjectReleases.aspx?ReleaseId=1445
+            for the original source code and project.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.ScrollingPreviewBehavior.VerticalScrollingPreviewTemplateProperty">
+            <summary>
+            Allows for specifying a ContentTemplate for a ToolTip that will appear next to the 
+            vertical ScrollBar while dragging the thumb.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.ScrollingPreviewBehavior.HorizontalScrollingPreviewTemplateProperty">
+            <summary>
+                Allows for specifying a ContentTemplate for a ToolTip that will appear next to the 
+                horizontal ScrollBar while dragging the thumb.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ScrollingPreviewBehavior.OnAttached">
+            <summary>
+            Called after the behavior is attached to an AssociatedObject.
+            </summary>
+            <remarks>
+            Override this to hook up functionality to the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ScrollingPreviewBehavior.OnDetaching">
+            <summary>
+            Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
+            </summary>
+            <remarks>
+            Override this to unhook functionality from the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ScrollingPreviewBehavior.VerticalScrollingPreviewTemplate">
+            <summary>
+            Retrieves the vertical scrolling preview template
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ScrollingPreviewBehavior.HorizontalScrollingPreviewTemplate">
+            <summary>
+            Gets the horizontal scrolling preview template
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.ScrollingPreviewBehavior.ScrollingPreviewData">
+            <summary>
+                Provides data that should be useful to templates displaying
+                a preview.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ScrollingPreviewBehavior.ScrollingPreviewData.UpdateScrollingValues(System.Windows.Controls.Primitives.ScrollBar)">
+            <summary>
+                Updates Offset, Viewport, and Extent.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ScrollingPreviewBehavior.ScrollingPreviewData.UpdateItem(System.Windows.Controls.ItemsControl,System.Boolean)">
+            <summary>
+                Updates FirstItem and LastItem based on the
+                Offset and Viewport properties.
+            </summary>
+            <param name="itemsControl">The ItemsControl that contains the data items.</param>
+            <param name="vertical">True for vertical scrollbar</param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ScrollingPreviewBehavior.ScrollingPreviewData.OnPropertyChanged(System.String)">
+            <summary>
+                Raises the PropertyChanged event.
+            </summary>
+            <param name="name">The name of the property.</param>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ScrollingPreviewBehavior.ScrollingPreviewData.Value">
+            <summary>
+            The Scrollbar's current value
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ScrollingPreviewBehavior.ScrollingPreviewData.Offset">
+            <summary>
+                The ScrollBar's offset.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ScrollingPreviewBehavior.ScrollingPreviewData.Viewport">
+            <summary>
+                The size of the current viewport.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ScrollingPreviewBehavior.ScrollingPreviewData.Extent">
+            <summary>
+                The entire scrollable range.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ScrollingPreviewBehavior.ScrollingPreviewData.FirstItem">
+            <summary>
+                The first visible item in the viewport.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ScrollingPreviewBehavior.ScrollingPreviewData.LastItem">
+            <summary>
+                The last visible item in the viewport.
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.Interactivity.ScrollingPreviewBehavior.ScrollingPreviewData.PropertyChanged">
+            <summary>
+                Notifies listeners of changes to properties on this object.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.CloseDialogBehavior">
+            <summary>
+            This behavior allows the designer to close a dialog using a true/false DialogResult through a button.
+            This is already supported if the IsCancel property is true, but the IsDefault does not auto-dismiss the dialog
+            without some code behind.  This aleviates that requirement for the very simple dialogs that are completely VM driven.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.CloseDialogBehavior.DialogResultProperty">
+            <summary>
+            DialogResult dependency property
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.CloseDialogBehavior.OnAttached">
+            <summary>
+            Called after the behavior is attached to an AssociatedObject.
+            </summary>
+            <remarks>
+            Override this to hook up functionality to the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.CloseDialogBehavior.OnDetaching">
+            <summary>
+            Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
+            </summary>
+            <remarks>
+            Override this to unhook functionality from the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.CloseDialogBehavior.OnButtonClick(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            This dismisses the associated window
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.CloseDialogBehavior.DialogResult">
+            <summary>
+            Dismiss dialog result value - this is assigned to the window.DialogResult to close the window.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.CommandEventTrigger">
+            <summary>
+            This is an attached behavior for Blend 3 that allows a Event -> Command trigger
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.CommandEventTrigger.CommandProperty">
+            <summary>
+            Command Property Dependency Property
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.CommandEventTrigger.CommandParameterProperty">
+            <summary>
+            Parameter for the ICommand
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.CommandEventTrigger.EventProperty">
+            <summary>
+            Event Dependency Property
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.CommandEventTrigger.OnParameterChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            This is called when the command parameter changes -- this can
+            happen if it is databound.
+            </summary>
+            <param name="dpo">DependencyObject</param>
+            <param name="e">Change</param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.CommandEventTrigger.OnAttached">
+            <summary>
+            Called after the behavior is attached to an AssociatedObject.
+            </summary>
+            <remarks>
+            Override this to hook up functionality to the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.CommandEventTrigger.HookEvents">
+            <summary>
+            Hooks the event maps
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.CommandEventTrigger.OnDetaching">
+            <summary>
+            Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
+            </summary>
+            <remarks>
+            Override this to unhook functionality from the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.CommandEventTrigger.System#Windows#Input#ICommand#CanExecute(System.Object)">
+            <summary>
+            Defines the method that determines whether the command can execute in its current state.
+            </summary>
+            <returns>
+            true if this command can be executed; otherwise, false.
+            </returns>
+            <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.CommandEventTrigger.System#Windows#Input#ICommand#Execute(System.Object)">
+            <summary>
+            Defines the method to be called when the command is invoked.
+            </summary>
+            <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.CommandEventTrigger.Event">
+            <summary>
+            Gets or sets the Event property.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.CommandEventTrigger.Command">
+            <summary>
+            Gets or sets the Command property. 
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.CommandEventTrigger.CommandParameter">
+            <summary>
+            Gets or sets the CommandParameter property.
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.Interactivity.CommandEventTrigger.System#Windows#Input#ICommand#CanExecuteChanged">
+            <summary>
+            Occurs when changes occur that affect whether or not the command should execute.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.ClickTrigger">
+            <summary>
+            This is a Blend/VS.NET behavior which drives a Click event to 
+            some interactive action
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.ClickTrigger.ClickModeProperty">
+            <summary>
+            The DependencyProperty for the ClickMode property.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ClickTrigger.OnAttached">
+            <summary>
+            Called after the behavior is attached to an AssociatedObject.
+            </summary>
+            <remarks>
+            Override this to hook up functionality to the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ClickTrigger.OnDetaching">
+            <summary>
+            Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
+            </summary>
+            <remarks>
+            Override this to unhook functionality from the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ClickTrigger.HandlePreviewMouseLeftButtonDown(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            Mark that a ButtonDown occurred.
+            </summary>
+            <param name="sender">UIElement</param>
+            <param name="mouseEventArgs">EventArgs</param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ClickTrigger.HandlePreviewMouseMove(System.Object,System.Windows.Input.MouseEventArgs)">
+            <summary>
+            Mark that a ButtonDown occurred.
+            </summary>
+            <param name="sender">UIElement</param>
+            <param name="mouseEventArgs">EventArgs</param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.ClickTrigger.HandlePreviewMouseLeftButtonUp(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            Mark that a ButtonDown occurred.
+            </summary>
+            <param name="sender">UIElement</param>
+            <param name="mouseEventArgs">EventArgs</param>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.ClickTrigger.ClickMode">
+            <summary> 
+            ClickMode specify when the Click event should fire 
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Actions.InvokeCommand">
+            <summary>
+            This trigger action binds a command/command parameter for MVVM usage with 
+            a Blend based trigger.  This is used in place of the one in the Blend samples - 
+            it has a problem in it as of the current (first) release.  Once it is fixed, this
+            command can go away.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Actions.InvokeCommand.CommandProperty">
+            <summary>
+            ICommand to execute
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Actions.InvokeCommand.CommandParameterProperty">
+            <summary>
+            Command parameter to pass to command execution
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Actions.InvokeCommand.Invoke(System.Object)">
+            <summary>
+            This is called to execute the command when the trigger conditions are satisified.
+            </summary>
+            <param name="parameter">parameter (not used)</param>
+        </member>
+        <member name="P:JulMar.Windows.Actions.InvokeCommand.Command">
+            <summary>
+            Command to execute
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Actions.InvokeCommand.CommandParameter">
+            <summary>
+            Command parameter
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Internal.DragUtilities">
+            <summary>
+            Drag Utilities - this was taken from a sample posted by Bea Stollnitz
+            See http://www.beacosta.com/blog/?p=53 for the original article.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.DoubleClickTrigger">
+            <summary>
+            This is a Blend/VS.NET behavior which drives a DoubleClick event to 
+            some interactive action
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DoubleClickTrigger.OnAttached">
+            <summary>
+            Called after the behavior is attached to an AssociatedObject.
+            </summary>
+            <remarks>
+            Override this to hook up functionality to the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DoubleClickTrigger.OnDetaching">
+            <summary>
+            Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
+            </summary>
+            <remarks>
+            Override this to unhook functionality from the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DoubleClickTrigger.HandleButtonUp(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            This handles the UIElement.LeftButtonDown event to test for a double-click event.
+            </summary>
+            <param name="sender">UIElement</param>
+            <param name="mouseEventArgs">EventArgs</param>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.BindingTrigger">
+            <summary>
+            This triggers off a binding expression.  It allows a designer to run a set of actions using a MVVM property as the trigger.
+            As a side effect it also allows the Value to be data bound so you can compare two ViewModel properties for equality and then run 
+            a set of actions when the condition is matched.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.BindingTrigger.ValueProperty">
+            <summary>
+            Value to test against
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.BindingTrigger.OnValueChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            This is called when the DP backed by the binding changes
+            </summary>
+            <param name="dpo"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.BindingTrigger.CheckValue">
+            <summary>
+            This compares a changed value
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.BindingTrigger.Binding">
+            <summary>
+            Binding declaration of the conditional 
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.BindingTrigger.Value">
+            <summary>
+            Gets or sets the Value property.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.MaskedTextBoxBehavior">
+            <summary>
+            WPF attached behavior which attaches a regular expression to a TextBox.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.MaskedTextBoxBehavior.MaskProperty">
+            <summary>
+            This property serves a dual purpose.  First, it allows the behavior to be used as a traditional
+            attached property behavior - without use of the Blend tool.  Second, it acts as a local property
+            to store the expression.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.MaskedTextBoxBehavior.GetMask(System.Windows.Controls.TextBox)">
+            <summary>
+            Returns whether MaskedTextBoxBehavior is enabled via attached property
+            </summary>
+            <param name="textBox"></param>
+            <returns>Regular Expression Mask</returns>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.MaskedTextBoxBehavior.SetMask(System.Windows.Controls.TextBox,System.String)">
+            <summary>
+            Adds MaskedTextBoxBehavior to TextBox
+            </summary>
+            <param name="textBox">TextBox to apply</param>
+            <param name="value">True/False</param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.MaskedTextBoxBehavior.OnMaskChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            This associates a new MaskedTextBoxBehavior onto a TextBox using the applied mask.
+            </summary>
+            <param name="dpo"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.MaskedTextBoxBehavior.OnAttached">
+            <summary>
+            This attaches the property handlers - PreviewKeyDown and Clipboard support.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.MaskedTextBoxBehavior.OnDetaching">
+            <summary>
+            This removes all our handlers.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.MaskedTextBoxBehavior.OnTextInput(System.Object,System.Windows.Input.TextCompositionEventArgs)">
+            <summary>
+            This is called to process text (character) input
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.MaskedTextBoxBehavior.OnClipboardPaste(System.Object,System.Windows.DataObjectPastingEventArgs)">
+            <summary>
+            This method handles paste and drag/drop events onto the TextBox.  It restricts the character
+            set to numerics and ensures we have consistent behavior.
+            </summary>
+            <param name="sender">TextBox sender</param>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.MaskedTextBoxBehavior.OnKeyDown(System.Object,System.Windows.Input.KeyEventArgs)">
+            <summary>
+            This checks the PreviewKeyDown on the TextBox to check for the SPACE
+            character which is not considered a TextInput element.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.MaskedTextBoxBehavior.GetTextFuture(System.String)">
+            <summary>
+            This returns the next text value if the pending event is processed.
+            </summary>
+            <param name="textToAdd">Text to add to the TextBox</param>
+            <returns>String</returns>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.MaskedTextBoxBehavior.IsMatch(System.String)">
+            <summary>
+            This method is used to test the string input.
+            </summary>
+            <param name="textToCheck"></param>
+            <returns></returns>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.MaskedTextBoxBehavior.Mask">
+            <summary>
+            Mask to use for the regular expression.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.DeferredScrollBehavior">
+            <summary>
+            This class provides deferred scrolling capability to a normal scrollbar - the same
+            way a ScrollViewer can have deferred scrolling.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.DeferredScrollBehavior.ValueProperty">
+            <summary>
+            The Value property represents the current position of the ScrollBar.  Changes made to this 
+            value will be propogated to the thumb value.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DeferredScrollBehavior.OnValueChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            This method is called when the value is changed.
+            </summary>
+            <param name="dpo"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DeferredScrollBehavior.OnValueChanged(System.Double,System.Double)">
+            <summary>
+            This method adjusts the thumb position to the currently tracked value position.
+            </summary>
+            <param name="oldValue">Current value</param>
+            <param name="newValue">New value</param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DeferredScrollBehavior.OnAttached">
+            <summary>
+            This attaches the behavior to the ScrollBar.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DeferredScrollBehavior.OnDetaching">
+            <summary>
+            This detaches the behavior from the ScrollBar.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DeferredScrollBehavior.OnScroll(System.Object,System.Windows.Controls.Primitives.ScrollEventArgs)">
+            <summary>
+            This is called when ScrollBar changes the thumb position.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.DeferredScrollBehavior.Value">
+            <summary>
+            The current position of the ScrollBar.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.DataGridDragRowBehavior">
+            <summary>
+            This class enables a DataGrid to drag/drop to reorder rows.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interactivity.DataGridDragRowBehavior._target">
+            <summary>
+            Row drag target
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DataGridDragRowBehavior.OnAttached">
+            <summary>
+            Called after the behavior is attached to an AssociatedObject.
+            </summary>
+            <remarks>
+            Override this to hook up functionality to the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DataGridDragRowBehavior.OnDrop(System.Object,System.Windows.DragEventArgs)">
+            <summary>
+            This is used to drop the target
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DataGridDragRowBehavior.OnCheckDropTarget(System.Object,System.Windows.DragEventArgs)">
+            <summary>
+            This is used to verify the location of the drop.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DataGridDragRowBehavior.OnMouseMove(System.Object,System.Windows.Input.MouseEventArgs)">
+            <summary>
+            This handler monitors the mouse movement and initiates the drag/drop operation.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DataGridDragRowBehavior.OnDetaching">
+            <summary>
+            Called when the behavior is being detached from its AssociatedObject, but before it has actually occurred.
+            </summary>
+            <remarks>
+            Override this to unhook functionality from the AssociatedObject.
+            </remarks>
+        </member>
+        <member name="E:JulMar.Windows.Interactivity.DataGridDragRowBehavior.DropStarted">
+            <summary>
+             This is invoked when the drop is started (prior to moving the item)
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.Interactivity.DataGridDragRowBehavior.DropFinished">
+            <summary>
+            This is invoked after the item has been moved.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interactivity.DataGridRowDropEventArgs">
+            <summary>
+            The EventArgs parameter passed on the drop
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interactivity.DataGridRowDropEventArgs.#ctor(System.Object,System.Int32,System.Int32)">
+            <summary>
+            EventArgs passed with DropStarted and DropFinished
+            </summary>
+            <param name="item">Item being moved</param>
+            <param name="oldIndex">Old index</param>
+            <param name="newIndex">New index</param>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.DataGridRowDropEventArgs.Item">
+            <summary>
+            Item being repositioned in the DataGrid
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.DataGridRowDropEventArgs.OldIndex">
+            <summary>
+            Old index of the item
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interactivity.DataGridRowDropEventArgs.NewIndex">
+            <summary>
+            New index of the item
+            </summary>
+        </member>
+    </members>
+</doc>

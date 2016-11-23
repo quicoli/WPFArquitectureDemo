@@ -1,0 +1,3407 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JulMar.Wpf.Helpers</name>
+    </assembly>
+    <members>
+        <member name="T:JulMar.Windows.Mvvm.EditingViewModel">
+            <summary>
+            This provides a ViewModel that implements IEditableObject through cloning - a copy of the existing object 
+            is created during the edits and thrown away when the editing is completed.  If the edit operation fails 
+            and is canceled, then the copy replaces the existing version.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Mvvm.EditingViewModelBase`1">
+            <summary>
+            This provides the base class for editable object support.  The actual saving/restoring of the object
+            state is accomplished through an implementation class provided as a generic template parameter.  This can
+            be used as a basis to creating different supporting types for editable objects.
+            </summary>
+            <typeparam name="T">Editable persistance implementation</typeparam>
+        </member>
+        <member name="T:JulMar.Windows.Validations.ValidatingViewModel">
+            <summary>
+            This class can be used as a base class for ViewModel objects that want to support
+            validations through IDataErrorInfo.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Mvvm.ViewModel">
+            <summary>
+            This class is used as the basis for all ViewModel objects
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Mvvm.SimpleViewModel">
+            <summary>
+            This class implements the simplest view model -- one that implements INPC.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.SimpleViewModel.OnPropertyChanged">
+            <summary>
+            This can be used to indicate that all property values have changed.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.SimpleViewModel.OnPropertyChanged``1(System.Linq.Expressions.Expression{System.Func{``0}})">
+            <summary>
+            This raises the INotifyPropertyChanged.PropertyChanged event to indicate
+            a specific property has changed value. This version provides a compile-time safe
+            way to indicate the property through the use of an expression tree / lambda.
+            </summary>
+            <example>
+            <![CDATA[
+               public string Name
+               {
+                  get { return _name; }
+                  set
+                  {
+                      _name = value;
+                      OnPropertyChanged(() => Name);
+                  }
+               }
+            ]]>
+            </example>
+            <typeparam name="T">Type where it is being raised</typeparam>
+            <param name="propExpr">Property</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.SimpleViewModel.OnPropertyChanged(System.String,System.String[])">
+            <summary>
+            This raises the INotifyPropertyChanged.PropertyChanged event to indicate
+            a specific property has changed value.
+            </summary>
+            <param name="name">Primary property</param>
+            <param name="propertyNames">Additional properties</param>
+        </member>
+        <member name="E:JulMar.Windows.Mvvm.SimpleViewModel.PropertyChanged">
+            <summary>
+            Occurs when a property value changes.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Mvvm.ViewModel.ServiceProvider">
+            <summary>
+            Service provider used by ViewModels.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModel.#cctor">
+            <summary>
+            Static constructor - executed prior to any ViewModel being used.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModel.#ctor">
+            <summary>
+            Constructor - registers with the message mediator and hooks up any imports/exports
+            with the default MEF catalog
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModel.#ctor(System.Boolean,System.Boolean)">
+            <summary>
+            Constructor - registers with the message mediator and hooks up any imports/exports
+            with the default MEF catalog
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModel.Resolve``1">
+            <summary>
+            This resolves a service type and returns the implementation.
+            </summary>
+            <typeparam name="T">Type to resolve</typeparam>
+            <returns>Implementation</returns>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModel.RaiseCloseRequest">
+            <summary>
+            This raises the CloseRequest event to close the UI.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModel.RaiseCloseRequest(System.Nullable{System.Boolean})">
+            <summary>
+            This raises the CloseRequest event to close the UI.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModel.RaiseActivateRequest">
+            <summary>
+            This raises the ActivateRequest event to activate the UI.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModel.SendMessage``1(System.String,``0)">
+            <summary>
+            This sends a message via the MessageMediator.
+            </summary>
+            <param name="key">Message key</param>
+            <param name="message">Message parameter</param>
+            <returns>True if at least one recipient received the message</returns>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModel.SendMessage``1(``0)">
+            <summary>
+            This sends a message via the MessageMediator.
+            </summary>
+            <param name="message">Message parameter</param>
+            <returns>True if at least one recipient received the message</returns>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModel.DispatcherInvoke(System.Action)">
+            <summary>
+            Helper method to run logic on Dispatcher (UI) thread. Useful for adding to 
+            ObservableCollection(T), etc.
+            </summary>
+            <param name="action">Method to execute</param>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModel.DispatcherInvoke(System.Windows.Threading.DispatcherPriority,System.Action)">
+            <summary>
+            Helper method to run logic on Dispatcher (UI) thread. Useful for adding to 
+            ObservableCollection(T), etc.
+            </summary>
+            <param name="priority">Priority of method</param>
+            <param name="action">Method to execute</param>
+            <returns>Result</returns>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModel.DispatcherInvoke``1(System.Func{``0})">
+            <summary>
+            Helper method to run logic on Dispatcher (UI) thread. Useful for adding to 
+            ObservableCollection(T), etc.
+            </summary>
+            <typeparam name="T">Return type</typeparam>
+            <param name="func">Method to execute</param>
+            <returns>Result</returns>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModel.DispatcherInvoke``1(System.Windows.Threading.DispatcherPriority,System.Func{``0})">
+            <summary>
+            Helper method to run logic on Dispatcher (UI) thread. Useful for adding to 
+            ObservableCollection(T), etc.
+            </summary>
+            <typeparam name="T">Return type</typeparam>
+            <param name="priority">Priority</param>
+            <param name="func">Method to execute</param>
+            <returns>Result</returns>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModel.DispatcherBeginInvoke(System.Action)">
+            <summary>
+            Helper method to run logic on Dispatcher (UI) thread. Useful for adding to 
+            ObservableCollection(T), etc.
+            </summary>
+            <param name="action">Method to execute</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModel.DispatcherBeginInvoke(System.Windows.Threading.DispatcherPriority,System.Action)">
+            <summary>
+            Helper method to run logic on Dispatcher (UI) thread. Useful for adding to 
+            ObservableCollection(T), etc.
+            </summary>
+            <param name="priority">Priority</param>
+            <param name="action">Method to execute</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModel.Dispose(System.Boolean)">
+            <summary>
+            This disposes of the view model.  It unregisters from the message mediator.
+            </summary>
+            <param name="isDisposing">True if IDisposable.Dispose was called</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModel.Dispose">
+            <summary>
+            Implementation of IDisposable.Dispose.
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.Mvvm.ViewModel.CloseRequest">
+            <summary>
+            This event should be raised to close the view.  Any view tied to this
+            ViewModel should register a handler on this event and close itself when
+            this event is raised.  If the view is not bound to the lifetime of the
+            ViewModel then this event can be ignored.
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.Mvvm.ViewModel.ActivateRequest">
+            <summary>
+            This event should be raised to activate the UI.  Any view tied to this
+            ViewModel should register a handler on this event and close itself when
+            this event is raised.  If the view is not bound to the lifetime of the
+            ViewModel then this event can be ignored.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Mvvm.ViewModel.InDesignMode">
+            <summary>
+            Returns true if we are currently in design mode.
+            Useful for design-time property return tests.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Validations.ValidatingViewModel.ValidateOverride(System.String,System.Object,System.String)">
+            <summary>
+            This method is called during the validation process.  It can be overridden
+            to alter or remove the error text being returned.
+            </summary>
+            <param name="propertyName">Property being validated (null for all)</param>
+            <param name="instance">Object instance</param>
+            <param name="errorText">Existing error text</param>
+            <returns>New error text</returns>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.EditingViewModelBase`1.BeginEdit">
+            <summary>
+            Begins an edit on an object.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.EditingViewModelBase`1.CancelEdit">
+            <summary>
+            Discards changes since the last <see cref="M:System.ComponentModel.IEditableObject.BeginEdit"/> call.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.EditingViewModelBase`1.EndEdit">
+            <summary>
+            Pushes changes since the last <see cref="M:System.ComponentModel.IEditableObject.BeginEdit"/> or <see cref="M:System.ComponentModel.IBindingList.AddNew"/> call into the underlying object.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.EditingViewModelBase`1.OnBeginEdit">
+            <summary>
+            Interception point for derived logic to do work when beginning edit.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.EditingViewModelBase`1.OnEndEdit(System.Boolean)">
+            <summary>
+            This is called in response to either CancelEdit or EndEdit and provides an interception point.
+            </summary>
+            <param name="succeeded">True if edit was succesful.</param>
+        </member>
+        <member name="P:JulMar.Windows.Mvvm.EditingViewModelBase`1.IsEditing">
+            <summary>
+            Returns true if this object is currently being edited
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Mvvm.IEditableObjectImpl">
+            <summary>
+            This is the implementation class used for providing editable object support
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.IEditableObjectImpl.OnBeginEdit">
+            <summary>
+            Called to begin an edit operation
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.IEditableObjectImpl.OnEndEdit(System.Boolean)">
+            <summary>
+            Called to end an edit operation
+            </summary>
+            <param name="success">True for persist, False to cancel edits</param>
+        </member>
+        <member name="P:JulMar.Windows.Mvvm.IEditableObjectImpl.IsEditing">
+            <summary>
+            True/False if this object is being edited currently
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Mvvm.ShallowCopyEditableObject">
+            <summary>
+            This implementation provides editable support by saving the state in a dictionary.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Mvvm.ShallowCopyEditableObject._savedState">
+            <summary>
+            This stores the current "copy" of the object.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ShallowCopyEditableObject.OnBeginEdit">
+            <summary>
+            Called to begin an edit operation
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ShallowCopyEditableObject.OnEndEdit(System.Boolean)">
+            <summary>
+            Called to end an edit operation
+            </summary>
+            <param name="success">True for persist, False to cancel edits</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ShallowCopyEditableObject.GetFieldValues">
+            <summary>
+            This is used to clone the object.  Override the method to provide a more efficient clone.  The
+            default implementation simply reflects across the object copying every field.
+            </summary>
+            <returns>Clone of current object</returns>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ShallowCopyEditableObject.RestoreFieldValues(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            This restores the state of the current object from the passed clone object.
+            </summary>
+            <param name="fieldValues">Object to restore state from</param>
+        </member>
+        <member name="P:JulMar.Windows.Mvvm.ShallowCopyEditableObject.IsEditing">
+            <summary>
+            True/False if this object is being edited currently
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Mvvm.AsyncDelegatingCommand">
+            <summary>
+            An asynchronous version of the DelegatingCommand
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand.#ctor(System.Action)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="action">The action to be executed</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand.#ctor(System.Action,System.Func{System.Boolean})">
+            <summary>
+            Constructor for no-parameter ICommand
+            </summary>
+            <param name="action">The action to be executed</param>
+            <param name="canExecute">Will be used to determine if the action can be executed</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand.#ctor(System.Action,System.Func{System.Boolean},System.Action{System.Object})">
+            <summary>
+            Constructor for no-parameter ICommand
+            </summary>
+            <param name="action">The action to be executed</param>
+            <param name="canExecute">Will be used to determine if the action can be executed</param>
+            <param name="completedCallback">Will be invoked when the action is completed</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand.#ctor(System.Action,System.Func{System.Boolean},System.Action{System.Object},System.Action{System.Exception})">
+            <summary>
+            Constructor for no-parameter ICommand
+            </summary>
+            <param name="action">The action to be executed</param>
+            <param name="canExecute">Will be used to determine if the action can be executed</param>
+            <param name="completedCallback">Will be invoked when the action is completed</param>
+            <param name="errorCallback">Will be invoked if the action throws an error</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand.#ctor(System.Action,System.Func{System.Boolean},System.Action{System.Object},System.Action{System.Exception},System.Boolean)">
+            <summary>
+            Constructor for no-parameter ICommand
+            </summary>
+            <param name="action">The action to be executed</param>
+            <param name="canExecute">Will be used to determine if the action can be executed</param>
+            <param name="completedCallback">Will be invoked when the action is completed</param>
+            <param name="errorCallback">Will be invoked if the action throws an error</param>
+            <param name="autoCanExecuteRequery">True to use WPF CommandManager for CanExecute re-query operations</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand.#ctor(System.Action{System.Object})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="action">The action to be executed</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand.#ctor(System.Action{System.Object},System.Func{System.Object,System.Boolean})">
+            <summary>
+            Constructor for no-parameter ICommand
+            </summary>
+            <param name="action">The action to be executed</param>
+            <param name="canExecute">Will be used to determine if the action can be executed</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand.#ctor(System.Action{System.Object},System.Func{System.Object,System.Boolean},System.Action{System.Object})">
+            <summary>
+            Constructor for no-parameter ICommand
+            </summary>
+            <param name="action">The action to be executed</param>
+            <param name="canExecute">Will be used to determine if the action can be executed</param>
+            <param name="completedCallback">Will be invoked when the action is completed</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand.#ctor(System.Action{System.Object},System.Func{System.Object,System.Boolean},System.Action{System.Object},System.Action{System.Exception})">
+            <summary>
+            Constructor for object-based parameter ICommand
+            </summary>
+            <param name="action">The action to be executed</param>
+            <param name="canExecute">Will be used to determine if the action can be executed</param>
+            <param name="completed">Will be invoked when the action is completed</param>
+            <param name="error">Will be invoked if the action throws an error</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand.#ctor(System.Action{System.Object},System.Func{System.Object,System.Boolean},System.Action{System.Object},System.Action{System.Exception},System.Boolean)">
+            <summary>
+            Constructor for object-based parameter ICommand
+            </summary>
+            <param name="action">The action to be executed</param>
+            <param name="canExecute">Will be used to determine if the action can be executed</param>
+            <param name="completed">Will be invoked when the action is completed</param>
+            <param name="error">Will be invoked if the action throws an error</param>
+            <param name="autoCanExecuteRequery">True to use WPF CommandManager for CanExecute re-query operations</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand.RaiseCanExecuteChanged">
+            <summary>
+            This method can be used to raise the CanExecuteChanged handler.
+            This will force WPF to re-query the status of this command directly.
+            This is not necessary if you use the AutoCanExecuteRequery feature.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand.OnCanExecuteChanged">
+            <summary>
+            This method is used to walk the delegate chain and well WPF that
+            our command execution status has changed.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand.CanExecute(System.Object)">
+            <summary>
+            Defines the method that determines whether the command can execute in its current state.
+            </summary>
+            <returns>
+            true if this command can be executed; otherwise, false.
+            </returns>
+            <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand.Execute(System.Object)">
+            <summary>
+            Invoke the command
+            </summary>
+            <param name="parameter"></param>
+        </member>
+        <member name="P:JulMar.Windows.Mvvm.AsyncDelegatingCommand.AutoCanExecuteRequery">
+            <summary>
+            Enable or Disable the automatic CanExecute re-query support using the 
+            WPF CommandManager.
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.Mvvm.AsyncDelegatingCommand.CanExecuteChanged">
+            <summary>
+            Event that is raised when the current state for our command has changed.
+            Note that this is an instance event - unlike the CommandManager.RequerySuggested event
+            and as such we don't need to manage weak references here.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Mvvm.AsyncDelegatingCommand`1">
+            <summary>
+            An asynchronous version of the DelegatingCommand
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand`1.#ctor(System.Action{`0})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="action">The action to be executed</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand`1.#ctor(System.Action{`0},System.Func{`0,System.Boolean})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="action">The action to be executed</param>
+            <param name="canExecute">Will be used to determine if the action can be executed</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand`1.#ctor(System.Action{`0},System.Func{`0,System.Boolean},System.Action{System.Object})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="action">The action to be executed</param>
+            <param name="canExecute">Will be used to determine if the action can be executed</param>
+            <param name="completedCallback">Will be invoked when the action is completed</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand`1.#ctor(System.Action{`0},System.Func{`0,System.Boolean},System.Action{System.Object},System.Action{System.Exception})">
+            <summary>
+            Constructor 
+            </summary>
+            <param name="action">The action to be executed</param>
+            <param name="canExecute">Will be used to determine if the action can be executed</param>
+            <param name="completedCallback">Will be invoked when the action is completed</param>
+            <param name="errorCallback">Will be invoked if the action throws an error</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand`1.#ctor(System.Action{`0},System.Func{`0,System.Boolean},System.Action{System.Object},System.Action{System.Exception},System.Boolean)">
+            <summary>
+            Constructor for no-parameter ICommand
+            </summary>
+            <param name="action">The action to be executed</param>
+            <param name="canExecute">Will be used to determine if the action can be executed</param>
+            <param name="completedCallback">Will be invoked when the action is completed</param>
+            <param name="errorCallback">Will be invoked if the action throws an error</param>
+            <param name="autoCanExecuteRequery">True to use WPF CommandManager for CanExecute re-query operations</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand`1.RaiseCanExecuteChanged">
+            <summary>
+            This method can be used to raise the CanExecuteChanged handler.
+            This will force WPF to re-query the status of this command directly.
+            This is not necessary if you use the AutoCanExecuteRequery feature.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand`1.OnCanExecuteChanged">
+            <summary>
+            This method is used to walk the delegate chain and well WPF that
+            our command execution status has changed.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand`1.CanExecute(System.Object)">
+            <summary>
+            Defines the method that determines whether the command can execute in its current state.
+            </summary>
+            <returns>
+            true if this command can be executed; otherwise, false.
+            </returns>
+            <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.AsyncDelegatingCommand`1.Execute(System.Object)">
+            <summary>
+            Invoke the command
+            </summary>
+            <param name="parameter"></param>
+        </member>
+        <member name="P:JulMar.Windows.Mvvm.AsyncDelegatingCommand`1.AutoCanExecuteRequery">
+            <summary>
+            Enable or Disable the automatic CanExecute re-query support using the 
+            WPF CommandManager.
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.Mvvm.AsyncDelegatingCommand`1.CanExecuteChanged">
+            <summary>
+            Event that is raised when the current state for our command has changed.
+            Note that this is an instance event - unlike the CommandManager.RequerySuggested event
+            and as such we don't need to manage weak references here.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Converters.NumericToDoubleConverter">
+            <summary>
+            This converts any numeric type to a double.  It is primarily used in template bindings where an integer value
+            is bound to a RangeBase.Value property which requires a double.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NumericToDoubleConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NumericToDoubleConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value that is produced by the binding target.</param><param name="targetType">The type to convert to.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NumericToDoubleConverter.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Returns the converter
+            </summary>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="T:JulMar.Windows.Converters.NotBooleanConverter">
+            <summary>
+            This converter reverses a Boolean value (True == False, False == True).
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NotBooleanConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NotBooleanConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value that is produced by the binding target.</param><param name="targetType">The type to convert to.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NotBooleanConverter.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Returns the converter
+            </summary>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="T:JulMar.Windows.Converters.IntegerToVisibilityConverter">
+            <summary>
+            This converts an integer value to a Visibility type.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.IntegerToVisibilityConverter.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.IntegerToVisibilityConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.IntegerToVisibilityConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value that is produced by the binding target.</param><param name="targetType">The type to convert to.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.IntegerToVisibilityConverter.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Returns the converter
+            </summary>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="P:JulMar.Windows.Converters.IntegerToVisibilityConverter.ZeroTreatment">
+            <summary>
+            Mapping for zero to Visibility.  Defaults to Collapsed.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Converters.IntegerToVisibilityConverter.NonzeroTreatment">
+            <summary>
+            Mapping for non-zero to Visibility.  Defaults to Visible.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Converters.IntegerToBooleanConverter">
+            <summary>
+            Converts an integer value into a boolean true/false
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.IntegerToBooleanConverter.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.IntegerToBooleanConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.IntegerToBooleanConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value that is produced by the binding target.</param><param name="targetType">The type to convert to.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.IntegerToBooleanConverter.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Returns the converter
+            </summary>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="P:JulMar.Windows.Converters.IntegerToBooleanConverter.ZeroTreatment">
+            <summary>
+            Mapping for zero to Visibility.  Defaults to Collapsed.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Converters.IntegerToBooleanConverter.NonzeroTreatment">
+            <summary>
+            Mapping for non-zero to Visibility.  Defaults to Visible.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Behaviors.HelpProvider">
+            <summary>
+            This class provides the ability to easily attach Help functionality
+            to Framework elements. To use it, you need to
+            add a reference to the HelpProvider in your XAML. The FilenameProperty
+            is used to specify the name of the helpfile, and the KeywordProperty specifies
+            the keyword to be used with the search.
+            </summary>
+            <remarks>
+            The FilenameProperty can be at a higher level of the visual tree than
+            the KeywordProperty, so you don't need to set the filename each time.
+            </remarks>
+            <example>
+            <![CDATA[
+            <Window xmlns:help="..."
+                    julmar:HelpProviduer.Filename="MyHelpfile.chm">
+              ...
+               <TextBox julmar:HelpProvider.Keyword="MyKeyword" Grid.Row="0" Text="Keyword based search" />
+            </Window>
+            ]]>
+            </example>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.HelpProvider.#cctor">
+            <summary>
+            Initialize a new instance of <see cref="T:JulMar.Windows.Behaviors.HelpProvider"/>.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.HelpProvider.FilenameProperty">
+            <summary>
+            Filename Attached Dependency Property
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.HelpProvider.GetFilename(System.Windows.DependencyObject)">
+            <summary>
+            Gets the Filename property.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.HelpProvider.SetFilename(System.Windows.DependencyObject,System.String)">
+            <summary>
+            Sets the Filename property.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.HelpProvider.KeywordProperty">
+            <summary>
+            Keyword Attached Dependency Property
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.HelpProvider.GetKeyword(System.Windows.DependencyObject)">
+            <summary>
+            Gets the Keyword property.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.HelpProvider.SetKeyword(System.Windows.DependencyObject,System.String)">
+            <summary>
+            Sets the Keyword property.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.HelpProvider.CanExecute(System.Object,System.Windows.Input.CanExecuteRoutedEventArgs)">
+            <summary>
+            Handler for the ApplicationCommands.Help.CanExecute method.
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.HelpProvider.Executed(System.Object,System.Windows.Input.ExecutedRoutedEventArgs)">
+            <summary>
+            Handler for the ApplicationCommands.Help.Executed method.
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:JulMar.Windows.UI.IUIVisualizerMetadata">
+            <summary>
+            Interface used to populate metadata we use for services.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.UI.IUIVisualizerMetadata.Key">
+            <summary>
+            Key used to export the UI - registered with the UIVisualizer.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.UI.IUIVisualizerMetadata.ExportTypeIdentity">
+            <summary>
+            The type being exported
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.UI.ExportUIVisualizerAttribute">
+            <summary>
+            This attribute is used to decorate all "auto-located" services.
+            MEF is used to locate and bind each service with this attribute decoration.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.UI.ExportUIVisualizerAttribute.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.UI.ExportUIVisualizerAttribute.Key">
+            <summary>
+            Key used to export the View/ViewModel
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.UI.UIVisualizer">
+            <summary>
+            This class implements the IUIVisualizer for WPF.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interfaces.IUIVisualizer">
+            <summary>
+            This interface defines a UI controller which can be used to display dialogs
+            in either modal or modaless form from a ViewModel.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interfaces.IUIVisualizer.Register(System.String,System.Type)">
+            <summary>
+            Registers a type through a key.
+            </summary>
+            <param name="key">Key for the UI dialog</param>
+            <param name="winType">Type which implements dialog</param>
+        </member>
+        <member name="M:JulMar.Windows.Interfaces.IUIVisualizer.Unregister(System.String)">
+            <summary>
+            This unregisters a type and removes it from the mapping
+            </summary>
+            <param name="key">Key to remove</param>
+            <returns>True/False success</returns>
+        </member>
+        <member name="M:JulMar.Windows.Interfaces.IUIVisualizer.Show(System.String,System.Boolean,System.EventHandler{JulMar.Windows.Interfaces.UICompletedEventArgs})">
+            <summary>
+            This method displays a modaless dialog associated with the given key.  The associated
+            VM is not connected but must be supplied through some other means.
+            </summary>
+            <param name="key">Key previously registered with the UI controller.</param>
+            <param name="setOwner">Set the owner of the window</param>
+            <param name="completedProc">Callback used when UI closes (may be null)</param>
+            <returns>True/False if UI is displayed</returns>
+        </member>
+        <member name="M:JulMar.Windows.Interfaces.IUIVisualizer.ShowDialog(System.String)">
+            <summary>
+            This method displays a modal dialog associated with the given key.  The associated
+            VM is not connected but must be supplied through some other means.
+            </summary>
+            <param name="key">Key previously registered with the UI controller.</param>
+            <returns>True/False if UI is displayed.</returns>
+        </member>
+        <member name="M:JulMar.Windows.Interfaces.IUIVisualizer.Show(System.String,System.Object,System.Boolean,System.EventHandler{JulMar.Windows.Interfaces.UICompletedEventArgs})">
+            <summary>
+            This method displays a modaless dialog associated with the given key.
+            </summary>
+            <param name="key">Key previously registered with the UI controller.</param>
+            <param name="state">Object state to associate with the dialog</param>
+            <param name="setOwner">Set the owner of the window</param>
+            <param name="completedProc">Callback used when UI closes (may be null)</param>
+            <returns>True/False if UI is displayed</returns>
+        </member>
+        <member name="M:JulMar.Windows.Interfaces.IUIVisualizer.ShowDialog(System.String,System.Object)">
+            <summary>
+            This method displays a modal dialog associated with the given key.
+            </summary>
+            <param name="key">Key previously registered with the UI controller.</param>
+            <param name="state">Object state to associate with the dialog</param>
+            <returns>True/False if UI is displayed.</returns>
+        </member>
+        <member name="M:JulMar.Windows.Interfaces.IUIVisualizer.Show(System.String,System.Object,System.Object,System.EventHandler{JulMar.Windows.Interfaces.UICompletedEventArgs})">
+            <summary>
+            This method displays a modaless dialog associated with the given key.
+            </summary>
+            <param name="key">Key previously registered with the UI controller.</param>
+            <param name="state">Object state to associate with the dialog</param>
+            <param name="owner">owner for the window</param>
+            <param name="completedProc">Callback used when UI closes (may be null)</param>
+            <returns>True/False if UI is displayed</returns>
+        </member>
+        <member name="M:JulMar.Windows.Interfaces.IUIVisualizer.ShowDialog(System.String,System.Object,System.Object)">
+            <summary>
+            This method displays a modal dialog associated with the given key.
+            </summary>
+            <param name="key">Key previously registered with the UI controller.</param>
+            <param name="state">Object state to associate with the dialog</param>
+            <param name="owner">Owner for the window</param>
+            <returns>True/False if UI is displayed.</returns>
+        </member>
+        <member name="F:JulMar.Windows.UI.UIVisualizer.MefLocatorKey">
+            <summary>
+            Key used to lookup visualizations with MEF.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.UI.UIVisualizer._registeredWindows">
+            <summary>
+            Registered UI windows
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.UI.UIVisualizer._locatedVisuals">
+            <summary>
+            MEF registered views
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.UI.UIVisualizer._haveLoadedVisuals">
+            <summary>
+            Set to true once we have loaded any dynamic visuals.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.UI.UIVisualizer.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.UI.UIVisualizer.FindType(System.String)">
+            <summary>
+            Locates a type in a loaded assembly.
+            </summary>
+            <param name="typeName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Windows.UI.UIVisualizer.Register(System.Collections.Generic.Dictionary{System.String,System.Type})">
+            <summary>
+            Registers a collection of entries
+            </summary>
+            <param name="startupData"></param>
+        </member>
+        <member name="M:JulMar.Windows.UI.UIVisualizer.Register(System.String,System.Type)">
+            <summary>
+            Registers a type through a key.
+            </summary>
+            <param name="key">Key for the UI dialog</param>
+            <param name="winType">Type which implements dialog</param>
+        </member>
+        <member name="M:JulMar.Windows.UI.UIVisualizer.Unregister(System.String)">
+            <summary>
+            This unregisters a type and removes it from the mapping
+            </summary>
+            <param name="key">Key to remove</param>
+            <returns>True/False success</returns>
+        </member>
+        <member name="M:JulMar.Windows.UI.UIVisualizer.Show(System.String,System.Boolean,System.EventHandler{JulMar.Windows.Interfaces.UICompletedEventArgs})">
+            <summary>
+            This method displays a modaless dialog associated with the given key.  The associated
+            VM is not connected but must be supplied through some other means.
+            </summary>
+            <param name="key">Key previously registered with the UI controller.</param>
+            <param name="setOwner">Set the owner of the window</param>
+            <param name="completedProc">Callback used when UI closes (may be null)</param>
+            <returns>True/False if UI is displayed</returns>
+        </member>
+        <member name="M:JulMar.Windows.UI.UIVisualizer.ShowDialog(System.String)">
+            <summary>
+            This method displays a modal dialog associated with the given key.  The associated
+            VM is not connected but must be supplied through some other means.
+            </summary>
+            <param name="key">Key previously registered with the UI controller.</param>
+            <returns>True/False if UI is displayed.</returns>
+        </member>
+        <member name="M:JulMar.Windows.UI.UIVisualizer.Show(System.String,System.Object,System.Boolean,System.EventHandler{JulMar.Windows.Interfaces.UICompletedEventArgs})">
+            <summary>
+            This method displays a modaless dialog associated with the given key.
+            </summary>
+            <param name="key">Key previously registered with the UI controller.</param>
+            <param name="state">Object state to associate with the dialog</param>
+            <param name="setOwner">Set the owner of the window</param>
+            <param name="completedProc">Callback used when UI closes (may be null)</param>
+            <returns>True/False if UI is displayed</returns>
+        </member>
+        <member name="M:JulMar.Windows.UI.UIVisualizer.ShowDialog(System.String,System.Object)">
+            <summary>
+            This method displays a modal dialog associated with the given key.
+            </summary>
+            <param name="key">Key previously registered with the UI controller.</param>
+            <param name="state">Object state to associate with the dialog</param>
+            <returns>True/False if UI is displayed.</returns>
+        </member>
+        <member name="M:JulMar.Windows.UI.UIVisualizer.Show(System.String,System.Object,System.Object,System.EventHandler{JulMar.Windows.Interfaces.UICompletedEventArgs})">
+            <summary>
+            This method displays a modaless dialog associated with the given key.
+            </summary>
+            <param name="key">Key previously registered with the UI controller.</param>
+            <param name="state">Object state to associate with the dialog</param>
+            <param name="owner">owner for the window</param>
+            <param name="completedProc">Callback used when UI closes (may be null)</param>
+            <returns>True/False if UI is displayed</returns>
+        </member>
+        <member name="M:JulMar.Windows.UI.UIVisualizer.ShowDialog(System.String,System.Object,System.Object)">
+            <summary>
+            This method displays a modal dialog associated with the given key.
+            </summary>
+            <param name="key">Key previously registered with the UI controller.</param>
+            <param name="state">Object state to associate with the dialog</param>
+            <param name="owner">Owner for the window</param>
+            <returns>True/False if UI is displayed.</returns>
+        </member>
+        <member name="M:JulMar.Windows.UI.UIVisualizer.CreateWindow(System.String,System.Object,System.Windows.Window,System.EventHandler{JulMar.Windows.Interfaces.UICompletedEventArgs},System.Boolean)">
+            <summary>
+            This creates the WPF window from a key.
+            </summary>
+            <param name="key">Key</param>
+            <param name="dataContext">DataContext (state) object</param>
+            <param name="owner">Owner for the window</param>
+            <param name="completedProc">Callback</param>
+            <param name="isModal">True if this is a ShowDialog request</param>
+            <returns>Success code</returns>
+        </member>
+        <member name="M:JulMar.Windows.UI.UIVisualizer.CheckForDynamicRegisters">
+            <summary>
+            Initialize any MEF-located views.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Converters.ArrayToStringConverter">
+            <summary>
+            This converts an array of objects to a string with a given separator.  The default
+            separator is a comma, but it can be changed through a property.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.ArrayToStringConverter.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.ArrayToStringConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.ArrayToStringConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value that is produced by the binding target.</param><param name="targetType">The type to convert to.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.ArrayToStringConverter.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Returns the converter
+            </summary>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="P:JulMar.Windows.Converters.ArrayToStringConverter.Separator">
+            <summary>
+            Separator to use when joining strings
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Markup.ViewModelCreatorExtension">
+            <summary>
+            This provides a simple way to establish a ViewModel for a View through a markup extension
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Markup.ViewModelCreatorExtension._winTarget">
+            <summary>
+            The window we are bound to
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Markup.ViewModelCreatorExtension._viewModel">
+            <summary>
+            The view model we created
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Markup.ViewModelCreatorExtension.#ctor">
+            <summary>
+            Common constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Markup.ViewModelCreatorExtension.#ctor(System.Type)">
+            <summary>
+            Parameterized constructor
+            </summary>
+            <param name="runtimeType">Type to create</param>
+        </member>
+        <member name="M:JulMar.Windows.Markup.ViewModelCreatorExtension.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Returns an object to represent the ViewModel.
+            </summary>
+            <returns>
+            The object value to set on the property where the extension is applied. 
+            </returns>
+            <param name="serviceProvider">Object that can provide services for the markup extension.</param>
+        </member>
+        <member name="M:JulMar.Windows.Markup.ViewModelCreatorExtension.CreateOrLocateViewModel">
+            <summary>
+            This either creates the VM directly using the Types supplied, or looks up the VM
+            with MEF using the key and creates it that way.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Windows.Markup.ViewModelCreatorExtension.WindowClosed(System.Object,System.EventArgs)">
+            <summary>
+            Event handler that is invoked when the window is closed.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Markup.ViewModelCreatorExtension.CloseViewRequest(System.Object,JulMar.Windows.Mvvm.CloseRequestEventArgs)">
+            <summary>
+            Event handler that is invoked when the ViewModel is
+            requesting the view to close.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Markup.ViewModelCreatorExtension.ActivateViewRequest(System.Object,System.EventArgs)">
+            <summary>
+            Event handler called when the ViewModel is requesting to
+            activate (surface) the view.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="P:JulMar.Windows.Markup.ViewModelCreatorExtension.Key">
+            <summary>
+            View Model key
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Markup.ViewModelCreatorExtension.ViewModelType">
+            <summary>
+            The Type of the view model to create
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Markup.ViewModelCreatorExtension.DisposeOnClose">
+            <summary>
+            True to automatically dispose the VM when the view closes.
+            Defaults to TRUE - set it to FALSE to turn this off.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.UI.TextPath">
+            <summary>
+            This class generates a Geometry from a block of text in a specific font, weight, etc.
+            and renders it to WPF as a shape.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.UI.TextPath._textGeometry">
+            <summary>
+            Data member that holds the generated geometry
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.UI.TextPath.TextProperty">
+            <summary>
+            Text (string) to display
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.UI.TextPath.OriginPointProperty">
+            <summary>
+            Origin (0,0) of the text
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.UI.TextPath.FontFamilyProperty">
+            <summary>
+            Font family to render text in
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.UI.TextPath.FontSizeProperty">
+            <summary>
+            Font size to render text in
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.UI.TextPath.FontStretchProperty">
+            <summary>
+            Font Stretch
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.UI.TextPath.FontStyleProperty">
+            <summary>
+            Font Style
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.UI.TextPath.FontWeightProperty">
+            <summary>
+            Font Weight
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.UI.TextPath.OnPropertyChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            This method is called when any of our dependency properties change - it
+            changes the geometry so it is drawn properly.
+            </summary>
+            <param name="d">Depedency Object</param>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:JulMar.Windows.UI.TextPath.CreateTextGeometry">
+            <summary>
+            This method creates the text geometry.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.UI.TextPath.Origin">
+            <summary>
+            Gets/Sets the text origin
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.UI.TextPath.FontFamily">
+            <summary>
+            Gets/Sets the Font Family
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.UI.TextPath.FontSize">
+            <summary>
+            Gets/Sets the Font Size
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.UI.TextPath.FontStretch">
+            <summary>
+            Gets/Sets the FontStretch property
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.UI.TextPath.FontStyle">
+            <summary>
+            Gets/Sets the Font Style
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.UI.TextPath.FontWeight">
+            <summary>
+            Gets/Sets the Font Weight
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.UI.TextPath.Text">
+            <summary>
+            Gets/Sets the text to draw
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.UI.TextPath.DefiningGeometry">
+            <summary>
+            This method is called to retrieve the geometry that defines the shape.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Mvvm.ExportViewModelAttribute">
+            <summary>
+            This attribute is used to decorate all "auto-located" services.
+            MEF is used to locate and bind each service with this attribute decoration.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ExportViewModelAttribute.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="key">Key used to lookup ViewModel</param>
+        </member>
+        <member name="P:JulMar.Windows.Mvvm.ExportViewModelAttribute.Key">
+            <summary>
+            Key used to export the View/ViewModel
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Mvvm.ViewModelLocator">
+            <summary>
+            This class holds ViewModels that are registered with the ExportViewModelAttribute.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Mvvm.ViewModelLocator.MefLocatorKey">
+            <summary>
+            Key used to bind exports together
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Mvvm.ViewModelLocator._locatedVms">
+            <summary>
+            Collection of VMs
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModelLocator.Locate(System.String)">
+            <summary>
+            Finds the VM based on the key.
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="T:JulMar.Windows.Behaviors.PasswordBoxHelper">
+            <summary>
+            This class provides a bindable property for the PasswordBox class.
+            <PasswordBox PasswordBoxHelper.Text="{Binding .. }" />
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.PasswordBoxHelper.TextProperty">
+            <summary>
+            Text Property to pul from PasswordBox
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.PasswordBoxHelper.GetText(System.Windows.DependencyObject)">
+            <summary>
+            Get the Password Text as a DP.
+            </summary>
+            <param name="dpo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.PasswordBoxHelper.SetText(System.Windows.DependencyObject,System.String)">
+            <summary>
+            Set the Password Text as a DP.
+            </summary>
+            <param name="dpo"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.PasswordBoxHelper.OnAttachDetach(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            Called to attach/detach the handler
+            </summary>
+            <param name="dpo"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.PasswordBoxHelper.HandlePasswordChanged(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            This is called when the PasswordBox value changes.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:JulMar.Windows.Converters.BooleanToBrushConverter">
+            <summary>
+            This converts a Boolean value to a Brush
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.BooleanToBrushConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.BooleanToBrushConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value that is produced by the binding target.</param><param name="targetType">The type to convert to.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.BooleanToBrushConverter.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Returns the converter
+            </summary>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="P:JulMar.Windows.Converters.BooleanToBrushConverter.TrueBrush">
+            <summary>
+            Mapping for True value
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Converters.BooleanToBrushConverter.FalseBrush">
+            <summary>
+            Mapping for False value
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.UI.ErrorVisualizer">
+            <summary>
+            This implements the IErrorVisualizer for WPF.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interfaces.IErrorVisualizer">
+            <summary>
+            This interface is used to display an error.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interfaces.IErrorVisualizer.Show(System.String,System.String)">
+            <summary>
+            This displays an error to the user
+            </summary>
+            <param name="title">Title</param>
+            <param name="message">Message text</param>
+        </member>
+        <member name="M:JulMar.Windows.UI.ErrorVisualizer.Show(System.String,System.String)">
+            <summary>
+            This displays an error to the user
+            </summary>
+            <param name="title">Title</param>
+            <param name="message">Message text</param>
+        </member>
+        <member name="T:JulMar.Windows.Converters.DebugConverter">
+            <summary>
+            This provides a debugging output for a binding converter
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.DebugConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Outputs all parameters to the debug console.
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.DebugConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value that is produced by the binding target.</param><param name="targetType">The type to convert to.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.DebugConverter.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Returns the converter
+            </summary>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="T:JulMar.Windows.Interfaces.IViewModelTrigger">
+            <summary>
+            Interface used to drive actions from the VM -> View.
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.Interfaces.IViewModelTrigger.Execute">
+            <summary>
+            This event is used to trigger the action
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Converters.NullOrEmptyBooleanConverter">
+            <summary>
+            This converts an object value to a boolean
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NullOrEmptyBooleanConverter.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NullOrEmptyBooleanConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NullOrEmptyBooleanConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value that is produced by the binding target.</param><param name="targetType">The type to convert to.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NullOrEmptyBooleanConverter.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Returns the converter
+            </summary>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="P:JulMar.Windows.Converters.NullOrEmptyBooleanConverter.EmptyTreatment">
+            <summary>
+            Mapping value for null - defaults to false.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Converters.NullOrEmptyBooleanConverter.NotEmptyTreatment">
+            <summary>
+            Mapping value for non-null, defaults to true.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Validations.RequiredIntegerRange">
+            <summary>
+            This validates that a property is numeric and within a certain range
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Validations.ValidatorAttribute">
+            <summary>
+            This attribute is applied to properties to perform validation checking.
+            It is derived from to create specific validation types.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Validations.IValidator">
+            <summary>
+            Validation interface to check a property value.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Validations.IValidator.Validate(System.String,System.Object)">
+            <summary>
+            This is the method called to validate a specific property value.
+            </summary>
+            <param name="name">Property name</param>
+            <param name="newValue">New Property value</param>
+            <returns>Error string, empty if no error</returns>
+        </member>
+        <member name="M:JulMar.Windows.Validations.ValidatorAttribute.Validate(System.String,System.Object)">
+            <summary>
+            This is the method called to validate a specific property value.
+            </summary>
+            <param name="name">Property name</param>
+            <param name="newValue">New value for this property</param>
+            <returns>Error string, empty if no error</returns>
+        </member>
+        <member name="M:JulMar.Windows.Validations.RequiredIntegerRange.Validate(System.String,System.Object)">
+            <summary>
+            This is the method called to validate a specific property value.
+            </summary>
+            <param name="name">Property name</param>
+            <param name="value">Value</param>
+            <returns>Error string, empty if no error</returns>
+        </member>
+        <member name="P:JulMar.Windows.Validations.RequiredIntegerRange.Minimum">
+            <summary>
+            Minimum value required
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Validations.RequiredIntegerRange.Maximum">
+            <summary>
+            Maximum value required
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.UI.MessageVisualizer">
+            <summary>
+            This class implements the IMessageVisualizer for WPF
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interfaces.IMessageVisualizer">
+            <summary>
+            This interface abstracts the display of MessageBox style notifications
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interfaces.IMessageVisualizer.Show(System.String,System.String,JulMar.Windows.Interfaces.MessageButtons)">
+            <summary>
+            This displays a message to the user and prompts for a selection.
+            </summary>
+            <param name="title">Title</param>
+            <param name="message">Message</param>
+            <param name="buttons">Buttons to dismiss box</param>
+            <returns>Result</returns>
+        </member>
+        <member name="M:JulMar.Windows.Interfaces.IMessageVisualizer.Show(System.String,System.String,JulMar.Windows.Interfaces.MessageVisualizerOptions)">
+            <summary>
+            This displays a message to the user and prompts for a selection.
+            </summary>
+            <param name="title">Title</param>
+            <param name="message">Message</param>
+            <param name="visualizerOptions">Optional parameters</param>
+            <returns>Result</returns>
+        </member>
+        <member name="M:JulMar.Windows.UI.MessageVisualizer.Show(System.String,System.String,JulMar.Windows.Interfaces.MessageButtons)">
+            <summary>
+            This displays a message to the user and prompts for a selection.
+            </summary>
+            <param name="title">Title</param>
+            <param name="message">Message</param>
+            <param name="buttons">Buttons to dismiss box</param>
+            <returns>Result</returns>
+        </member>
+        <member name="M:JulMar.Windows.UI.MessageVisualizer.Show(System.String,System.String,JulMar.Windows.Interfaces.MessageVisualizerOptions)">
+            <summary>
+            This displays a message to the user and prompts for a selection.
+            </summary>
+            <param name="title">Title</param>
+            <param name="message">Message</param>
+            <param name="visualizerOptions">Options for the message</param>
+            <returns>Result</returns>
+        </member>
+        <member name="T:JulMar.Windows.Extensions.Designer">
+            <summary>
+            Properties used to control the design surface details
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Extensions.Designer.InDesignMode">
+            <summary>
+            Returns true/false whether the code is currently being executed by a designer surface
+            (Blend or Visual Studio).
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Behaviors.EventParameters">
+            <summary>
+            This is passed to the ICommand handler for the event
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.EventParameters.#ctor(System.Windows.Input.ICommand,System.Object,System.EventArgs,System.Object)">
+            <summary>
+            Constructor for the EventParameters
+            </summary>
+            <param name="command">ICommand</param>
+            <param name="sender">Event sender</param>
+            <param name="e">Event args</param>
+            <param name="parameter">CommandParameter</param>
+        </member>
+        <member name="P:JulMar.Windows.Behaviors.EventParameters.Sender">
+            <summary>
+            The sender of the handled event
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Behaviors.EventParameters.EventArgs">
+            <summary>
+            The passed EventArgs for the event.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Behaviors.EventParameters.Command">
+            <summary>
+            The ICommand which has just been executed
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Behaviors.EventParameters.CommandParameter">
+            <summary>
+            The associated CommandParameter (if any).
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Behaviors.CommandEvent">
+            <summary>
+            This represents a single event to command mapping.  It derives from Freezable in order to inherit context and support 
+            element name bindings per Mike Hillberg blog post.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.CommandEvent.CommandProperty">
+            <summary>
+            Command Property Dependency Property
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.CommandEvent.CommandParameterProperty">
+            <summary>
+            Parameter for the ICommand
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.CommandEvent.EventProperty">
+            <summary>
+            Event Dependency Property
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.CommandEvent.DataContextProperty">
+            <summary>
+            DataContext for any bindings applied to this CommandEvent
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.CommandEvent.Subscribe(System.Object)">
+            <summary>
+            Wires up an event to the target
+            </summary>
+            <param name="target"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.CommandEvent.Unsubscribe(System.Object)">
+            <summary>
+            Unwires target event
+            </summary>
+            <param name="target"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.CommandEvent.OnEventRaised(System.Object,System.EventArgs)">
+            <summary>
+            This is invoked by the event - it invokes the command.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.CommandEvent.CreateInstanceCore">
+            <summary>
+            When implemented in a derived class, creates a new instance of the <see cref="T:System.Windows.Freezable"/> derived class. 
+            </summary>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="P:JulMar.Windows.Behaviors.CommandEvent.Event">
+            <summary>
+            Gets or sets the Event property.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Behaviors.CommandEvent.Command">
+            <summary>
+            Gets or sets the Command property. 
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Behaviors.CommandEvent.CommandParameter">
+            <summary>
+            Gets or sets the CommandParameter property.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Behaviors.CommandEventCollection">
+            <summary>
+            Collection of command to event mappings
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.CommandEventCollection.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.CommandEventCollection.Subscribe(System.Object)">
+            <summary>
+            Wire up events to the target
+            </summary>
+            <param name="target"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.CommandEventCollection.Unsubscribe(System.Object)">
+            <summary>
+            Unwire all target events
+            </summary>
+            <param name="target"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.CommandEventCollection.OnCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>
+            This handles the collection change event - it then subscribes and unsubscribes events.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.CommandEventCollection.OnItemAdded(JulMar.Windows.Behaviors.CommandEvent)">
+            <summary>
+            A new item has been added to the event list
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.CommandEventCollection.OnItemRemoved(JulMar.Windows.Behaviors.CommandEvent)">
+            <summary>
+            An item has been removed from the event list.
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="T:JulMar.Windows.Behaviors.EventCommander">
+            <summary>
+            This class manages a collection of command to event mappings.  It is used to wire up View events to a
+            ViewModel ICommand implementation.  Note that if it is lifetime events (Loaded, Activated, Closing, Closed, etc.)
+            then you should use the LifetimeEvents behavior instead.  This is for other input events to be tied to the 
+            ViewModel without codebehind.
+            </summary>
+            <example>
+            <![CDATA[
+            
+            <Behaviors:EventCommander.Mappings>
+               <Behaviors:CommandEvent Command="{Binding MouseEnterCommand}" Event="MouseEnter" />
+               <Behaviors:CommandEvent Command="{Binding MouseLeaveCommand}" Event="MouseLeave" />
+            </Behaviors:EventCommander.Mappings>
+            
+            ]]>
+            </example>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.EventCommander.InternalGetMappingCollection(System.Windows.DependencyObject)">
+            <summary>
+            Retrieves the mapping collection
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.EventCommander.GetMappings(System.Windows.DependencyObject)">
+            <summary>
+            This retrieves the mapping collection
+            </summary>
+            <param name="obj">Dependency Object</param>
+            <returns>Mapping collection</returns>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.EventCommander.SetMappings(System.Windows.DependencyObject,JulMar.Windows.Behaviors.CommandEventCollection)">
+            <summary>
+            This sets the mapping collection.
+            </summary>
+            <param name="obj">Dependency Object</param>
+            <param name="value">Mapping collection</param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.EventCommander.OnMappingsChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            This changes the event mapping
+            </summary>
+            <param name="target"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:JulMar.Windows.Extensions.DependencyObjectExtensions">
+            <summary>
+            Dependency Object extensions
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Extensions.DependencyObjectExtensions.FindTemplateName``1(System.Windows.Controls.Control,System.String)">
+            <summary>
+            Returns the template element of the given name within the Control.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Extensions.DependencyObjectExtensions.FindElement``1(System.Windows.DependencyObject)">
+            <summary>
+            Searches the subtree of an element (including that element) 
+            for an element of a particluar type.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Extensions.DependencyObjectExtensions.FindVisualParent``1(System.Windows.DependencyObject)">
+            <summary>
+            This method locates the first visual parent of the given Type.
+            </summary>
+            <typeparam name="T">Type to search for</typeparam>
+            <param name="fe">Framework Element</param>
+            <returns>Visual Parent</returns>
+        </member>
+        <member name="M:JulMar.Windows.Extensions.DependencyObjectExtensions.FindVisualChild``1(System.Windows.DependencyObject)">
+            <summary>
+            This method locates the first visual child of the given Type.
+            </summary>
+            <typeparam name="T">Type to search for</typeparam>
+            <param name="fe">Framework Element</param>
+            <returns>Visual Child</returns>
+        </member>
+        <member name="M:JulMar.Windows.Extensions.DependencyObjectExtensions.FindVisualChildByName``1(System.Windows.DependencyObject,System.String)">
+            <summary>
+            This method locates a visual child by NAME of the given Type.
+            </summary>
+            <typeparam name="T">Type to search for</typeparam>
+            <param name="fe">Framework Element</param>
+            <param name="name">Name to look for (assigned to Name property)</param>
+            <returns>Visual Child or null</returns>
+        </member>
+        <member name="M:JulMar.Windows.Extensions.DependencyObjectExtensions.EnumerateVisualTree``1(System.Windows.DependencyObject,System.Predicate{``0})">
+            <summary>
+            A simple iterator method to expose the visual tree to LINQ (parent to child).
+            </summary>
+            <param name="start">Starting root</param>
+            <param name="predicate">Predicate called for each item to provide filter (can be null)</param>
+            <returns>Enumerable list of visuals</returns>
+        </member>
+        <member name="M:JulMar.Windows.Extensions.DependencyObjectExtensions.ReverseEnumerateVisualTree``1(System.Windows.DependencyObject,System.Predicate{``0})">
+            <summary>
+            A simple iterator method to expose the visual tree to LINQ going backwards (child to parent)
+            </summary>
+            <param name="start">Starting child</param>
+            <param name="predicate">Predicate called for each item to provide filter (can be null)</param>
+            <returns>Enumerable list of visuals</returns>
+        </member>
+        <member name="M:JulMar.Windows.Extensions.DependencyObjectExtensions.VisualChildren(System.Windows.DependencyObject)">
+            <summary>
+            This enumerates the children of the given starting DPO.
+            </summary>
+            <param name="fe">Start</param>
+            <returns>Collection of children (enumerator)</returns>
+        </member>
+        <member name="T:JulMar.Windows.Markup.LinearGradientBrushExtension">
+            <summary>
+            This creates a gradient color brush
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Markup.LinearGradientBrushExtension.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Markup.LinearGradientBrushExtension.#ctor(System.Windows.Media.Color,System.Windows.Media.Color,System.Double)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="startColor">Starting Color</param>
+            <param name="endColor">Ending Color</param>
+            <param name="angle">Angle</param>
+        </member>
+        <member name="M:JulMar.Windows.Markup.LinearGradientBrushExtension.ProvideValue(System.IServiceProvider)">
+            <summary>
+            When implemented in a derived class, returns an object that is set as the value of the target property for this markup extension. 
+            </summary>
+            <returns>
+            The object value to set on the property where the extension is applied. 
+            </returns>
+            <param name="serviceProvider">Object that can provide services for the markup extension.
+                            </param>
+        </member>
+        <member name="P:JulMar.Windows.Markup.LinearGradientBrushExtension.StartColor">
+            <summary>
+            Starting color
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Markup.LinearGradientBrushExtension.EndColor">
+            <summary>
+            Ending color
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Markup.LinearGradientBrushExtension.Angle">
+            <summary>
+            Angle for gradient
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Converters.NullOrEmptyVisibilityConverter">
+            <summary>
+            This converts object presence to visibility.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NullOrEmptyVisibilityConverter.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NullOrEmptyVisibilityConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NullOrEmptyVisibilityConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value that is produced by the binding target.</param><param name="targetType">The type to convert to.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NullOrEmptyVisibilityConverter.ProvideValue(System.IServiceProvider)">
+            <summary>
+            This returns the converter
+            </summary>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="P:JulMar.Windows.Converters.NullOrEmptyVisibilityConverter.EmptyTreatment">
+            <summary>
+            Visibility conversion when object is null.  Defaults to hidden.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Converters.NullOrEmptyVisibilityConverter.NotEmptyTreatment">
+            <summary>
+            Visibility conversion when object is non-null.  Defaults to visible.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Converters.KeyToResourceConverter">
+            <summary>
+            This class can be used to convert a resource key to a resource within a binding expression:
+            <ContentControl ContentTemplate="{Binding ActiveResourceKey, Converter=KeyToResourceConverter}" />
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Converters.KeyToResourceConverter.ElementProperty">
+            <summary>
+            Dependency Property backing the element - used for Data Binding
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.KeyToResourceConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.KeyToResourceConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value that is produced by the binding target.</param><param name="targetType">The type to convert to.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.KeyToResourceConverter.CreateInstanceCore">
+            <summary>
+            Used to create an instance of the Freezable.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:JulMar.Windows.Converters.KeyToResourceConverter.Element">
+            <summary>
+            FrameworkElement to use for locating resources
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Validations.RequiredLengthAttribute">
+            <summary>
+            This validates that a property has a specific length
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Validations.RequiredLengthAttribute.Validate(System.String,System.Object)">
+            <summary>
+            This is the method called to validate a specific property value.
+            </summary>
+            <param name="name">Property name</param>
+            <param name="value">Value</param>
+            <returns>Error string, empty if no error</returns>
+        </member>
+        <member name="P:JulMar.Windows.Validations.RequiredLengthAttribute.Minimum">
+            <summary>
+            Minimum length required
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Validations.RequiredLengthAttribute.Maximum">
+            <summary>
+            Maximum length required
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Mvvm.ViewModelTrigger">
+            <summary>
+            This is used to trigger a behavior on the View.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Mvvm.ViewModelTrigger._func">
+            <summary>
+            Action - hooked by the View
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModelTrigger.Execute(System.Object)">
+            <summary>
+             This is called by the ViewModel to trigger some behavior
+             in the view.
+            </summary>
+            <param name="parameter">Optional parameter</param>
+            <returns>True if raised event</returns>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.ViewModelTrigger.Execute">
+            <summary>
+             This is called by the ViewModel to trigger some behavior
+             in the view.
+            </summary>
+            <returns>True if raised event</returns>
+        </member>
+        <member name="E:JulMar.Windows.Mvvm.ViewModelTrigger.JulMar#Windows#Interfaces#IViewModelTrigger#Execute">
+            <summary>
+            Event used by the view.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.MTObservableCollection`1">
+            <summary>
+            This class provides an ObservableCollection which supports background thread
+            access and updates.  It allows for concurrent read access and single write access
+            through the use of a MRSW lock.
+            </summary>
+            <remarks>
+            This collection, while safe, is generally very slow because it does all the work on the
+            UI thread.  You should prefer to use the better ThreadedCollection which doesn't use
+            INotifyCollectionChanged and then maintain two collections in synch for performance.
+            </remarks>
+            <typeparam name="T">Type this collection holds</typeparam>
+        </member>
+        <member name="M:JulMar.Windows.MTObservableCollection`1.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.MTObservableCollection`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Convenient constructor to allow LINQ sources
+            </summary>
+            <param name="collection">IEnumerable source</param>
+        </member>
+        <member name="M:JulMar.Windows.MTObservableCollection`1.AcquireWriteLock">
+            <summary>
+            This acquires the writer lock.  It does this by first getting an upgradeable
+            read lock and then getting the write lock. Later, the caller will downgrade to
+            a read lock to notify the UI about the change.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.MTObservableCollection`1.OnNotifyCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>
+            This method notifies the UI about changes to this collection.  It uses
+            the first located dispatcher to do the notification.
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.MTObservableCollection`1.OnCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedAction,System.Object,System.Int32)">
+            <summary>
+            Helper to raise CollectionChanged event to any listeners
+            </summary> 
+        </member>
+        <member name="M:JulMar.Windows.MTObservableCollection`1.OnCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedAction,System.Object,System.Object,System.Int32)">
+            <summary>
+            Helper to raise CollectionChanged event to any listeners
+            </summary> 
+        </member>
+        <member name="M:JulMar.Windows.MTObservableCollection`1.OnCollectionReset">
+            <summary>
+            Helper to raise CollectionChanged event with action == Reset to any listeners
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.MTObservableCollection`1.IndexOf(`0)">
+            <summary>
+            Determines the index of a specific item in the <see cref="T:System.Collections.Generic.IList`1"/>.
+            </summary>
+            <returns>
+            The index of <paramref name="item"/> if found in the list; otherwise, -1.
+            </returns>
+            <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1"/>.</param>
+        </member>
+        <member name="M:JulMar.Windows.MTObservableCollection`1.Insert(System.Int32,`0)">
+            <summary>
+            Inserts an item to the <see cref="T:System.Collections.Generic.IList`1"/> at the specified index.
+            </summary>
+            <param name="index">The zero-based index at which <paramref name="item"/> should be inserted.</param>
+            <param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1"/>.</param>
+        </member>
+        <member name="M:JulMar.Windows.MTObservableCollection`1.RemoveAt(System.Int32)">
+            <summary>
+            Removes the <see cref="T:System.Collections.Generic.IList`1"/> item at the specified index.
+            </summary>
+            <param name="index">The zero-based index of the item to remove.</param>
+        </member>
+        <member name="M:JulMar.Windows.MTObservableCollection`1.Add(`0)">
+            <summary>
+            Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </summary>
+            <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
+        </member>
+        <member name="M:JulMar.Windows.MTObservableCollection`1.Clear">
+            <summary>
+            Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.MTObservableCollection`1.Contains(`0)">
+            <summary>
+            Determines whether the <see cref="T:System.Collections.Generic.ICollection`1"/> contains a specific value.
+            </summary>
+            <returns>
+            true if <paramref name="item"/> is found in the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false.
+            </returns>
+            <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
+        </member>
+        <member name="M:JulMar.Windows.MTObservableCollection`1.CopyTo(`0[],System.Int32)">
+            <summary>
+            Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
+            </summary>
+            <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param>
+            <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
+        </member>
+        <member name="M:JulMar.Windows.MTObservableCollection`1.Remove(`0)">
+            <summary>
+            Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </summary>
+            <returns>
+            true if <paramref name="item"/> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false. This method also returns false if <paramref name="item"/> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </returns>
+            <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"/>.</param>
+        </member>
+        <member name="M:JulMar.Windows.MTObservableCollection`1.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection. </returns>
+        </member>
+        <member name="M:JulMar.Windows.MTObservableCollection`1.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through a collection.
+            </summary>
+            <returns>An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="P:JulMar.Windows.MTObservableCollection`1.Dispatcher">
+            <summary>
+            Retrieves the UI dispatcher using the collection event
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.MTObservableCollection`1.PropertyChanged">
+            <summary>
+            Occurs when a property value changes.
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.MTObservableCollection`1.CollectionChanged">
+            <summary>
+            Occurs when the collection changes.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.MTObservableCollection`1.Item(System.Int32)">
+            <summary>
+            Gets or sets the element at the specified index.
+            </summary>
+            <returns>
+            The element at the specified index.
+            </returns>
+            <param name="index">The zero-based index of the element to get or set.</param>
+        </member>
+        <member name="P:JulMar.Windows.MTObservableCollection`1.Count">
+            <summary>
+            Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </summary>
+            <returns>
+            The number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+            </returns>
+        </member>
+        <member name="P:JulMar.Windows.MTObservableCollection`1.IsReadOnly">
+            <summary>
+            Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+            </summary>
+            <returns>
+            true if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, false.
+            </returns>
+        </member>
+        <member name="T:JulMar.Windows.Converters.NullBooleanConverter">
+            <summary>
+            This converts an object value to a boolean
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NullBooleanConverter.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NullBooleanConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NullBooleanConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value that is produced by the binding target.</param><param name="targetType">The type to convert to.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NullBooleanConverter.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Returns the converter
+            </summary>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="P:JulMar.Windows.Converters.NullBooleanConverter.NullTreatment">
+            <summary>
+            Mapping value for null - defaults to false.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Converters.NullBooleanConverter.NonNullTreatment">
+            <summary>
+            Mapping value for non-null, defaults to true.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Converters.DoubleToIntegerConverter">
+            <summary>
+            This converts a double into an integer value, rounding the value off.
+            It is useful when providing textual versions of scrollbar or slider values (on a tooltip).
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.DoubleToIntegerConverter.ProvideValue(System.IServiceProvider)">
+            <summary>
+            When implemented in a derived class, returns an object that is set as the value of the target property for this markup extension. 
+            </summary>
+            <returns>
+            The object value to set on the property where the extension is applied. 
+            </returns>
+            <param name="serviceProvider">Object that can provide services for the markup extension.
+                            </param>
+        </member>
+        <member name="T:JulMar.Windows.Behaviors.BindableCommand">
+            <summary>
+            This class can be used to create a bound ICommand in resources
+            which may then be assigned to the Command property of Key/Mouse gestures.
+            Note that this is not necessary for .NET 4.0
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.BindableCommand.CommandProperty">
+            <summary>
+            ICommand implementation to bind to the input type.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.BindableCommand.CommandParameterProperty">
+            <summary>
+            Parameter for the ICommand
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.BindableCommand.CanExecute(System.Object)">
+            <summary>
+            Returns whether the command is valid
+            </summary>
+            <param name="parameter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.BindableCommand.Execute(System.Object)">
+            <summary>
+            Executes the command
+            </summary>
+            <param name="parameter"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.BindableCommand.CreateInstanceCore">
+            <summary>
+            Creates an instance of the object.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:JulMar.Windows.Behaviors.BindableCommand.Command">
+            <summary>
+            Gets and sets the Command
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Behaviors.BindableCommand.CommandParameter">
+            <summary>
+            Gets and sets the CommandParameter
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.Behaviors.BindableCommand.CanExecuteChanged">
+            <summary>
+            This is used to determine if the command validity has changed.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Converters.ValidationErrorConverter">
+            <summary>
+            This converter can be applied to the Validation.Errors to pull the error description
+            out of any ExceptionValidationRule that has been violated.  Typically this ends up being
+            a TargetInvocationException and you need to reach into the InnerException to get the actual
+            error.  In the case where multiple validation rules are applied, this converter will ensure
+            the proper text is displayed.
+            </summary>
+            <example><![CDATA[
+            <Style TargetType="{x:Type TextBox}">
+               <Style.Triggers>
+                  <Trigger Property="Validation.HasError" Value="true">
+                     <Setter Property="ToolTip" 
+                             Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors), Converter={StaticResource errorConverter}}"/>
+                  </Trigger>
+               </Style.Triggers>
+            </Style>
+            ]]>
+            </example>
+        </member>
+        <member name="M:JulMar.Windows.Converters.ValidationErrorConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value produced by the binding source.</param>
+            <param name="targetType">The type of the binding target property.</param>
+            <param name="parameter">The converter parameter to use.</param>
+            <param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.ValidationErrorConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value.
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value that is produced by the binding target.</param>
+            <param name="targetType">The type to convert to.</param>
+            <param name="parameter">The converter parameter to use.</param>
+            <param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="T:JulMar.Windows.Behaviors.LifetimeEvent">
+            <summary>
+            This class is used to attach the Window lifetime events to ICommand implementations.  It allows a ViewModel to 
+            hook into the lifetime of the view (when necessary) through simple XAML tags.  Supported events are
+            Loaded, Activated, Deactivated and Closing/Closed.  For the Closing/Closed event, the CanExecute handler is invoked
+            in response to the Closing event - if it returns true, then the Closed event is allowed and the Execute handler is
+            called in response.
+            </summary>
+            <remarks>
+            Note that this class is deprecated because the EventCommander can do everything this class does.
+            </remarks>
+            <example>
+            <![CDATA[  <Window MvvmHelpers:LifetimeEvent.Close="{Binding CloseCommand}" />  ]]>
+            </example>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.LifetimeEvent.LoadedProperty">
+            <summary>
+            Dependency property which holds the ICommand for the Loaded event
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.LifetimeEvent.ActivatedProperty">
+            <summary>
+            Dependency property which holds the ICommand for the Activated event
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.LifetimeEvent.DeactivatedProperty">
+            <summary>
+            Dependency property which holds the ICommand for the Deactivated event
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.LifetimeEvent.CloseProperty">
+            <summary>
+            Dependency property which holds the ICommand for the Close event
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.LifetimeEvent.CommandParameterProperty">
+            <summary>
+            Parameter for the ICommand
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.GetLoaded(System.Windows.DependencyObject)">
+            <summary>
+            Attached Property getter to retrieve the ICommand
+            </summary>
+            <param name="source">Dependency Object</param>
+            <returns>ICommand</returns>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.SetLoaded(System.Windows.DependencyObject,System.Windows.Input.ICommand)">
+            <summary>
+            Attached Property setter to change the ICommand
+            </summary>
+            <param name="source">Dependency Object</param>
+            <param name="command">ICommand</param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.GetActivated(System.Windows.DependencyObject)">
+            <summary>
+            Attached Property getter to retrieve the ICommand
+            </summary>
+            <param name="source">Dependency Object</param>
+            <returns>ICommand</returns>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.SetActivated(System.Windows.DependencyObject,System.Windows.Input.ICommand)">
+            <summary>
+            Attached Property setter to change the ICommand
+            </summary>
+            <param name="source">Dependency Object</param>
+            <param name="command">ICommand</param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.GetDeactivated(System.Windows.DependencyObject)">
+            <summary>
+            Attached Property getter to retrieve the ICommand
+            </summary>
+            <param name="source">Dependency Object</param>
+            <returns>ICommand</returns>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.SetDeactivated(System.Windows.DependencyObject,System.Windows.Input.ICommand)">
+            <summary>
+            Attached Property setter to change the ICommand
+            </summary>
+            <param name="source">Dependency Object</param>
+            <param name="command">ICommand</param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.GetClose(System.Windows.DependencyObject)">
+            <summary>
+            Attached Property getter to retrieve the ICommand
+            </summary>
+            <param name="source">Dependency Object</param>
+            <returns>ICommand</returns>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.SetClose(System.Windows.DependencyObject,System.Windows.Input.ICommand)">
+            <summary>
+            Attached Property setter to change the ICommand
+            </summary>
+            <param name="source">Dependency Object</param>
+            <param name="command">ICommand</param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.GetCommandParameter(System.Windows.DependencyObject)">
+            <summary>
+            This retrieves the CommandParameter used for the command.
+            </summary>
+            <param name="source">Dependency object</param>
+            <returns>Command Parameter passed to ICommand</returns>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.SetCommandParameter(System.Windows.DependencyObject,System.Object)">
+            <summary>
+            This changes the CommandParameter used with this command.
+            </summary>
+            <param name="source">Dependency Object</param>
+            <param name="value">New Value</param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.OnLoadedEventInfoChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            This is the property changed handler for the Loaded property.
+            </summary>
+            <param name="sender">Dependency Object</param>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.OnWindowLoaded(System.Object,System.EventArgs)">
+            <summary>
+            This is the handler for the Loaded event to raise the command.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.OnActivatedEventInfoChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            This is the property changed handler for the Activated property.
+            </summary>
+            <param name="sender">Dependency Object</param>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.OnWindowActivated(System.Object,System.EventArgs)">
+            <summary>
+            This is the handler for the Activated event to raise the command.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.OnDeactivatedEventInfoChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            This is the property changed handler for the Deactivated property.
+            </summary>
+            <param name="sender">Dependency Object</param>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.OnWindowDeactivated(System.Object,System.EventArgs)">
+            <summary>
+            This is the handler for the Deactivated event to raise the command.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.OnCloseEventInfoChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            This is the property changed handler for the Close property.
+            </summary>
+            <param name="sender">Dependency Object</param>
+            <param name="e">EventArgs</param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.OnWindowClosing(System.Object,System.ComponentModel.CancelEventArgs)">
+            <summary>
+            This method is invoked when the Window.Closing event is raised.  It checks with the ICommand.CanExecute handler
+            and cancels the event if the handler returns false.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.OnWindowClosed(System.Object,System.EventArgs)">
+            <summary>
+            This method is invoked when the Window.Closed event is raised.  It executes the ICommand.Execute handler.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.LifetimeEvent.PerformCleanup(System.Object,System.EventArgs)">
+            <summary>
+            This method is used to perform cleanup on the Window.Closed event.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:JulMar.Windows.UI.NotificationVisualizer">
+            <summary>
+            This implements the INotificationVisualizer interface for WPF
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interfaces.INotificationVisualizer">
+            <summary>
+            This is used to display a notification that the program is doing something
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interfaces.INotificationVisualizer.BeginWait(System.String,System.String)">
+            <summary>
+            This provides a "Wait" support
+            </summary>
+            <param name="title">Title (if any)</param>
+            <param name="message">Message (if any)</param>
+            <returns>Disposable element</returns>
+        </member>
+        <member name="M:JulMar.Windows.UI.NotificationVisualizer.BeginWait(System.String,System.String)">
+            <summary>
+            This provides a "Wait" support
+            </summary>
+            <param name="title">Title (if any)</param>
+            <param name="message">Message (if any)</param>
+            <returns>Disposable element</returns>
+        </member>
+        <member name="T:JulMar.Windows.Validations.ValidationManager">
+            <summary>
+            This class performs validations on properties decorated with IValidator attribute types.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Validations.ValidationManager.Validate(System.String,System.Object)">
+            <summary>
+            This validates the given property, or all properties if name is null/empty.
+            </summary>
+            <param name="name">Property name, can be null/empty</param>
+            <param name="instance">Object instance</param>
+            <returns>List of errors separated by newlines</returns>
+        </member>
+        <member name="T:JulMar.Windows.Mvvm.DelegatingCommand">
+            <summary>
+            A simple command to delegate forwarding class
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.DelegatingCommand.#ctor(System.Action{System.Object})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="command">Function mapped to ICommand.Execute</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.DelegatingCommand.#ctor(System.Action)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="command">Function mapped to ICommand.Execute</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.DelegatingCommand.#ctor(System.Action,System.Func{System.Boolean})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="command">Function mapped to ICommand.Execute</param>
+            <param name="test">Function mapped to ICommand.CanExecute</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.DelegatingCommand.#ctor(System.Action{System.Object},System.Func{System.Object,System.Boolean})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="command">Function mapped to ICommand.Execute</param>
+            <param name="test">Function mapped to ICommand.CanExecute</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.DelegatingCommand.#ctor(System.Action,System.Func{System.Boolean},System.Boolean)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="command">Function mapped to ICommand.Execute</param>
+            <param name="test">Function mapped to ICommand.CanExecute</param>
+            <param name="autoCanExecuteRequery">True to use WPF CommandManager for CanExecute re-query operations</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.DelegatingCommand.#ctor(System.Action{System.Object},System.Func{System.Object,System.Boolean},System.Boolean)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="command">Function mapped to ICommand.Execute</param>
+            <param name="test">Function mapped to ICommand.CanExecute</param>
+            <param name="autoCanExecuteRequery">True to use WPF command manager for CanExecute handler</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.DelegatingCommand.RaiseCanExecuteChanged">
+            <summary>
+            This method can be used to raise the CanExecuteChanged handler.
+            This will force WPF to re-query the status of this command directly.
+            This is not necessary if you use the AutoCanExecuteRequery feature.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.DelegatingCommand.OnCanExecuteChanged">
+            <summary>
+            This method is used to walk the delegate chain and well WPF that
+            our command execution status has changed.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.DelegatingCommand.CanExecute(System.Object)">
+            <summary>
+            Defines the method that determines whether the command can execute in its current state.
+            </summary>
+            <returns>
+            true if this command can be executed; otherwise, false.
+            </returns>
+            <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.DelegatingCommand.Execute(System.Object)">
+            <summary>
+            Defines the method to be called when the command is invoked.
+            </summary>
+            <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+        </member>
+        <member name="P:JulMar.Windows.Mvvm.DelegatingCommand.AutoCanExecuteRequery">
+            <summary>
+            Enable or Disable the automatic CanExecute re-query support using the 
+            WPF CommandManager.
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.Mvvm.DelegatingCommand.CanExecuteChanged">
+            <summary>
+            Event that is raised when the current state for our command has changed.
+            Note that this is an instance event - unlike the CommandManager.RequerySuggested event
+            and as such we don't need to manage weak references here.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Mvvm.DelegatingCommand`1">
+            <summary>
+            A simple command to delegate forwarding class which auto-casts the parameter
+            passed to a given type.
+            </summary>
+            <typeparam name="T">Parameter type</typeparam>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.DelegatingCommand`1.#ctor(System.Action{`0})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="command">Function mapped to ICommand.Execute</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.DelegatingCommand`1.#ctor(System.Action{`0},System.Func{`0,System.Boolean})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="command">Function mapped to ICommand.Execute</param>
+            <param name="test">Function mapped to ICommand.CanExecute</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.DelegatingCommand`1.#ctor(System.Action{`0},System.Func{`0,System.Boolean},System.Boolean)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="command">Function mapped to ICommand.Execute</param>
+            <param name="test">Function mapped to ICommand.CanExecute</param>
+            <param name="autoCanExecuteRequery">True to use WPF command manager for CanExecute handler</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.DelegatingCommand`1.RaiseCanExecuteChanged">
+            <summary>
+            This method can be used to raise the CanExecuteChanged handler.
+            This will force WPF to re-query the status of this command directly.
+            This is not necessary if you use the AutoCanExecuteRequery feature.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.DelegatingCommand`1.OnCanExecuteChanged">
+            <summary>
+            This method is used to walk the delegate chain and well WPF that
+            our command execution status has changed.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.DelegatingCommand`1.CanExecute(System.Object)">
+            <summary>
+            Defines the method that determines whether the command can execute in its current state.
+            </summary>
+            <returns>
+            true if this command can be executed; otherwise, false.
+            </returns>
+            <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+        </member>
+        <member name="M:JulMar.Windows.Mvvm.DelegatingCommand`1.Execute(System.Object)">
+            <summary>
+            Defines the method to be called when the command is invoked.
+            </summary>
+            <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+        </member>
+        <member name="P:JulMar.Windows.Mvvm.DelegatingCommand`1.AutoCanExecuteRequery">
+            <summary>
+            Enable or Disable the automatic CanExecute re-query support using the 
+            WPF CommandManager.
+            </summary>
+        </member>
+        <member name="E:JulMar.Windows.Mvvm.DelegatingCommand`1.CanExecuteChanged">
+            <summary>
+            Event that is raised when the current state for our command has changed.
+            Note that this is an instance event - unlike the CommandManager.RequerySuggested event
+            and as such we don't need to manage weak references here.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Converters.MathConverter">
+            <summary>
+            This provides a simple Math converter which supports to add/subtract/multiply/divide by a constant.
+            The operation can be "+", "-", "*" and "%".
+            </summary>
+            <example>
+            <![CDATA[
+                <me:MathConverter x:Key="mathCvt" />
+                <TextBlock Text="{Binding ElementName=slider, Path=Value, Converter={StaticResource mathCvt}, ConverterParameter=+1}" />
+            ]]>
+            </example>
+        </member>
+        <member name="M:JulMar.Windows.Converters.MathConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.MathConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value that is produced by the binding target.</param><param name="targetType">The type to convert to.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.MathConverter.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Returns the converter
+            </summary>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="P:JulMar.Windows.Converters.MathConverter.Operation">
+            <summary>
+            Operation to set - used if no parameter is passed.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Converters.ValueConverterCollection">
+            <summary>
+            Converter collection
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Converters.MultiConverter">
+            <summary>
+            This class holds a list of converters and runs the value through each.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.MultiConverter.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.MultiConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.MultiConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value that is produced by the binding target.</param><param name="targetType">The type to convert to.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="P:JulMar.Windows.Converters.MultiConverter.Converters">
+            <summary>
+            The collection of value converters to run
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Converters.BooleanToVisibilityConverter">
+            <summary>
+            This converts a Boolean to a Visibility.  It supports mapping the conversions (unlike the default converter in WPF).
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.BooleanToVisibilityConverter.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.BooleanToVisibilityConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.BooleanToVisibilityConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value that is produced by the binding target.</param><param name="targetType">The type to convert to.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.BooleanToVisibilityConverter.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Returns the converter
+            </summary>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="P:JulMar.Windows.Converters.BooleanToVisibilityConverter.TrueTreatment">
+            <summary>
+            Mapping for True to Visibility.  Defaults to Visible.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Converters.BooleanToVisibilityConverter.FalseTreatment">
+            <summary>
+            Mapping for False to Visibility.  Defaults to Collapsed.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interfaces.UICompletedEventArgs">
+            <summary>
+            This is the EventArgs return value for the IUIController.Show completed event.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interfaces.UICompletedEventArgs.State">
+            <summary>
+            Data passed to the Show method.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interfaces.UICompletedEventArgs.Result">
+            <summary>
+            Final result of the UI dialog
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Validations.RequiredAttribute">
+            <summary>
+            This validates that a property has a value and is non-null.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Validations.RequiredAttribute.Validate(System.String,System.Object)">
+            <summary>
+            This is the method called to validate a specific property value.
+            </summary>
+            <param name="name">Property name</param>
+            <param name="value">Value</param>
+            <returns>Error string, empty if no error</returns>
+        </member>
+        <member name="T:JulMar.Windows.Converters.NullVisibilityConverter">
+            <summary>
+            This converts object presence to visibility.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NullVisibilityConverter.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NullVisibilityConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NullVisibilityConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value that is produced by the binding target.</param><param name="targetType">The type to convert to.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.NullVisibilityConverter.ProvideValue(System.IServiceProvider)">
+            <summary>
+            This returns the converter
+            </summary>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="P:JulMar.Windows.Converters.NullVisibilityConverter.NullTreatment">
+            <summary>
+            Visibility conversion when object is null.  Defaults to hidden.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Converters.NullVisibilityConverter.NonNullTreatment">
+            <summary>
+            Visibility conversion when object is non-null.  Defaults to visible.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Converters.ListBoxItemToIndexConverter">
+            <summary>
+            This converts a ListBoxItem to the index of the item within the underlying databound collection.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Converters.ListBoxItemToIndexConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.ListBoxItemToIndexConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Converts a value. 
+            </summary>
+            <returns>
+            A converted value. If the method returns null, the valid null value is used.
+            </returns>
+            <param name="value">The value that is produced by the binding target.</param><param name="targetType">The type to convert to.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
+        </member>
+        <member name="M:JulMar.Windows.Converters.ListBoxItemToIndexConverter.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Returns the converter
+            </summary>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+        <member name="P:JulMar.Windows.Converters.ListBoxItemToIndexConverter.StartIndex">
+            <summary>
+            StartIndex, defaults to zero
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.UI.WaitCursor">
+            <summary>
+            This class implements a disposable WaitCursor to show an hourglass while
+            some long-running event occurs.
+            </summary>
+            <example>
+            <![CDATA[
+            
+            using (new WaitCursor())
+            {
+               .. Do work here ..
+            }
+            
+            ]]>
+            </example>
+        </member>
+        <member name="M:JulMar.Windows.UI.WaitCursor.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.UI.WaitCursor.Dispose">
+            <summary>
+            Returns the cursor to the default state.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.DeferredBinder">
+            <summary>
+            This class provides a simple deferred wrapper which binds two properties together and 
+            transfers the values on a timeout interval
+            </summary>
+            <example>
+            <![CDATA[
+            <StackPanel>
+               <StackPanel.Resources>
+                  <DeferredBinder:DeferredBinding x:Key="dbTest" Timeout="1" />
+               </StackPanel.Resources>
+               <TextBlock x:Name="tb" Text="{Binding Source={StaticResource dbTest}, Path=Target}" FontSize="48pt" HorizontalAlignment="Center" />
+               <Slider x:Name="slider" Margin="10" HorizontalAlignment="Center" Width="200" Minimum="0" Maximum="100" Value="{Binding Source={StaticResource dbTest}, Path=Source, Mode=OneWayToSource}" />
+            </StackPanel>
+            ]]>
+            </example>
+        </member>
+        <member name="F:JulMar.Windows.DeferredBinder._timer">
+            <summary>
+            Timer used to track value changes
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.DeferredBinder.TimeoutProperty">
+            <summary>
+            Timeout Dependency Property - controls how long we wait until value is transferred.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.DeferredBinder.OnTimeoutChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            Handles changes to the Timeout property.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.DeferredBinder.SourceProperty">
+            <summary>
+            Source Dependency Property - this is SOURCE of the property change
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.DeferredBinder.OnSourceChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            Handles changes to the Target property.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.DeferredBinder.TargetProperty">
+            <summary>
+            Target Dependency Property
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.DeferredBinder.ResetTimer">
+            <summary>
+            This resets the timer.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.DeferredBinder.OnTimeout(System.Object,System.EventArgs)">
+            <summary>
+            This is called when the timeout occurs and it transfers the source to the target.
+            </summary>
+            <param name="sender">Dispatcher Timer</param>
+            <param name="e">Event arguments</param>
+        </member>
+        <member name="M:JulMar.Windows.DeferredBinder.CreateInstanceCore">
+            <summary>
+            When implemented in a derived class, creates a new instance of the <see cref="T:System.Windows.Freezable"/> derived class. 
+            </summary>
+            <returns>
+            The new instance.
+            </returns>
+        </member>
+        <member name="P:JulMar.Windows.DeferredBinder.Timeout">
+            <summary>
+            Gets or sets the Timeout property.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.DeferredBinder.Source">
+            <summary>
+            Gets or sets the Source property.  
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.DeferredBinder.Target">
+            <summary>
+            Gets or sets the Target property.  This dependency property 
+            indicates ....
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Validations.RegexValidatorAttribute">
+            <summary>
+            This implements a validator which utilizes a regular expression.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Validations.RegexValidatorAttribute.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="regExpression">Regular Expression</param>
+        </member>
+        <member name="M:JulMar.Windows.Validations.RegexValidatorAttribute.Validate(System.String,System.Object)">
+            <summary>
+            This is the method called to validate a specific property value.
+            </summary>
+            <param name="name">Property name</param>
+            <param name="value">Value</param>
+            <returns>Error string, empty if no error</returns>
+        </member>
+        <member name="P:JulMar.Windows.Validations.RegexValidatorAttribute.RegularExpression">
+            <summary>
+            Regular expression to test the parameter against.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Validations.RegexValidatorAttribute.ErrorText">
+            <summary>
+            The error text for the pattern.
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interfaces.MessageButtons">
+            <summary>
+            Button types that may be used to dismiss message prompts
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interfaces.MessageButtons.OK">
+            <summary>
+            OK button
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interfaces.MessageButtons.OKCancel">
+            <summary>
+            OK + Cancel buttons
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interfaces.MessageButtons.YesNoCancel">
+            <summary>
+            Yes + No + Cancel buttons
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interfaces.MessageButtons.YesNo">
+            <summary>
+            Yes + No buttons
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interfaces.MessageResult">
+            <summary>
+            Result of a IMessageVisualizer.Show call
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interfaces.MessageResult.None">
+            <summary>
+            No result - dialog closed without button
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interfaces.MessageResult.OK">
+            <summary>
+            OK button clicked to dismiss dialog
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interfaces.MessageResult.Cancel">
+            <summary>
+            Cancel button clicked to dismiss dialog
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interfaces.MessageResult.Yes">
+            <summary>
+            Yes button clicked to dismiss dialog
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interfaces.MessageResult.No">
+            <summary>
+            No button clicked to dismiss dialog
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interfaces.MessageIcon">
+            <summary>
+            Icon to use
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interfaces.MessageIcon.None">
+            <summary>
+            No icon
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interfaces.MessageIcon.Error">
+            <summary>
+            Error icon
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interfaces.MessageIcon.Question">
+            <summary>
+            Question icon
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interfaces.MessageIcon.Warning">
+            <summary>
+            Warning icon
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Interfaces.MessageIcon.Information">
+            <summary>
+            Information icon
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Interfaces.MessageVisualizerOptions">
+            <summary>
+            Options passed to IMessageVisualizer.  Can create derived class to pass
+            custom data into private implementation.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Interfaces.MessageVisualizerOptions.#ctor">
+            <summary>
+            Constructor to create simple prompt
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interfaces.MessageVisualizerOptions.Owner">
+            <summary>
+            Window Owner
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interfaces.MessageVisualizerOptions.Icon">
+            <summary>
+            Icon to use
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interfaces.MessageVisualizerOptions.Prompt">
+            <summary>
+            Prompt to use
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Interfaces.MessageVisualizerOptions.DefaultPrompt">
+            <summary>
+            Default choice for dismissal
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Mvvm.CloseRequestEventArgs">
+            <summary>
+            This is used to send result parameters to a CloseRequest
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.Mvvm.CloseRequestEventArgs.Result">
+            <summary>
+             Final result for ShowDialog
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.Markup.FirstFocusedElementExtension">
+            <summary>
+            This markup extension locates the first focusable child and returns it.
+            It is intended to be used with FocusManager.FocusedElement:
+            </summary>
+            <example>
+            <![CDATA[
+            
+               <Window ... FocusManager.FocusedElement={ft:FirstFocusedElement} />
+            
+            ]]>
+            </example>
+        </member>
+        <member name="M:JulMar.Windows.Markup.FirstFocusedElementExtension.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Markup.FirstFocusedElementExtension.ProvideValue(System.IServiceProvider)">
+            <summary>
+            This method locates the first focusable + visible element we can
+            change focus to.
+            </summary>
+            <param name="serviceProvider">IServiceProvider from XAML</param>
+            <returns>Focusable Element or null</returns>
+        </member>
+        <member name="M:JulMar.Windows.Markup.FirstFocusedElementExtension.GetLeafFocusableChild(System.Windows.IInputElement)">
+            <summary>
+            Locate the first real focusable child.  We keep going down
+            the visual tree until we hit a leaf node.
+            </summary>
+            <param name="fe"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Windows.Markup.FirstFocusedElementExtension.GetFirstFocusableChild(System.Windows.IInputElement)">
+            <summary>
+            This searches the Visual Tree looking for a valid child which can have focus.
+            </summary>
+            <param name="fe"></param>
+            <returns></returns>
+        </member>
+        <member name="P:JulMar.Windows.Markup.FirstFocusedElementExtension.OneTime">
+            <summary>
+            Unhook the handler after it has set focus to the element the first time
+            </summary>
+        </member>
+        <member name="T:JulMar.Windows.FrameworkElementAdorner">
+            <summary>
+            Simple Adorner to present a single FrameworkElement child in the adorner layer
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.FrameworkElementAdorner.GetVisualChild(System.Int32)">
+            <summary>
+            Overrides <see cref="M:System.Windows.Media.Visual.GetVisualChild(System.Int32)"/>, and returns a child at the specified index from a collection of child elements. 
+            </summary>
+            <returns>
+            The requested child element. This should not return null; if the provided index is out of range, an exception is thrown.
+            </returns>
+            <param name="index">The zero-based index of the requested child element in the collection.</param>
+        </member>
+        <member name="M:JulMar.Windows.FrameworkElementAdorner.MeasureOverride(System.Windows.Size)">
+            <summary>
+            Implements any custom measuring behavior for the adorner.
+            </summary>
+            <returns>
+            A <see cref="T:System.Windows.Size"/> object representing the amount of layout space needed by the adorner.
+            </returns>
+            <param name="constraint">A size to constrain the adorner to.</param>
+        </member>
+        <member name="M:JulMar.Windows.FrameworkElementAdorner.ArrangeOverride(System.Windows.Size)">
+            <summary>
+            When overridden in a derived class, positions child elements and determines a size for a <see cref="T:System.Windows.FrameworkElement"/> derived class. 
+            </summary>
+            <returns>
+            The actual size used.
+            </returns>
+            <param name="finalSize">The final area within the parent that this element should use to arrange itself and its children.</param>
+        </member>
+        <member name="M:JulMar.Windows.FrameworkElementAdorner.#ctor(System.Windows.UIElement,System.Windows.FrameworkElement)">
+            <summary>
+             Constructor
+            </summary>
+            <param name="adornedElement">Element being adorned</param>
+            <param name="child">Child element to place in adorner layer</param>
+        </member>
+        <member name="M:JulMar.Windows.FrameworkElementAdorner.CreateElementAdorner(System.Windows.UIElement,System.Windows.FrameworkElement)">
+            <summary>
+            This static method creates and places the adorner - it is returned so it may
+            be disposed when not needed anymore.
+            </summary>
+            <param name="adornedElement">Element being adorned</param>
+            <param name="child">Child element to place in adorner layer</param>
+            <returns>Created adorner</returns>
+        </member>
+        <member name="M:JulMar.Windows.FrameworkElementAdorner.Dispose">
+            <summary>
+            Removes the adorner from the layer.
+            </summary>
+        </member>
+        <member name="P:JulMar.Windows.FrameworkElementAdorner.VisualChildrenCount">
+            <summary>
+            Gets the number of visual child elements within this element.
+            </summary>
+            <returns>
+            The number of visual child elements for this element.
+            </returns>
+        </member>
+        <member name="T:JulMar.Windows.Behaviors.SynchronizeScrollingBehavior">
+            <summary>
+            This class provides synchronized scrolling behavior for two controls which use ScrollViewer.
+            The first scroll viewer found in the Visual Tree is used.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.SynchronizeScrollingBehavior.HorizontalAdjustmentProperty">
+            <summary>
+            This dependency property holds the horizontal adjustment factor when two scrollviewer instances do not have the
+            same size or elements.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.SynchronizeScrollingBehavior.VerticalAdjustmentProperty">
+            <summary>
+            This dependency property holds the vertical adjustment factor when two scrollviewer instances do not have the
+            same size or elements.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.SynchronizeScrollingBehavior.TargetProperty">
+            <summary>
+            This holds the target to synchronize to.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.SynchronizeScrollingBehavior.SourceProperty">
+            <summary>
+            This holds the source to synchronize to.
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.SynchronizeScrollingBehavior.GetTarget(System.Windows.DependencyObject)">
+            <summary>
+            Property getter for the Target property
+            </summary>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.SynchronizeScrollingBehavior.SetTarget(System.Windows.DependencyObject,System.Windows.UIElement)">
+            <summary>
+            Property setter for the Target property
+            </summary>
+            <param name="source"></param>
+            <param name="target"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.SynchronizeScrollingBehavior.GetHorizontalAdjustment(System.Windows.DependencyObject)">
+            <summary>
+            Property getter for the HorizontalAdjustment property
+            </summary>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.SynchronizeScrollingBehavior.SetHorizontalAdjustment(System.Windows.DependencyObject,System.Double)">
+            <summary>
+            Property setter for the HorizontalAdjustment property
+            </summary>
+            <param name="source"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.SynchronizeScrollingBehavior.GetVerticalAdjustment(System.Windows.DependencyObject)">
+            <summary>
+            Property getter for the VerticalAdjustment property
+            </summary>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.SynchronizeScrollingBehavior.SetVerticalAdjustment(System.Windows.DependencyObject,System.Double)">
+            <summary>
+            Property setter for the VerticalAdjustment property
+            </summary>
+            <param name="source"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.SynchronizeScrollingBehavior.OnTargetChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            This method is called when the target property is changed.
+            </summary>
+            <param name="dpo">Dependency object</param>
+            <param name="e">Event Args</param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.SynchronizeScrollingBehavior.OnSourceScroll(System.Object,System.Windows.Controls.ScrollChangedEventArgs)">
+            <summary>
+            This handles the synchronization when the source list is scrolled.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.SynchronizeScrollingBehavior.OnTargetScroll(System.Object,System.Windows.Controls.ScrollChangedEventArgs)">
+            <summary>
+            This handles the synchronization when the target list is scrolled.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.SynchronizeScrollingBehavior.AdjustScrollPosition(System.Windows.Controls.ScrollViewer,System.Windows.Controls.ScrollChangedEventArgs,System.Double,System.Double)">
+            <summary>
+            This is the command scroll adjustment code which synchronizes two ScrollViewer instances.
+            </summary>
+            <param name="sv">ScrollViewer to adjust</param>
+            <param name="e">Change in the source</param>
+            <param name="hadjust">Horizontal adjustment</param>
+            <param name="vadjust">Vertical adjustment</param>
+        </member>
+        <member name="T:JulMar.Windows.Behaviors.RenderBehavior">
+            <summary>
+             This attached property can be used from a ViewModel to force a part of the tree to render
+             based on some known property change that can impact it but is not data bound.  To use it, 
+             associated it onto any Visual to a {Binding} and then change the value - that will force the 
+             Visual and all it's children to be invalidated.
+            </summary>
+        </member>
+        <member name="F:JulMar.Windows.Behaviors.RenderBehavior.InvalidateProperty">
+            <summary>
+            Render property - data bind this to force rendering
+            </summary>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.RenderBehavior.GetInvalidate(System.Windows.DependencyObject)">
+            <summary>
+            Retrieve the invalidate render property
+            </summary>
+            <param name="dpo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JulMar.Windows.Behaviors.RenderBehavior.SetInvalidate(System.Windows.DependencyObject,System.Object)">
+            <summary>
+            Set the render property
+            </summary>
+            <param name="dpo"></param>
+            <param name="value"></param>
+        </member>
+    </members>
+</doc>
