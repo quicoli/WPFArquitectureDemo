@@ -1,9 +1,10 @@
-
 ## A Simple WPF Arquitecture Demo
 
 Some years ago I wrote an [article](http://www.devmedia.com.br/mandamentos-da-orientacao-a-objetos-artigo-net-magazine-79/18481) for [DevMedia group](http://www.devmedia.com.br/) named "Comandments of Object Orientation", based in what I'd worked, learned, read, and studied. So I can say:
 
 _The goal of this project is to show how build a good (flexible) solution for WPF applications._
+
+Well, this is not a silver bullet, but it's a starting point and I'd like to let an open discussion here.
 
 ![](http://g.recordit.co/OKOhx9TYTx.gif "Simple application")
 
@@ -17,6 +18,7 @@ _The goal of this project is to show how build a good (flexible) solution for WP
 - NHibernate (in a simple way)
 - Mapping Models->Entities and Entities<-Models
 
+In the next days I'm creating some wikis explaining the code 
 
 ## What is inside
 
