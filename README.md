@@ -5,7 +5,7 @@ Some years ago I wrote an [article](http://www.devmedia.com.br/mandamentos-da-or
 
 _The goal of this project is to show how build a good (flexible) solution for WPF applications._
 
-![]({{site.baseurl}}//WPFDemo.gif)
+![](http://g.recordit.co/OKOhx9TYTx.gif "Simple application")
 
 ## What you can see
 - How to keep logic in ViewModel, avoiding code-behind
