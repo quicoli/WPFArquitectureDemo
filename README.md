@@ -1,4 +1,4 @@
-## A Simple WPF Arquitecture Demo
+## A Simple WPF Architecture Demo
 
 Some years ago I wrote an [article](http://www.devmedia.com.br/mandamentos-da-orientacao-a-objetos-artigo-net-magazine-79/18481) for [DevMedia group](http://www.devmedia.com.br/) named "Comandments of Object Orientation", based in what I'd worked, learned, read, and studied. So I can say:
 
